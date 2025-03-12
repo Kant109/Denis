@@ -1,70 +1,40 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500">
 
-    <circle cx="250" cy="250" r="250" stroke="black" stroke-width="1" fill="#4d4d4b"/>
+    <circle cx="250" cy="250" r="250" stroke="black" stroke-width="10"/>
   
     <!-- Création des 20 secteurs -->
     <g>
+        <!-- Haut droit-->
+        <!-- 13 --> <path d="M250,250 L497,211 A250,250 0 0 0 473,137 Z" fill="#1C1A1D"/>
+        <!-- 4 --> <path d="M250,250 L473,137 A250,250 0 0 0 427,73 Z" fill="#EFDEAD"/>
+        <!-- 18 --> <path d="M250,250 L427,73 A250,250 0 0 0 363,27 Z" fill="#1C1A1D"/>
+        <!-- 1 --> <path d="M250,250 L363,27 A250,250 0 0 0 289,3 Z" fill="#EFDEAD"/>
+        <!-- 20 --> <path d="M250,250 L289,3 A250,250 0 0 0 211,3 Z" fill="#1C1A1D"/>
+
         <!-- Haut gauche -->
-        <path d="M250,250 L1,250 A250,250 0 0,1 13,173 Z" fill="#fee2ba"/>
-        <path d="M250,250 L13,173 A250,250 0 0,1 48,104 Z" fill="dark"/>
-        <path d="M250,250 L48,104 A250,250 0 0,1 104,48 Z" fill="#fee2ba"/>
-        <path d="M250,250 L104,48 A250,250 0 0,1 173,13 Z" fill="dark"/>
-        <path d="M250,250 L173,13 A250,250 0 0,1 250,1 Z" fill="#fee2ba"/>
-
-        <!-- Haut droit -->
-        <path d="M250,250 L250,1 A250,250 0 0,1 326,13 Z" fill="dark"/>
-        <path d="M250,250 L326,13 A250,250 0 0,1 396,48 Z" fill="#fee2ba"/>
-        <path d="M250,250 L396,48 A250,250 0 0,1 452,104 Z" fill="dark"/>
-        <path d="M250,250 L452,104 A250,250 0 0,1 487,173 Z" fill="#fee2ba"/>
-        <path d="M250,250 L487,173 A250,250 0 0,1 499,250 Z" fill="dark"/>
-
-        <!-- Bas droit -->
-        <path d="M250,250 L499,250 A250,250 0 0,1 487,327 Z" fill="#fee2ba"/>
-        <path d="M250,250 L487,327 A250,250 0 0,1 452,396 Z" fill="dark"/>
-        <path d="M250,250 L452,396 A250,250 0 0,1 396,452 Z" fill="#fee2ba"/>
-        <path d="M250,250 L396,452 A250,250 0 0,1 327,487 Z" fill="dark"/>
-        <path d="M250,250 L327,487 A250,250 0 0,1 250,499 Z" fill="#fee2ba"/>
+        <!-- 5 --> <path d="M250,250 L211,3 A250,250 0 0 0 137,27 Z" fill="#EFDEAD"/>
+        <!-- 12 --> <path d="M250,250 L137,27 A250,250 0 0 0 73,73 Z" fill="#1C1A1D"/>
+        <!-- 9 --> <path d="M250,250 L73,73 A250,250 0 0 0 27,137 Z" fill="#EFDEAD"/>
+        <!-- 14 --> <path d="M250,250 L27,137 A250,250 0 0 0 3,211 Z" fill="#1C1A1D"/>
+        <!-- 11 --> <path d="M250,250 L3,211 A250,250 0 0 0 3,289 Z" fill="#EFDEAD"/>
 
         <!-- Bas gauche -->
-        <path d="M250,250 L250,499 A250,250 0 0,1 173,487 Z" fill="dark"/>
-        <path d="M250,250 L173,487 A250,250 0 0,1 104,452 Z" fill="#fee2ba"/>
-        <path d="M250,250 L104,452 A250,250 0 0,1 48,396 Z" fill="dark"/>
-        <path d="M250,250 L48,396 A250,250 0 0,1 13,327 Z" fill="#fee2ba"/>
-        <path d="M250,250 L13,327 A250,250 0 0,1 1,250 Z" fill="dark"/>
+        <!-- 8 --> <path d="M250,250 L3,289 A250,250 0 0 0 27,363 Z" fill="#1C1A1D"/>
+        <!-- 16 --> <path d="M250,250 L27,363 A250,250 0 0 0 73,427 Z" fill="#EFDEAD"/>
+        <!-- 7 --> <path d="M250,250 L73,427 A250,250 0 0 0 137,473 Z" fill="#1C1A1D"/>
+        <!-- 19 --> <path d="M250,250 L137,473 A250,250 0 0 0 211,497 Z" fill="#EFDEAD"/>
+        <!-- 3 --> <path d="M250,250 L211,497 A250,250 0 0 0 289,497 Z" fill="#1C1A1D"/>
+
+        <!-- Bas droit -->
+        <!-- 17 --> <path d="M250,250 L289,497 A250,250 0 0 0 363,473 Z" fill="#EFDEAD"/>
+        <!-- 2 --> <path d="M250,250 L363,473 A250,250 0 0 0 427,427 Z" fill="#1C1A1D"/>
+        <!-- 15 --> <path d="M250,250 L427,427 A250,250 0 0 0 473,363 Z" fill="#EFDEAD"/>
+        <!-- 10 --> <path d="M250,250 L473,363 A250,250 0 0 0 497,289 Z" fill="#1C1A1D"/>
+        <!-- 6 --> <path d="M250,250 L497,289 A250,250 0 0 0 497,211 Z" fill="#EFDEAD"/>
     </g>
 
-    <circle cx="250" cy="250" r="125" stroke="lighgray" stroke-width="1" fill="rgba(0,0,0,0)"/>
-    <circle cx="250" cy="250" r="30" stroke="black" stroke-width="1" fill="#4d4d4b"/>
-    <circle cx="250" cy="250" r="15" stroke="black" stroke-width="1" fill="#4d4d4b"/>
-
-    <!-- <g stroke="#37ff00" stroke-width="1"> -->
-        <!-- Haut gauche -->
-        <!-- <line x1="250" y1="250" x2="1" y2="250" stroke="red"/>
-        <line x1="250" y1="250" x2="13" y2="173"/>
-        <line x1="250" y1="250" x2="48" y2="104"/>
-        <line x1="250" y1="250" x2="104" y2="48"/>
-        <line x1="250" y1="250" x2="173" y2="12"/> -->
-
-        <!-- Haut droit -->
-        <!-- <line x1="250" y1="250" x2="250" y2="0" stroke="red"/>
-        <line x1="250" y1="250" x2="327" y2="12"/>
-        <line x1="250" y1="250" x2="396" y2="48"/>
-        <line x1="250" y1="250" x2="452" y2="104"/>
-        <line x1="250" y1="250" x2="488" y2="173"/> -->
-
-        <!-- Bas droit -->
-        <!-- <line x1="250" y1="250" x2="500" y2="250" stroke="red"/>
-        <line x1="250" y1="250" x2="488" y2="327"/>
-        <line x1="250" y1="250" x2="452" y2="396"/>
-        <line x1="250" y1="250" x2="396" y2="452"/>
-        <line x1="250" y1="250" x2="327" y2="488"/> -->
-
-        <!-- Bas gauche -->
-        <!-- <line x1="250" y1="250" x2="250" y2="500" stroke="red"/>
-        <line x1="250" y1="250" x2="173" y2="488"/>
-        <line x1="250" y1="250" x2="104" y2="452"/>
-        <line x1="250" y1="250" x2="48" y2="396"/>
-        <line x1="250" y1="250" x2="12" y2="327"/> -->
-    <!-- </g> -->
+    <!-- <circle cx="250" cy="250" r="125" stroke="lighgray" stroke-width="1" fill="rgba(0,0,0,0)"/> -->
+    <circle cx="250" cy="250" r="35" stroke="black" stroke-width="2" fill="#3E7A31"/>
+    <circle cx="250" cy="250" r="14" stroke="black" stroke-width="2" fill="#BB2A32"/>
 
 </svg>
