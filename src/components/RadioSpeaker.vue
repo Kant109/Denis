@@ -1,6 +1,12 @@
 <script setup lang="ts">
-import { useManagementAppStore } from '@/stores/ManagementAppStore';
 import { computed } from 'vue';
+import { useManagementAppStore } from '@/stores/ManagementAppStore';
+
+interface Props {
+  isAlwaysEnable?: boolean
+}
+
+const { isAlwaysEnable = false } = defineProps<Props>();
 
 const managementAppStore = useManagementAppStore();
 
@@ -14,9 +20,9 @@ const stopSpeaker = () => {
 </script>
 
 <template>
-    <div class="radio-box-container" v-if="displayRadioBox">
+    <div class="radio-box-container" v-if="displayRadioBox || isAlwaysEnable">
         <div class="radio-box-content">
-            <div class="radio-box-content-button" @click.prevent="stopSpeaker"><img src="@/assets/images/close-cross.svg" alt="Close"></div>
+            <div class="radio-box-content-button" @click.prevent="stopSpeaker" v-if="!isAlwaysEnable"><img src="@/assets/images/close-cross.svg" alt="Close"></div>
             <div class="radio-box-content-text">DENIS</div>
             <div class="radio-box-speak-animation">
                 <div class="bar" v-for="index in 10"></div>

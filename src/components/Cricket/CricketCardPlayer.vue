@@ -275,22 +275,4 @@ const props = defineProps<{
         }
     }
 }
-
-@media screen and (max-width: 389px) {
-    .player-content {
-        .recap {
-            .doors {
-                gap: .3rem;
-                .door {
-                    width: 1.3rem;
-                    height: 1.3rem;
-                }
-            }
-        }
-    }
-    .player-stats .recap-doors {
-        gap: 0.1rem;
-        font-size: 14px;
-    }
-}
 </style>
