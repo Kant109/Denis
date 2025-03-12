@@ -328,6 +328,13 @@ html, body, #app, main {
             }
         }
     }
+
+    h2 {
+        font-family: "Michroma", sans-serif;
+        font-size: 1.5rem;
+        color: var(--text-color);
+        margin: 0;
+    }
 }
 
 @keyframes send-out {

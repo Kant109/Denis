@@ -53,7 +53,7 @@ const back = () => {
     .title {
         display: flex;
         justify-content: center;
-        font-family: "Monoton", sans-serif;
+        font-family: "Michroma", sans-serif;
         font-size: 2rem;
         color: var(--text-color);
     }

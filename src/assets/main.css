@@ -279,6 +279,12 @@ html .confirm-end-game-dialog .confirm-end-game-container .btn-container .btn.en
   background-color: var(--active-player);
   border-bottom-right-radius: 8px;
 }
+html h2, body h2, #app h2, main h2 {
+  font-family: "Michroma", sans-serif;
+  font-size: 1.5rem;
+  color: var(--text-color);
+  margin: 0;
+}
 
 @keyframes send-out {
   0% {

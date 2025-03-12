@@ -23,12 +23,26 @@ const setDarkMode = () => {
     localStorage.setItem('darkmode-apsidart', managementAppStore.isDarkMode ? 'active' : 'disable');
 }
 
-const launchAnimation = (gameImg: string) => {
-    animationImg.value = gameImg;
+const launchAnimation = (img: string) => {
+    animationImg.value = img;
     isAnimationLaunch.value = true;
     setTimeout(() => {
         launchJelloAnimation.value = true;
     }, 200);
+}
+
+const getRanking = () => {
+    launchAnimation('trophy_3d');
+    setTimeout(() => {
+        router.push({ name: "ranking"});
+    }, 1100);
+}
+
+const getGameDetails = () => {
+    launchAnimation('crossed_swords_3d');
+    setTimeout(() => {
+        router.push({ name: "game-details"});
+    }, 1100);
 }
 
 </script>
@@ -36,17 +50,29 @@ const launchAnimation = (gameImg: string) => {
 <template>
     <div class="header" :class="{'isAnimationLaunch': isAnimationLaunch}">
         <!-- <div class="profile" @click.prevent="goToProfile"></div> -->
-        <div class="title">ENIS</div>
+        <h1 class="title">ENIS</h1>
         <!-- <div class="dark-mode" @click.prevent="setDarkMode">
             <input id="toggle" class="toggle" :class="{'darkmode': isDarkMode}" type="checkbox">
         </div> -->
     </div>
+    <div class="details-container" :class="{'isAnimationLaunch': isAnimationLaunch}">
+        <h2>Général :</h2>
+        <div class="ranking-btn" @click.prevent="getRanking()">
+            <img src="@/assets/images/trophy_3d.png" alt="Trophée">
+            <div class="content">Classement</div>
+        </div>
+        <!-- <div class="games-btn" @click.prevent="getGameDetails()">
+            <img src="@/assets/images/crossed_swords_3d.png" alt="Trophée">
+            <div class="content">Parties</div>
+        </div> -->
+    </div>
     <div class="all-games-container" :class="{'isAnimationLaunch': isAnimationLaunch}">
+        <h2>Jeux :</h2>
         <GameContainer
-            img="darts"
+            img="dart"
             title="Fléchettes"
             route-name="darts-player"
-            @click.prevent="launchAnimation('darts')"
+            @click.prevent="launchAnimation('dart')"
         />
         <!-- <GameContainer
             img="babyfoot"
@@ -87,6 +113,7 @@ const launchAnimation = (gameImg: string) => {
         font-family: "Michroma", sans-serif;
         font-size: 2rem;
         color: var(--text-color);
+        margin: 0;
 
         &::before {
             content: "";
@@ -137,6 +164,44 @@ const launchAnimation = (gameImg: string) => {
                 box-shadow: inset calc(var(--size) * 0.33) calc(var(--size) * -0.25) 0;
                 color: hsl(240, 100%, 95%);
             }
+        }
+    }
+
+    &.isAnimationLaunch {
+        opacity: 0;
+        animation-duration: .2s;
+        animation-name: disapear;
+    }
+}
+
+.details-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+    padding: 0rem 0.5rem 1rem 0.5rem;
+
+    .ranking-btn, .games-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+        width: 100%;
+        height: 3rem;
+        position: relative;
+        background-color: var(--bg-color-secondary);
+        border-radius: 8px;
+        cursor: pointer;
+
+        img {
+            width: 2rem;
+            height: 2rem;
+        }
+        
+        .content {
+            font-family: "Tilt Warp", sans-serif;
+            font-size: 1rem;
+            color: var(--text-color);
         }
     }
 
