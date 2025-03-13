@@ -1,38 +1,22 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import CricketCardPlayer from '@/components/Cricket/CricketCardPlayer.vue';
 import RadioSpeaker from '@/components/RadioSpeaker.vue';
 
-const players = ref([{"id":2,"pseudo":"Mati","firstName":"Matis","name":"Charrier","isActive":true,"points":{"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,"25":0,"total":0},"doors":{"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,"25":0},"volleys":[["","",""]],"position":0},{"id":1,"pseudo":"Kant1","firstName":"Quentin","name":"ROULET","isActive":false,"points":{"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,"25":0,"total":0},"doors":{"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,"25":0},"volleys":[],"position":0},{"id":51,"pseudo":"Rom1F","firstName":"Romain","name":"Fontaine","isActive":false,"points":{"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,"25":0,"total":0},"doors":{"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,"25":0},"volleys":[],"position":0}]);
+const players = ref([{"id":2,"pseudo":"Mati","firstName":"Matis","name":"Charrier","isActive":true,"points":{"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,"25":0,"total":0},"doors":{"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,"25":0},"volleys":[["","",""]],"position":0},{"id":1,"pseudo":"Kant1","firstName":"Quentin","name":"ROULET","isActive":false,"points":{"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,"25":0,"total":0},"doors":{"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,"25":0},"volleys":[],"position":0},{"id":51,"pseudo":"Rom1F","firstName":"Romain","name":"Fontaine","isActive":false,"points":{"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,"25":0,"total":0},"doors":{"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,"25":0},"volleys":[],"position":0},{"id":2,"pseudo":"Mati","firstName":"Matis","name":"Charrier","isActive":true,"points":{"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,"25":0,"total":0},"doors":{"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,"25":0},"volleys":[["","",""]],"position":0},{"id":2,"pseudo":"Mati","firstName":"Matis","name":"Charrier","isActive":true,"points":{"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,"25":0,"total":0},"doors":{"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,"25":0},"volleys":[["","",""]],"position":0},{"id":2,"pseudo":"Mati","firstName":"Matis","name":"Charrier","isActive":true,"points":{"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,"25":0,"total":0},"doors":{"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,"25":0},"volleys":[["","",""]],"position":0},{"id":2,"pseudo":"Mati","firstName":"Matis","name":"Charrier","isActive":true,"points":{"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,"25":0,"total":0},"doors":{"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,"25":0},"volleys":[["","",""]],"position":0},{"id":2,"pseudo":"Mati","firstName":"Matis","name":"Charrier","isActive":true,"points":{"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,"25":0,"total":0},"doors":{"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,"25":0},"volleys":[["","",""]],"position":0},{"id":2,"pseudo":"Mati","firstName":"Matis","name":"Charrier","isActive":true,"points":{"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,"25":0,"total":0},"doors":{"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,"25":0},"volleys":[["","",""]],"position":0},{"id":2,"pseudo":"Mati","firstName":"Matis","name":"Charrier","isActive":true,"points":{"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,"25":0,"total":0},"doors":{"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,"25":0},"volleys":[["","",""]],"position":0}]);
 
-const simple20 = ref('#fff');
-const triple20 = ref('#fff');
-const double20 = ref('#fff');
+const hitZone = ref("");
 
-const simple19 = ref('#fff');
-const triple19 = ref('#fff');
-const double19 = ref('#fff');
+const firstDart = ref("");
+const secondDart = ref("");
+const thirdDart = ref("");
 
-const simple18 = ref('#fff');
-const triple18 = ref('#fff');
-const double18 = ref('#fff');
-
-const simple17 = ref('#fff');
-const triple17 = ref('#fff');
-const double17 = ref('#fff');
-
-const simple16 = ref('#fff');
-const triple16 = ref('#fff');
-const double16 = ref('#fff');
-
-const simple15 = ref('#fff');
-const triple15 = ref('#fff');
-const double15 = ref('#fff');
-
-const bull = ref('#fff');
-const doubleBull = ref('#fff');
-
-
+onMounted(() => {
+    hitZone.value = "19-T20-D18";
+    firstDart.value = hitZone.value.split('-')[0];
+    secondDart.value = hitZone.value.split('-')[1];
+    thirdDart.value = hitZone.value.split('-')[2];
+})
 
 </script>
 
@@ -54,9 +38,9 @@ const doubleBull = ref('#fff');
 
                 <!-- Création des 20 secteurs -->
                 <g>
-                    <!-- 20 --> <path d="M300,300 L339,53 A300,300 0 0 0 261,53 Z" :fill="simple20"/>
-                    <!--   double --> <path stroke="black" stroke-width="1" d="M336,74 L339,53 A300,300 0 0 0 261,53 L264,74 A300,300 0 0 1 336,74 Z" :fill="double20"/>
-                    <!--   triple --> <path stroke="black" stroke-width="1" d="M321,169 L324,149 A300,300 0 0 0 276,149 L279,169 A300,300 0 0 1 321,169 Z" :fill="triple20"/>
+                    <!-- 20 --> <path d="M300,300 L339,53 A300,300 0 0 0 261,53 Z" :class="{'flashing': firstDart === '20' || secondDart === '20' || thirdDart === '20'}" fill="#1C1A1D"/>
+                    <!--   double --> <path stroke="black" stroke-width="1" d="M336,74 L339,53 A300,300 0 0 0 261,53 L264,74 A300,300 0 0 1 336,74 Z" :class="{'flashing': firstDart === 'D20' || secondDart === 'D20' || thirdDart === 'D20'}" fill="#BB2A32"/>
+                    <!--   triple --> <path stroke="black" stroke-width="1" d="M321,169 L324,149 A300,300 0 0 0 276,149 L279,169 A300,300 0 0 1 321,169 Z" :class="{'flashing': firstDart === 'T20' || secondDart === 'T20' || thirdDart === 'T20'}" fill="#BB2A32"/>
                     <!--   nombre --> <text font-family="Arial, Helvetica, sans-serif" font-size="24" text-anchor="middle" alignment-baseline="middle" fill="white" transform="translate(562, 215) rotate(72)">13</text>
 
                     <!-- 5 --> <path d="M300,300 L261,53 A300,300 0 0 0 187,77 Z" fill="#EFDEAD"/>
@@ -89,9 +73,9 @@ const doubleBull = ref('#fff');
                     <!--   triple --> <path stroke="black" stroke-width="1" d="M169,321 L149,324 A300,300 0 0 0 164,370 L182,360 A300,300 0 0 1 169,321 Z" fill="#BB2A32"/>
                     <!--   nombre --> <text font-family="Arial, Helvetica, sans-serif" font-size="24" text-anchor="middle" alignment-baseline="middle" fill="white" transform="translate(138, 78) rotate(324)">12</text>
 
-                    <!-- 16 --> <path d="M300,300 L77,413 A300,300 0 0 0 123,477 Z" :fill="simple16"/>
-                    <!--   double --> <path stroke="black" stroke-width="1" d="M96,404 L77,413 A300,300 0 0 0 123,477 L138,462 A300,300 0 0 1 96,404 Z" :fill="double16"/>
-                    <!--   triple --> <path stroke="black" stroke-width="1" d="M182,360 L164,370 A300,300 0 0 0 192,408 L206,394 A300,300 0 0 1 182,360 Z" :fill="triple16"/>
+                    <!-- 16 --> <path d="M300,300 L77,413 A300,300 0 0 0 123,477 Z" :class="{'flashing': firstDart === '16' || secondDart === '16' || thirdDart === '16'}" fill="#EFDEAD"/>
+                    <!--   double --> <path stroke="black" stroke-width="1" d="M96,404 L77,413 A300,300 0 0 0 123,477 L138,462 A300,300 0 0 1 96,404 Z" :class="{'flashing': firstDart === 'D16' || secondDart === 'D16' || thirdDart === 'D16'}" fill="#3E7A31"/>
+                    <!--   triple --> <path stroke="black" stroke-width="1" d="M182,360 L164,370 A300,300 0 0 0 192,408 L206,394 A300,300 0 0 1 182,360 Z" :class="{'flashing': firstDart === 'T16' || secondDart === 'T16' || thirdDart === 'T16'}" fill="#3E7A31"/>
                     <!--   nombre --> <text font-family="Arial, Helvetica, sans-serif" font-size="24" text-anchor="middle" alignment-baseline="middle" fill="white" transform="translate(78, 138) rotate(306)">9</text>
 
                     <!-- 7 --> <path d="M300,300 L123,477 A300,300 0 0 0 187,523 Z" fill="#1C1A1D"/>
@@ -99,9 +83,9 @@ const doubleBull = ref('#fff');
                     <!--   triple --> <path stroke="black" stroke-width="1" d="M206,394 L192,408 A300,300 0 0 0 230,436 L240,418 A300,300 0 0 1 206,394 Z" fill="#BB2A32"/>
                     <!--   nombre --> <text font-family="Arial, Helvetica, sans-serif" font-size="24" text-anchor="middle" alignment-baseline="middle" fill="white" transform="translate(38, 215) rotate(288)">14</text>
 
-                    <!-- 19 --> <path d="M300,300 L187,523 A300,300 0 0 0 261,547 Z" :fill="simple19"/>
-                    <!--   double --> <path stroke="black" stroke-width="1" d="M196,504 L187,523 A300,300 0 0 0 261,547 L264,526 A300,300 0 0 1 196,504 Z" :fill="double19"/>
-                    <!--   triple --> <path stroke="black" stroke-width="1" d="M240,418 L230,436 A300,300 0 0 0 276,451 L279,431 A300,300 0 0 1 240,418 Z" :fill="triple19"/>
+                    <!-- 19 --> <path d="M300,300 L187,523 A300,300 0 0 0 261,547 Z" :class="{'flashing': firstDart === '19' || secondDart === '19' || thirdDart === '19'}" fill="#EFDEAD"/>
+                    <!--   double --> <path stroke="black" stroke-width="1" d="M196,504 L187,523 A300,300 0 0 0 261,547 L264,526 A300,300 0 0 1 196,504 Z" :class="{'flashing': firstDart === 'D19' || secondDart === 'D19' || thirdDart === 'D19'}" fill="#3E7A31"/>
+                    <!--   triple --> <path stroke="black" stroke-width="1" d="M240,418 L230,436 A300,300 0 0 0 276,451 L279,431 A300,300 0 0 1 240,418 Z" :class="{'flashing': firstDart === 'T19' || secondDart === 'T19' || thirdDart === 'T19'}" fill="#3E7A31"/>
                     <!--   nombre --> <text font-family="Arial, Helvetica, sans-serif" font-size="24" text-anchor="middle" alignment-baseline="middle" fill="white" transform="translate(25, 300) rotate(270)">11</text>
 
                     <!-- 3 --> <path d="M300,300 L261,547 A300,300 0 0 0 339,547 Z" fill="#1C1A1D"/>
@@ -109,9 +93,9 @@ const doubleBull = ref('#fff');
                     <!--   triple --> <path stroke="black" stroke-width="1" d="M279,431 L276,451 A300,300 0 0 0 324,451 L321,431 A300,300 0 0 1 279,431 Z" fill="#BB2A32"/>
                     <!--   nombre --> <text font-family="Arial, Helvetica, sans-serif" font-size="24" text-anchor="middle" alignment-baseline="middle" fill="white" transform="translate(38, 385) rotate(252)">8</text>
 
-                    <!-- 17 --> <path d="M300,300 L339,547 A300,300 0 0 0 413,523 Z" :fill="simple17"/>
-                    <!--   double --> <path stroke="black" stroke-width="1" d="M336,526 L339,547 A300,300 0 0 0 413,523 L404,504 A300,300 0 0 1 336,526 Z" :fill="double17"/>
-                    <!--   triple --> <path stroke="black" stroke-width="1" d="M321,431 L324,451 A300,300 0 0 0 370,436 L360,418 A300,300 0 0 1 321,431 Z" :fill="triple17"/>
+                    <!-- 17 --> <path d="M300,300 L339,547 A300,300 0 0 0 413,523 Z" :class="{'flashing': firstDart === '17' || secondDart === '17' || thirdDart === '17'}" fill="#EFDEAD"/>
+                    <!--   double --> <path stroke="black" stroke-width="1" d="M336,526 L339,547 A300,300 0 0 0 413,523 L404,504 A300,300 0 0 1 336,526 Z" :class="{'flashing': firstDart === 'D17' || secondDart === 'D17' || thirdDart === 'D17'}" fill="#3E7A31"/>
+                    <!--   triple --> <path stroke="black" stroke-width="1" d="M321,431 L324,451 A300,300 0 0 0 370,436 L360,418 A300,300 0 0 1 321,431 Z" :class="{'flashing': firstDart === 'T17' || secondDart === 'T17' || thirdDart === 'T17'}" fill="#3E7A31"/>
                     <!--   nombre --> <text font-family="Arial, Helvetica, sans-serif" font-size="24" text-anchor="middle" alignment-baseline="middle" fill="white" transform="translate(78, 462) rotate(234)">16</text>
 
                     <!-- 2 --> <path d="M300,300 L413,523 A300,300 0 0 0 477,477 Z" fill="#1C1A1D"/>
@@ -119,9 +103,9 @@ const doubleBull = ref('#fff');
                     <!--   triple --> <path stroke="black" stroke-width="1" d="M360,418 L370,436 A300,300 0 0 0 408,408 L394,394 A300,300 0 0 1 360,418 Z" fill="#BB2A32"/>
                     <!--   nombre --> <text font-family="Arial, Helvetica, sans-serif" font-size="24" text-anchor="middle" alignment-baseline="middle" fill="white" transform="translate(138, 522) rotate(216)">7</text>
 
-                    <!-- 15 --> <path d="M300,300 L477,477 A300,300 0 0 0 523,413 Z" :fill="simple15"/>
-                    <!--   double --> <path stroke="black" stroke-width="1" d="M462,462 L477,477 A300,300 0 0 0 523,413 L504,404 A300,300 0 0 1 462,462 Z" :fill="double15"/>
-                    <!--   triple --> <path stroke="black" stroke-width="1" d="M394,394 L408,408 A300,300 0 0 0 436,370 L418,360 A300,300 0 0 1 394,394 Z" :fill="triple15"/>
+                    <!-- 15 --> <path d="M300,300 L477,477 A300,300 0 0 0 523,413 Z" :class="{'flashing': firstDart === '15' || secondDart === '15' || thirdDart === '15'}" fill="#EFDEAD"/>
+                    <!--   double --> <path stroke="black" stroke-width="1" d="M462,462 L477,477 A300,300 0 0 0 523,413 L504,404 A300,300 0 0 1 462,462 Z" :class="{'flashing': firstDart === 'D15' || secondDart === 'D15' || thirdDart === 'D15'}" fill="#3E7A31"/>
+                    <!--   triple --> <path stroke="black" stroke-width="1" d="M394,394 L408,408 A300,300 0 0 0 436,370 L418,360 A300,300 0 0 1 394,394 Z" :class="{'flashing': firstDart === 'T15' || secondDart === 'T15' || thirdDart === 'T15'}" fill="#3E7A31"/>
                     <!--   nombre --> <text font-family="Arial, Helvetica, sans-serif" font-size="24" text-anchor="middle" alignment-baseline="middle" fill="white" transform="translate(215, 562) rotate(198)">19</text>
 
                     <!-- 10 --> <path d="M300,300 L523,413 A300,300 0 0 0 547,339 Z" fill="#1C1A1D"/>
@@ -144,9 +128,9 @@ const doubleBull = ref('#fff');
                     <!--   triple --> <path stroke="black" stroke-width="1" d="M418,240 L436,230 A300,300 0 0 0 408,192 L394,206 A300,300 0 0 1 418,240 Z" fill="#3E7A31"/>
                     <!--   nombre --> <text font-family="Arial, Helvetica, sans-serif" font-size="24" text-anchor="middle" alignment-baseline="middle" fill="white" transform="translate(522, 462) rotate(126)">15</text>
                     
-                    <!-- 18 --> <path d="M300,300 L477,123 A300,300 0 0 0 413,77 Z" :fill="simple18"/>
-                    <!--   double --> <path stroke="black" stroke-width="1" d="M462,138 L477,123 A300,300 0 0 0 413,77 L404,96 A300,300 0 0 1 462,138 Z" :fill="double18"/>
-                    <!--   triple --> <path stroke="black" stroke-width="1" d="M394,206 L408,192 A300,300 0 0 0 370,164 L360,182 A300,300 0 0 1 394,206 Z" :fill="triple18"/>
+                    <!-- 18 --> <path d="M300,300 L477,123 A300,300 0 0 0 413,77 Z" :class="{'flashing': firstDart === '18' || secondDart === '18' || thirdDart === '18'}" fill="#1C1A1D"/>
+                    <!--   double --> <path stroke="black" stroke-width="1" d="M462,138 L477,123 A300,300 0 0 0 413,77 L404,96 A300,300 0 0 1 462,138 Z" :class="{'flashing': firstDart === 'D18' || secondDart === 'D18' || thirdDart === 'D18'}" fill="#BB2A32"/>
+                    <!--   triple --> <path stroke="black" stroke-width="1" d="M394,206 L408,192 A300,300 0 0 0 370,164 L360,182 A300,300 0 0 1 394,206 Z" :class="{'flashing': firstDart === 'T18' || secondDart === 'T18' || thirdDart === 'T18'}" fill="#BB2A32"/>
                     <!--   nombre --> <text font-family="Arial, Helvetica, sans-serif" font-size="24" text-anchor="middle" alignment-baseline="middle" fill="white" transform="translate(562, 385) rotate(108)">10</text>
                     
                     <!-- 1 --> <path d="M300,300 L413,77 A300,300 0 0 0 339,53 Z" fill="#EFDEAD"/>
@@ -155,8 +139,8 @@ const doubleBull = ref('#fff');
                     <!--   nombre --> <text font-family="Arial, Helvetica, sans-serif" font-size="24" text-anchor="middle" alignment-baseline="middle" fill="white" transform="translate(575, 300) rotate(90)">6</text>
                 </g>
 
-                <!-- outer bull --> <circle cx="300" cy="300" r="35" stroke="black" stroke-width="2" :fill="bull"/>
-                <!-- inner bull --> <circle cx="300" cy="300" r="14" stroke="black" stroke-width="2" :fill="doubleBull"/>
+                <!-- outer bull --> <circle cx="300" cy="300" r="35" stroke="black" stroke-width="2" :class="{'flashing': firstDart === '25' || secondDart === '25' || thirdDart === '25'}" fill="#3E7A31"/>
+                <!-- inner bull --> <circle cx="300" cy="300" r="14" stroke="black" stroke-width="2" :class="{'flashing': firstDart === 'D25' || secondDart === 'D25' || thirdDart === 'D25'}" fill="#BB2A32"/>
             </svg>
         </div>
         
@@ -183,11 +167,27 @@ const doubleBull = ref('#fff');
     }
 
     .dartboard {
+        $height: calc(100% - 5rem);
+
         position: absolute;
-        top: calc(50% - 400px);
+        top: calc(50% - calc($height / 2));
         right: 5%;
-        width: 800px;
-        height: 800px;
+        height: $height;
+        aspect-ratio: 1/1;
+
+        .flashing {
+            fill: rgba(249, 205, 97);
+            animation: sound 500ms linear infinite alternate;
+        }
+    }
+}
+
+@keyframes sound {
+    0% {
+        fill: rgb(253, 217, 127);
+    }
+    100% {
+        fill: rgb(255, 183, 0);
     }
 }
 

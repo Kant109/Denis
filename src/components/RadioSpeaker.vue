@@ -120,8 +120,8 @@ const stopSpeaker = () => {
         height: 3px; 
     }
     100% {
-        opacity: 1;       
-        height: 30px;        
+        opacity: 1;
+        height: 30px;
     }
 }
 
