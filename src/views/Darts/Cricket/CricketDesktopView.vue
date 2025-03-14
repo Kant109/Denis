@@ -12,7 +12,7 @@ const secondDart = ref("");
 const thirdDart = ref("");
 
 onMounted(() => {
-    hitZone.value = "19-T20-D18";
+    hitZone.value = "19-D25-D18";
     firstDart.value = hitZone.value.split('-')[0];
     secondDart.value = hitZone.value.split('-')[1];
     thirdDart.value = hitZone.value.split('-')[2];
@@ -156,39 +156,74 @@ onMounted(() => {
 
 
 .desktop-view-container {
+    display: flex;
+    justify-content: space-evenly;
+    width: 100%;
+    min-height: 100%;
+    overflow-y: scroll;
+    position: relative;
 
     .players-container {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
         gap: 1rem;
-        position: absolute;
-        left: 5%;
-        top: 5%;
+        min-height: fit-content;
+        margin: 2rem 0;
     }
 
     .dartboard {
         $height: calc(100% - 5rem);
 
-        position: absolute;
+        position: sticky;
         top: calc(50% - calc($height / 2));
         right: 5%;
         height: $height;
         aspect-ratio: 1/1;
 
         .flashing {
-            fill: rgba(249, 205, 97);
-            animation: sound 500ms linear infinite alternate;
+            fill: rgb(255,0,0);
+            animation: rainbow-bg 2.5s linear infinite;
         }
     }
 }
 
-@keyframes sound {
-    0% {
-        fill: rgb(253, 217, 127);
-    }
-    100% {
-        fill: rgb(255, 183, 0);
-    }
+@keyframes rainbow-bg{
+		100%,0%{
+			fill: rgb(255,0,0);
+		}
+		8%{
+			fill: rgb(255,127,0);
+		}
+		16%{
+			fill: rgb(255,255,0);
+		}
+		25%{
+			fill: rgb(127,255,0);
+		}
+		33%{
+			fill: rgb(0,255,0);
+		}
+		41%{
+			fill: rgb(0,255,127);
+		}
+		50%{
+			fill: rgb(0,255,255);
+		}
+		58%{
+			fill: rgb(0,127,255);
+		}
+		66%{
+			fill: rgb(0,0,255);
+		}
+		75%{
+			fill: rgb(127,0,255);
+		}
+		83%{
+			fill: rgb(255,0,255);
+		}
+		91%{
+			fill: rgb(255,0,127);
+		}
 }
 
 </style>
