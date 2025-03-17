@@ -1,33 +1,49 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { ref, watch } from 'vue';
 import CricketCardPlayer from '@/components/Cricket/CricketCardPlayer.vue';
 import RadioSpeaker from '@/components/RadioSpeaker.vue';
 
-const players = ref([{"id":2,"pseudo":"Mati","firstName":"Matis","name":"Charrier","isActive":true,"points":{"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,"25":0,"total":0},"doors":{"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,"25":0},"volleys":[["","",""]],"position":0},{"id":1,"pseudo":"Kant1","firstName":"Quentin","name":"ROULET","isActive":false,"points":{"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,"25":0,"total":0},"doors":{"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,"25":0},"volleys":[],"position":0},{"id":51,"pseudo":"Rom1F","firstName":"Romain","name":"Fontaine","isActive":false,"points":{"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,"25":0,"total":0},"doors":{"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,"25":0},"volleys":[],"position":0},{"id":2,"pseudo":"Mati","firstName":"Matis","name":"Charrier","isActive":true,"points":{"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,"25":0,"total":0},"doors":{"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,"25":0},"volleys":[["","",""]],"position":0},{"id":2,"pseudo":"Mati","firstName":"Matis","name":"Charrier","isActive":true,"points":{"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,"25":0,"total":0},"doors":{"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,"25":0},"volleys":[["","",""]],"position":0},{"id":2,"pseudo":"Mati","firstName":"Matis","name":"Charrier","isActive":true,"points":{"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,"25":0,"total":0},"doors":{"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,"25":0},"volleys":[["","",""]],"position":0},{"id":2,"pseudo":"Mati","firstName":"Matis","name":"Charrier","isActive":true,"points":{"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,"25":0,"total":0},"doors":{"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,"25":0},"volleys":[["","",""]],"position":0},{"id":2,"pseudo":"Mati","firstName":"Matis","name":"Charrier","isActive":true,"points":{"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,"25":0,"total":0},"doors":{"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,"25":0},"volleys":[["","",""]],"position":0},{"id":2,"pseudo":"Mati","firstName":"Matis","name":"Charrier","isActive":true,"points":{"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,"25":0,"total":0},"doors":{"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,"25":0},"volleys":[["","",""]],"position":0},{"id":2,"pseudo":"Mati","firstName":"Matis","name":"Charrier","isActive":true,"points":{"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,"25":0,"total":0},"doors":{"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,"25":0},"volleys":[["","",""]],"position":0}]);
+const players = ref([{"id":2,"pseudo":"Mati","firstName":"Matis","name":"Charrier","isActive":false,"points":{"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,"25":0,"total":0},"doors":{"15":0,"16":0,"17":0,"18":0,"19":0,"20":9,"25":0},"volleys":[["T20","T20","T20"]],"position":0},{"id":1,"pseudo":"Kant1","firstName":"Quentin","name":"ROULET","isActive":false,"points":{"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,"25":0,"total":0},"doors":{"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,"25":0},"volleys":[],"position":0},{"id":51,"pseudo":"Rom1F","firstName":"Romain","name":"Fontaine","isActive":false,"points":{"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,"25":0,"total":0},"doors":{"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,"25":0},"volleys":[],"position":0},{"id":3,"pseudo":"Mati","firstName":"Matis","name":"Charrier","isActive":false,"points":{"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,"25":0,"total":0},"doors":{"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,"25":0},"volleys":[["","",""]],"position":0},{"id":4,"pseudo":"Mati","firstName":"Matis","name":"Charrier","isActive":true,"points":{"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,"25":0,"total":0},"doors":{"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,"25":0},"volleys":[["","",""]],"position":0},{"id":5,"pseudo":"Mati","firstName":"Matis","name":"Charrier","isActive":false,"points":{"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,"25":0,"total":0},"doors":{"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,"25":0},"volleys":[["","",""]],"position":0},{"id":6,"pseudo":"Mati","firstName":"Matis","name":"Charrier","isActive":false,"points":{"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,"25":0,"total":0},"doors":{"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,"25":0},"volleys":[["","",""]],"position":0},{"id":7,"pseudo":"Mati","firstName":"Matis","name":"Charrier","isActive":false,"points":{"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,"25":0,"total":0},"doors":{"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,"25":0},"volleys":[["","",""]],"position":0},{"id":8,"pseudo":"Mati","firstName":"Matis","name":"Charrier","isActive":false,"points":{"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,"25":0,"total":0},"doors":{"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,"25":0},"volleys":[["","",""]],"position":0},{"id":9,"pseudo":"Mati","firstName":"Matis","name":"Charrier","isActive":false,"points":{"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,"25":0,"total":0},"doors":{"15":0,"16":0,"17":0,"18":0,"19":0,"20":0,"25":0},"volleys":[["","",""]],"position":0}]);
+const nextPlayerId = ref("");
 
-const hitZone = ref("");
+const hitZone = ref([] as Array<string>);
 
 const firstDart = ref("");
 const secondDart = ref("");
 const thirdDart = ref("");
 
-onMounted(() => {
-    hitZone.value = "19-D25-D18";
-    firstDart.value = hitZone.value.split('-')[0];
-    secondDart.value = hitZone.value.split('-')[1];
-    thirdDart.value = hitZone.value.split('-')[2];
-})
+const changePlayer = () => {
+    players.value.forEach(player => {
+        if(player.isActive) {
+            nextPlayerId.value = "#" + player.id;
+            (document.getElementById('changePlayer') as HTMLElement ).click();
+            hitZone.value = player.volleys[player.volleys.length - 1];
+            firstDart.value = hitZone.value[0];
+            secondDart.value = hitZone.value[1];
+            thirdDart.value = hitZone.value[2];
+        }
+    })
+}
+
+watch(
+    () => players.value,
+    () => {
+        changePlayer();
+    }
+)
 
 </script>
 
 <template>
     <div class="desktop-view-container">
+        <a id="changePlayer" :href="nextPlayerId">Change</a>
 
         <div class="players-container">
             <CricketCardPlayer
                 v-for="player in players"
                 :player="player"
                 :is-active="player.isActive"
+                :id="player.id"
             />
         </div>
 
@@ -162,6 +178,11 @@ onMounted(() => {
     min-height: 100%;
     overflow-y: scroll;
     position: relative;
+    scroll-behavior: smooth;
+
+    #changePlayer {
+        display: none;
+    }
 
     .players-container {
         display: grid;
