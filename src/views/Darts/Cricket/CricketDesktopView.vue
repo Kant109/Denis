@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import CricketCardPlayer from '@/components/Cricket/CricketCardPlayer.vue';
 import RadioSpeaker from '@/components/RadioSpeaker.vue';
 
@@ -31,6 +31,13 @@ watch(
         changePlayer();
     }
 )
+
+onMounted(() => {
+    var dartWebSocket = new WebSocket(
+        "ws://www.example.com/socketserver",
+        "dartProtocol",
+    );
+})
 
 </script>
 
