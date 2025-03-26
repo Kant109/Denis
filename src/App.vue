@@ -3,7 +3,6 @@
         <WaitingPage v-if="!isAppLoaded" />
         <RouterView v-else />
     </main>
-  
 </template>
 
 <script setup lang="ts">

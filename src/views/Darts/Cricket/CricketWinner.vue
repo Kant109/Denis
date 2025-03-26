@@ -133,7 +133,7 @@ onBeforeMount(async () => {
                     </div>
                     <div class="game-stats">
                         <div class="player-position">Position : {{ players.indexOf(player) + 1 }} <sup v-if="players.indexOf(player) === 0">er</sup><sup v-else>ème</sup>/ {{ players.length }}</div>
-                        <div class="player-elo">Classement Elo : {{ player.elo !== undefined ? Math.round(player.elo[0]) : "" }}&nbsp;<img v-if="((player.elo !== undefined) && (player.elo.length > 1)) && player.elo[1] < player.elo[0]" src="@/assets/images/chevron-up.svg" alt=""><img v-if="((player.elo !== undefined) && (player.elo.length > 1)) && player.elo[1] > player.elo[0]" src="@/assets/images/chevron-down.svg" alt="">&nbsp;{{ ((player.elo !== undefined) && (player.elo.length > 1)) ? " ("  + (player.elo[0] - player.elo[1] < 0 ? player.elo[0] - player.elo[1] : `+${ player.elo[0] - player.elo[1] }`) + ")" : "" }}</div>
+                        <div class="player-elo">Classement Elo : {{ player.elo !== undefined ? Math.round(player.elo[0]) : "" }}&nbsp;<img v-if="((player.elo !== undefined) && (player.elo.length > 1)) && player.elo[1] < player.elo[0]" src="@/assets/images/chevron-up-green.svg" alt=""><img v-if="((player.elo !== undefined) && (player.elo.length > 1)) && player.elo[1] > player.elo[0]" src="@/assets/images/chevron-down-red.svg" alt="">&nbsp;{{ ((player.elo !== undefined) && (player.elo.length > 1)) ? " ("  + (player.elo[0] - player.elo[1] < 0 ? player.elo[0] - player.elo[1] : `+${ player.elo[0] - player.elo[1] }`) + ")" : "" }}</div>
                     </div>
                     <div class="stats-container" v-if="chartDataLoaded">
                         <highcharts :options="player.chartData"></highcharts>

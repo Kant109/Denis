@@ -5,11 +5,12 @@ import Header from '@/components/Header.vue';
 
 const selectedSport = ref("");
 const games = ref([] as Array<GameDetails>);
+const isAllPlayersOpen = ref(false);
 
 const router = useRouter();
 
 const getGameDetails = async (sport: string) => {
-    const url = import.meta.env.VITE_BE_URL + "/" + sport + "/game";
+    const url = import.meta.env.VITE_BE_URL + "/" + sport + "/game/detail";
     try {
         const response = await fetch(url);
         if (!response.ok) {
@@ -27,6 +28,18 @@ const previousRoute = () => {
 
 const seeGameDetails = (idGame: number) => {
     console.log(idGame)
+}
+
+const beautifyDate = (date: string) => {
+    const parts = date.split("-");
+    if (parts.length === 3) {
+        const year = parts[0];
+        const month = parts[1];
+        const day = parts[2];
+        return `${day}/${month}/${year}`;
+    } else {
+        return date;
+    }
 }
 
 onBeforeMount(() => {
@@ -57,12 +70,30 @@ watch(
             <div class="game" v-for="game in games">
                 <div class="info-game">
                     <div class="id">
-                        Partie #{{ game.id }}
+                        Partie du {{ beautifyDate(game.date) }}
                     </div>
-                    <img :src="'/icons/' + selectedSport + '.png'" :alt="selectedSport">
+                    <div class="nb-players">
+                        {{ game.dartPlayers.length.toString() }}
+                        <img src="@/assets/images/users.svg" alt="Nombre de joueurs">
+                    </div>
                 </div>
                 <div class="winner-info">
-                    {{ game.typeGame }}
+                    <img class="player-img" :src="'https://api.dicebear.com/9.x/adventurer/svg?seed=' + game.dartPlayers[0].firstName + game.dartPlayers[0].pseudo + game.dartPlayers[0].name" alt="Avatar" />
+                    {{ game.dartPlayers[0].firstName }} "{{ game.dartPlayers[0].pseudo }}" {{ game.dartPlayers[0].name }} 
+                    <img class="trophy" src="@/assets/images/trophy_3d.png" alt="Trophée">
+                </div>
+                <div class="other-players">
+                    <details class="accordion" :open="isAllPlayersOpen">
+                        <summary>
+                            Joueurs
+                        </summary>
+                        <div class="accordion-content">
+                            <div class="players-name" v-for="player in game.dartPlayers">
+                                <img class="players-avatar" :src="'https://api.dicebear.com/9.x/adventurer/svg?seed=' + player.firstName + player.pseudo + player.name" alt="Avatar">
+                                {{ player.firstName }} "{{ player.pseudo }}" {{ player.name }}
+                            </div>
+                        </div>
+                    </details>
                 </div>
                 <div class="see-more" @click.prevent="seeGameDetails(game.id)">plus de statistiques</div>
             </div>
@@ -127,7 +158,7 @@ watch(
             cursor: pointer;
             font-family: "Playpen Sans", sans-serif;
             font-size: 1rem;
-            padding: 0 1rem 1rem 1rem;
+            padding: 1rem;
             gap: .5rem;
 
             .info-game {
@@ -136,9 +167,98 @@ watch(
                 align-items: center;
                 width: 100%;
 
-                img {
+                .nb-players {
+                    display: flex;
+                    align-items: center;
+                    font-size: 1.125rem;
+
+                    img {
+                        width: 2rem;
+                        aspect-ratio: 1/1;
+                    }
+                }
+            }
+
+            .winner-info {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 1rem;
+                font-family: "Michroma", sans-serif;
+                font-size: 1rem;
+                color: var(--text-color);
+
+                .player-img {
                     width: 4rem;
-                    aspect-ratio: 1/1;
+                    height: 4rem;
+                }
+
+                .trophy {
+                    width: 2rem;
+                    height: 2rem;
+                }
+            }
+
+            .other-players {
+                display: flex;
+                align-items: center;
+                width: 100%;
+
+                details.accordion {
+                    font-size: 1rem;
+                    width: 100%;
+                    border-radius: .5rem;
+                    align-items: center;
+                    transition: all 1s ease;
+                    cursor: pointer;
+                    padding: 0 1rem;
+
+                    summary {
+                        display: flex;
+                        font-size: 1.125rem;
+                        display: flex;
+                        align-items: center;
+
+                        &::after {
+                            content: "";
+                            width: 1.125rem;
+                            aspect-ratio: 1/1;
+                            margin-left: auto;
+                            transition: transform 0.8s ease;
+                            background-image: url("@/assets/images/chevron-down.svg");
+                            background-position: center;
+                            background-repeat: no-repeat;
+                            background-size: contain;
+                        }
+                    }
+
+                    .accordion-content {
+                        display: flex;
+                        flex-direction: column;
+                        gap: .5rem;
+                        padding-top: .5rem;
+
+                        .players-name {
+                            display: flex;
+                            font-family: "Michroma", sans-serif;
+                            font-size: 1rem;
+                            color: var(--text-color);
+                            gap: 1rem;
+
+                            .players-avatar {
+                                height: 3rem;
+                                width: 3rem;
+                            }
+                        }
+                    }
+                }
+
+                details.accordion[open] {
+                    summary {
+                        &::after {
+                            transform: rotate(180deg);
+                        }
+                    }
                 }
             }
 

@@ -64,18 +64,21 @@ watch(
 
 onMounted(async () => {
     if(gameStore.gameId === 0) {
-        const participants = async () => {
-            let participants = [] as Array<Player>;
-            players.value.forEach(player => {
-                participants.push({
-                    "id": player.id,
-                    "firstName": player.firstName,
-                    "name": player.name,
-                    "pseudo": player.pseudo
-                })
-            });
+        const performances = async () => {
+            let performances = [] as Array<DartPerformance>;
+                players.value.forEach(player => {
 
-            return participants;
+                    performances.push({
+                        "idPlayer": player.id,
+                        "pseudo": player.firstName,
+                        "score": 0,
+                        "position": players.value.indexOf(player) + 1,
+                        "volley": null,
+                        "numberRound": 0,
+                    })
+                });
+
+            return performances;
         }
 
         const currentDate = async (): Promise<string> => {
@@ -98,7 +101,7 @@ onMounted(async () => {
         const data: DartGame = {
             "typeGame": "DACKT",
             "creationDate": await currentDate() ,
-            "players": await participants()
+            "players": await performances()
         }
 
         const maPromesse = new Promise(async (resolve, reject) => {

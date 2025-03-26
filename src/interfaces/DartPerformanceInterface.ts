@@ -3,6 +3,6 @@ interface DartPerformance {
     pseudo: string,
     score: number,
     position: number,
-    volley: string,
+    volley: string | null,
     numberRound: number
 }
