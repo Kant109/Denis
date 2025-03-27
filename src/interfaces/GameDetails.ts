@@ -3,5 +3,5 @@ interface GameDetails {
     statut: string,
     typeGame: string,
     date: string,
-    performances: null 
+    dartPlayers: Array<Player> 
 }

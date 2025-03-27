@@ -61,10 +61,10 @@ const getGameDetails = () => {
             <img src="@/assets/images/trophy_3d.png" alt="Trophée">
             <div class="content">Classement</div>
         </div>
-        <!-- <div class="games-btn" @click.prevent="getGameDetails()">
-            <img src="@/assets/images/crossed_swords_3d.png" alt="Trophée">
+        <div class="games-btn" @click.prevent="getGameDetails()">
+            <img src="@/assets/images/crossed_swords_3d.png" alt="Parties">
             <div class="content">Parties</div>
-        </div> -->
+        </div>
     </div>
     <div class="all-games-container" :class="{'isAnimationLaunch': isAnimationLaunch}">
         <h2>Jeux :</h2>

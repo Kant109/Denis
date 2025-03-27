@@ -1,17 +1,20 @@
 <script setup lang="ts">
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { useCricketGameStore } from "@/stores/CricketGameStore";
 import { computed, onBeforeMount, ref } from "vue";
 import { register } from 'swiper/element/bundle';
 import { useManagementAppStore } from "@/stores/ManagementAppStore";
+import { usePlayerStore } from "@/stores/PlayerStore";
 
+const playerStore = usePlayerStore();
 const gameStore = useCricketGameStore();
 const managementAppStore = useManagementAppStore();
 
-const players = computed(() => gameStore.players);
+const players = computed(() => playerStore.players);
 const chartDataLoaded = ref(false);
 
 const router = useRouter();
+const gameId = useRoute().params.gameId;
 
 const replay = () => {
     gameStore.reset();
@@ -20,13 +23,14 @@ const replay = () => {
 
 const backHome = () => {
     gameStore.reset();
+    managementAppStore.seeGameDetails = false;
     router.push({ name: "home"});
 }
 
 onBeforeMount(async () => {
     register();
     try {
-        const response = await fetch(import.meta.env.VITE_BE_URL + "/dart/stat/game/" + gameStore.gameId + "/detail?typeGame=DACKT");
+        const response = await fetch(import.meta.env.VITE_BE_URL + "/dart/stat/game/" + gameId + "/detail?typeGame=DACKT");
         if (!response.ok) {
             throw new Error(`Response status: ${response.status}`);
         }
@@ -34,7 +38,7 @@ onBeforeMount(async () => {
 
         players.value.forEach(player => {
             let evolutionScore = cricketGameStats.evolutionScore[player.id];
-            evolutionScore.push(player.points.total);
+            evolutionScore.splice(evolutionScore.length - 1, 0 , evolutionScore[evolutionScore.length - 2])
 
             player.chartData = {
                 title: {
@@ -89,7 +93,7 @@ onBeforeMount(async () => {
                         color: "#0000FF",
                         zoneAxis: 'x',
                         zones: [{
-                            value: cricketGameStats.evolutionPosition[player.id].length - 1
+                            value: cricketGameStats.evolutionPosition[player.id].length - 2
                         }, {
                             dashStyle: 'dot'
                         }]
@@ -133,12 +137,12 @@ onBeforeMount(async () => {
                     </div>
                     <div class="game-stats">
                         <div class="player-position">Position : {{ players.indexOf(player) + 1 }} <sup v-if="players.indexOf(player) === 0">er</sup><sup v-else>ème</sup>/ {{ players.length }}</div>
-                        <div class="player-elo">Classement Elo : {{ player.elo !== undefined ? Math.round(player.elo[0]) : "" }}&nbsp;<img v-if="((player.elo !== undefined) && (player.elo.length > 1)) && player.elo[1] < player.elo[0]" src="@/assets/images/chevron-up.svg" alt=""><img v-if="((player.elo !== undefined) && (player.elo.length > 1)) && player.elo[1] > player.elo[0]" src="@/assets/images/chevron-down.svg" alt="">&nbsp;{{ ((player.elo !== undefined) && (player.elo.length > 1)) ? " ("  + (player.elo[0] - player.elo[1] < 0 ? player.elo[0] - player.elo[1] : `+${ player.elo[0] - player.elo[1] }`) + ")" : "" }}</div>
+                        <div class="player-elo">Classement Elo : {{ player.elo !== undefined ? Math.round(player.elo[0]) : "" }}&nbsp;<img v-if="((player.elo !== undefined) && (player.elo.length > 1)) && player.elo[1] < player.elo[0]" src="@/assets/images/chevron-up-green.svg" alt=""><img v-if="((player.elo !== undefined) && (player.elo.length > 1)) && player.elo[1] > player.elo[0]" src="@/assets/images/chevron-down-red.svg" alt="">&nbsp;{{ ((player.elo !== undefined) && (player.elo.length > 1)) ? " ("  + (player.elo[0] - player.elo[1] < 0 ? player.elo[0] - player.elo[1] : `+${ player.elo[0] - player.elo[1] }`) + ")" : "" }}</div>
                     </div>
                     <div class="stats-container" v-if="chartDataLoaded">
                         <highcharts :options="player.chartData"></highcharts>
                     </div>
-                    <div class="btn-replay" @click.prevent="replay">Rejouer</div>
+                    <div v-if="!managementAppStore.seeGameDetails" class="btn-replay" @click.prevent="replay">Rejouer</div>
                 </div>
             </swiper-slide>
         </swiper-container>
