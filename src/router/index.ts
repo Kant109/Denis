@@ -7,7 +7,7 @@ import DartsPlayer from '@/views/Darts/DartsPlayer.vue'
 import CricketMode from '@/views/Darts/Cricket/CricketMode.vue'
 import X01Mode from '@/views/Darts/X01/X01Mode.vue'
 import CricketTeamMode from '@/views/Darts/Cricket/CricketTeamMode.vue'
-import CricketWinner from '@/views/Darts/Cricket/CricketWinner.vue'
+import RecapGame from '@/views/Darts/RecapGame.vue'
 import X01Winner from '@/views/Darts/X01/X01Winner.vue'
 import Ranking from '@/views/Ranking.vue'
 import GameDetails from '@/views/GameDetails.vue'
@@ -61,9 +61,10 @@ const router = createRouter({
       component: CricketGame
     },
     {
-      path: '/darts/cricket/winner',
-      name: 'cricket-winner',
-      component: CricketWinner
+      path: '/darts/recap-game/:gameId',
+      name: 'recap-game',
+      component: RecapGame,
+      props: true
     },
     {
       path: '/darts/x01/game',

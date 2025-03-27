@@ -282,14 +282,14 @@ const sendRound = async (performances: DartPerformance[]) => {
 const endGame = async () => {
     let performances = [] as Array<DartPerformance>;
 
-    await getPlayersPosition();
+    const pointsPlayers = await getPlayersPosition();
 
     players.value.forEach(player => {
 
         performances.push({
             "idPlayer": player.id,
             "pseudo": player.firstName,
-            "score": player.points.total,
+            "score": pointsPlayers[players.value.indexOf(player)].points.total,
             "position": player.position,
             "volley": player.volleys[player.volleys.length - 1][0] + "-" + player.volleys[player.volleys.length - 1][1] + "-" + player.volleys[player.volleys.length - 1][2],
             "numberRound": numberRound.value,

@@ -2,6 +2,11 @@
 import { onBeforeMount, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import Header from '@/components/Header.vue';
+import { usePlayerStore } from '@/stores/PlayerStore';
+import { useManagementAppStore } from '@/stores/ManagementAppStore';
+
+const playerStore = usePlayerStore();
+const managementAppStore = useManagementAppStore();
 
 const selectedSport = ref("");
 const games = ref([] as Array<GameDetails>);
@@ -26,8 +31,10 @@ const previousRoute = () => {
     router.push({ name:"home" });
 }
 
-const seeGameDetails = (idGame: number) => {
-    console.log(idGame)
+const seeGameDetails = (game: GameDetails) => {
+    managementAppStore.seeGameDetails = true;
+    playerStore.players = game.dartPlayers;
+    router.push({ name: "recap-game", params: {gameId: game.id} });
 }
 
 const beautifyDate = (date: string) => {
@@ -77,12 +84,15 @@ watch(
                         <img src="@/assets/images/users.svg" alt="Nombre de joueurs">
                     </div>
                 </div>
-                <div class="winner-info">
+                <div v-if="game.statut === 'COMPLETED'" class="winner-info">
                     <img class="player-img" :src="'https://api.dicebear.com/9.x/adventurer/svg?seed=' + game.dartPlayers[0].firstName + game.dartPlayers[0].pseudo + game.dartPlayers[0].name" alt="Avatar" />
                     {{ game.dartPlayers[0].firstName }} "{{ game.dartPlayers[0].pseudo }}" {{ game.dartPlayers[0].name }} 
                     <img class="trophy" src="@/assets/images/trophy_3d.png" alt="Trophée">
                 </div>
-                <div class="other-players">
+                <div class="game-statut" v-else>
+                    Partie en cours
+                </div>
+                <div v-if="game.statut === 'COMPLETED'" class="other-players">
                     <details class="accordion" :open="isAllPlayersOpen">
                         <summary>
                             Joueurs
@@ -95,7 +105,7 @@ watch(
                         </div>
                     </details>
                 </div>
-                <div class="see-more" @click.prevent="seeGameDetails(game.id)">plus de statistiques</div>
+                <div v-if="game.statut === 'COMPLETED'" class="see-more" @click.prevent="seeGameDetails(game)">plus de statistiques</div>
             </div>
         </div>
     </div>
@@ -197,6 +207,10 @@ watch(
                     width: 2rem;
                     height: 2rem;
                 }
+            }
+
+            .game-statut {
+                font-size: 1.5rem;
             }
 
             .other-players {

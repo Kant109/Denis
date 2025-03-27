@@ -58,7 +58,7 @@ watch(
     () => {
         managementAppStore.openConfirmEndGame = false;
         managementAppStore.blur = false;
-        router.push({ name: "cricket-winner" });
+        router.push({ name: "recap-game", params: {gameId: gameStore.gameId} });
     }
 );
 

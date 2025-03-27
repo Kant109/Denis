@@ -6,10 +6,12 @@ import { useRouter } from 'vue-router';
 import draggable from 'vuedraggable';
 import { LottieAnimation } from "lottie-web-vue";
 import DartsAnimation from "../../assets/animations/loader.json";
+import { usePlayerStore } from '@/stores/PlayerStore';
 
 const router = useRouter();
 
 const managementAppStore = useManagementAppStore();
+const playerStore = usePlayerStore();
 
 const allPlayers = ref([] as Array<Player>);
 const selectedPlayers = ref([] as Array<Player>);
@@ -28,6 +30,7 @@ const loader = ref(true);
 
 
 onMounted(async () => {
+    playerStore.players = [];
     if((localStorage.getItem('orderedDartsPlayer') as string) !== null) {
         const playersFromLocalStorage = JSON.parse(localStorage.getItem('orderedDartsPlayer') as string) as Array<Player>;
         selectedPlayers.value.push(...playersFromLocalStorage);
@@ -81,6 +84,7 @@ const selectPlayer = (player: Player) => {
 const startGame = () => {
     if(selectedPlayers.value.length > 1) {
         router.push({ name: "darts-mode"});
+        playerStore.players = selectedPlayers.value;
         localStorage.setItem('orderedDartsPlayer', JSON.stringify([].slice.call(selectedPlayers.value)));
     } else {
         messageErrorNbPlayer.value = true;
@@ -131,7 +135,6 @@ const createPlayer = async () => {
         }
 
         Object.assign(player, { id: await response.json() });
-        Object.assign(player, { order: (selectedPlayers.value.length + 1).toString() });
 
         selectedPlayers.value.push(player as Player);
     } catch (error: any) {
@@ -345,7 +348,7 @@ const back = () => {
                 @include btn-primary;
             }
             
-            .btn-add-player, .btn-modif-player, .btn-change-order {
+            .btn-add-player {
                 @include btn-secondary;
             }
         }
