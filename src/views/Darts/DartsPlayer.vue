@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Header from '@/components/Header.vue';
 import { useManagementAppStore } from '@/stores/ManagementAppStore';
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import draggable from 'vuedraggable';
 import { LottieAnimation } from "lottie-web-vue";
@@ -13,6 +13,7 @@ const managementAppStore = useManagementAppStore();
 
 const allPlayers = ref([] as Array<Player>);
 const selectedPlayers = ref([] as Array<Player>);
+const deletedPlayers = ref([] as Array<Player>);
 const openSearchPlayer = ref(false);
 const isDarkMode = computed(() => managementAppStore.isDarkMode);
 const modalTitle = ref("Sélectionner des joueurs");
@@ -87,11 +88,9 @@ const startGame = () => {
     }
 }
 
-const removePlayer = (player: Player) => {
-    const indexOfPlayer = selectedPlayers.value.indexOf(player);
-    selectedPlayers.value.splice(indexOfPlayer, 1);
-    allPlayers.value.push(player);
-}
+// const removePlayer = (player: Player) => {
+//     allPlayers.value.push(player);
+// }
 
 const addingPlayer = () => {
     modalTitle.value = "Nouveau joueur";
@@ -146,24 +145,31 @@ const cancel = () => {
 const back = () => {
     router.push({ name: "home" });
 }
+
+watch(
+    () => deletedPlayers.value,
+    () => {
+        allPlayers.value.push(deletedPlayers.value[0]);
+        deletedPlayers.value.pop();
+    }
+)
 </script>
 
 <template>
     <div class="settings-container" :class="{'blur': openSearchPlayer}">
         <Header title="FLÉCHETTES" @previous-route="back" />
         <div class="adding-player-container">
-            <draggable v-if="selectedPlayers.length > 0" 
-                    tag="div"
-                    v-model="selectedPlayers"
-                    animation="200"
-                    group="players"
-                    @start="drag = true"
-                    @end="drag = false"
-                    ghost-class = "ghost"
-                    class="adding-player-recap"
-                    item-key="order"
-                    filter=".btn-remove"
-                >
+            <draggable 
+                tag="div"
+                v-model="selectedPlayers"
+                animation="200"
+                group="players"
+                @start="drag = true"
+                @end="drag = false"
+                ghost-class = "ghost"
+                class="adding-player-recap"
+                item-key="order"
+            >
                 <template #item="{ element: player }: {element : Player}" @dragover.prevent>
                     <div class="player-container">
                         <i class="player-order">{{ selectedPlayers.indexOf(player) + 1  }}</i>
@@ -171,9 +177,6 @@ const back = () => {
                             <img class="player-img" :src="'https://api.dicebear.com/9.x/adventurer/svg?seed=' + player.firstName + player.pseudo + player.name" alt="Avatar" />
                             <div class="player-name">{{ player.pseudo.length > 5 ? player.pseudo.substring(0,5) + ".." : player.pseudo}}</div>
                         </div>
-                        <button type="button" class="btn-remove" v-on:click="removePlayer(player)">
-                            <i class="btn-remove-icon">x</i>
-                        </button>
                     </div>
                 </template>
                 <template #footer>
@@ -183,8 +186,18 @@ const back = () => {
                 </template>
             </draggable>
             <div class="error-nb-player" v-if="messageErrorNbPlayer">Il faut minimum 2 joueurs pour lancer une partie</div>
+            <draggable
+                v-if="drag"
+                class="delete-player"
+                animation="200"
+                v-model="deletedPlayers"
+                group="players"
+                item-key="order"
+            >
+                <template #item="{ element: player }: {element : Player}"></template>
+            </draggable>
             <div class="btn-container">
-                <div v-if="selectedPlayers.length > 0" class="btn-start-game" @click.prevent="startGame">Choix du mode</div>
+                <div class="btn-start-game" @click.prevent="startGame">Choix du mode</div>
             </div>
         </div>
     </div>
@@ -267,17 +280,20 @@ const back = () => {
         gap: 1rem;
         animation: appear .5s;
 
-        .adding-player-recap {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            grid-template-rows: auto;
-            grid-column-gap: 1rem;
-            grid-row-gap: 1rem;
-            background-color: var(--bg-color-secondary);
-            border-radius: .5rem;
-            width: 90%;
-            padding: 1rem;
-            box-shadow: rgb(0, 0, 0, .25) 0px 5px 5px 0px inset;
+        .adding-player-recap, .delete-player {
+
+            &:is(.adding-player-recap) {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                grid-template-rows: auto;
+                grid-column-gap: 1rem;
+                grid-row-gap: 1rem;
+                background-color: var(--bg-color-secondary);
+                border-radius: .5rem;
+                width: 90%;
+                padding: 1rem;
+                box-shadow: rgb(0, 0, 0, .25) 0px 5px 5px 0px inset;
+            }
 
             .player-container {
                 display: flex;
@@ -285,10 +301,15 @@ const back = () => {
                 align-items: center;
                 justify-content: center;
                 background-color: var(--bg-color-primary);
-                width: 100%;
+                width: min( 102px, 100%);
 
                 border: 5px solid var(--bg-color-primary);
+                border-radius: .5rem;
                 position: relative;
+
+                &.ghost {
+                    opacity: .5rem;
+                }
 
                 &:hover {
                     cursor: grab;
@@ -324,6 +345,24 @@ const back = () => {
                     left: 0.2rem;
                     font-style: normal;
                     font-size: large;
+                }
+            }
+
+            &:is(.delete-player) {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background-color: rgba(red, .25);
+                background-image: url("@/assets/images/trash.svg");
+                background-position: center;
+                background-size: 50px;
+                background-repeat: no-repeat;
+                border-radius: .5rem;
+                width: 25%;
+                height: 75px;
+                
+                .player-container {
+                    opacity: 50%;
                 }
             }
         }
