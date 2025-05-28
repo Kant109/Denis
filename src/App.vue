@@ -11,14 +11,31 @@ import { computed, onBeforeMount, onMounted } from 'vue';
 import { useManagementAppStore } from './stores/ManagementAppStore';
 import WaitingPage from './views/WaitingPage.vue';
 import { RouterView } from 'vue-router';
+import { usePlayerStore } from './stores/PlayerStore';
 
 const managementAppStore = useManagementAppStore();
+const playerStore = usePlayerStore();
 
 const isAppLoaded = computed(() => managementAppStore.isAppLoaded);
 const isDarkMode = computed(() => managementAppStore.isDarkMode);
+const players = computed(() => playerStore.players);
 
-onBeforeMount(() => {
+onBeforeMount(async () => {
     managementAppStore.isDarkMode = localStorage.getItem('darkmode-apsidart') === 'active';
+    const url = import.meta.env.VITE_BE_URL + "/players";
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`Response status: ${response.status}`);
+        }
+        const playerFromApi = await response.json();
+
+        playerFromApi.forEach((player: Player) => {
+            players.value.push(player);
+        });
+    } catch (error: any) {
+        console.error(error.message);
+    }
 })
 
 onMounted(async () => {
