@@ -280,7 +280,7 @@ html .confirm-end-game-dialog .confirm-end-game-container .btn-container .btn.en
   border-bottom-right-radius: 8px;
 }
 html h2, body h2, #app h2, main h2 {
-  font-family: "Michroma", sans-serif;
+  font-family: "Honk", system-ui;
   font-size: 1.5rem;
   color: var(--text-color);
   margin: 0;

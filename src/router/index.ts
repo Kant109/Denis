@@ -11,7 +11,7 @@ import CricketWinner from '@/views/Darts/Cricket/CricketWinner.vue'
 import X01Winner from '@/views/Darts/X01/X01Winner.vue'
 import Ranking from '@/views/Ranking.vue'
 import GameDetails from '@/views/GameDetails.vue'
-import BabykonGame from '@/components/Babykon/BabykonGame.vue'
+import BabykonGame from '@/views/Babykon/BabykonGame.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
