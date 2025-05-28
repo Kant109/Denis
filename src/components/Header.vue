@@ -20,7 +20,7 @@ const back = () => {
 
 <template>
     <div class="header" :class="{'blur': blur}">
-        <img src="@/assets/images/chevron-white.svg" alt="Retour" @click.prevent="back">
+        <img src="@/assets/images/chevron.svg" alt="Retour" @click.prevent="back">
         <div class="title">
             {{ title }}
             <div class="by-matis" v-if="madeByMatis">by Matis</div>
