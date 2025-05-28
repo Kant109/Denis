@@ -24,7 +24,7 @@ export default defineConfig({
       manifest: {
         name: 'Denis',
         short_name: 'Denis',
-        description: 'Un pur de moment plaisir',
+        description: 'Un pur moment de plaisir',
         theme_color: '#ffffff',
         icons: [
           {

@@ -14,16 +14,10 @@ const managementAppStore = useManagementAppStore();
 
 const isDarkMode = computed(() => managementAppStore.isDarkMode);
 
-const goToDarts = () => {
-    setTimeout(() => {
-        router.push({name: props.routeName});
-    }, 1100);
-}
-
 </script>
 
 <template>
-    <div class="game-container" :class="{'darkMode': isDarkMode}" @click.prevent="goToDarts">
+    <div class="game-container" :class="{'darkMode': isDarkMode}">
         <div class="game-content">
             <img :src="'/icons/' + props.img + '.png'" alt="Image Game">
             <div class="game-text">

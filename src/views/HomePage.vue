@@ -38,6 +38,21 @@ const getRanking = () => {
     }, 1100);
 }
 
+const getDart = () => {
+    launchAnimation('dart');
+    setTimeout(() => {
+        router.push({ name: "darts-player"});
+    }, 1100);
+}
+
+
+const getBabykon = () => {
+    launchAnimation('babyfoot');
+    setTimeout(() => {
+        router.push({ name: "babykon-game"});
+    }, 1100);
+}
+
 const getGameDetails = () => {
     launchAnimation('crossed_swords_3d');
     setTimeout(() => {
@@ -72,14 +87,14 @@ const getGameDetails = () => {
             img="dart"
             title="Fléchettes"
             route-name="darts-player"
-            @click.prevent="launchAnimation('dart')"
+            @click.prevent="getDart()"
         />
-        <!-- <GameContainer
+        <GameContainer
             img="babyfoot"
-            title="Babyfoot"
-            route-name="babyfoot-player"
-            @click.prevent="launchAnimation('babyfoot')"
-        /> -->
+            title="Babykon"
+            route-name="babykon-game"
+            @click.prevent="getBabykon()"
+        /> 
     </div>
     <div v-if="isAnimationLaunch" class="container-animation">
         <div class="scale-animation" :class="{'jello-animation': launchJelloAnimation}">
