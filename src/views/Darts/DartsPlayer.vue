@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import Header from '@/components/Header.vue';
 import { useManagementAppStore } from '@/stores/ManagementAppStore';
-import { computed, onMounted, ref, watch } from 'vue';
+import { usePlayerStore } from '@/stores/PlayerStore';
+import { onMounted, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import draggable from 'vuedraggable';
 import { LottieAnimation } from "lottie-web-vue";
@@ -9,13 +10,12 @@ import DartsAnimation from "../../assets/animations/loader.json";
 
 const router = useRouter();
 
-const managementAppStore = useManagementAppStore();
+const playersStore = usePlayerStore();
 
 const allPlayers = ref([] as Array<Player>);
 const selectedPlayers = ref([] as Array<Player>);
 const deletedPlayers = ref([] as Array<Player>);
 const openSearchPlayer = ref(false);
-const isDarkMode = computed(() => managementAppStore.isDarkMode);
 const modalTitle = ref("Sélectionner des joueurs");
 const creatingPlayer = ref(false);
 const formError = ref(false);
@@ -37,16 +37,7 @@ onMounted(async () => {
         openSearchPlayer.value = true;
     }
 
-    const url = import.meta.env.VITE_BE_URL + "/players";
-    try {
-        const response = await fetch(url);
-        if (!response.ok) {
-            throw new Error(`Response status: ${response.status}`);
-        }
-        allPlayers.value = await response.json();
-    } catch (error: any) {
-        console.error(error.message);
-    }
+    allPlayers.value = playersStore.players;
 
     if(selectedPlayers.value.length > 0) {
         selectedPlayers.value.forEach(player => {
@@ -87,10 +78,6 @@ const startGame = () => {
         messageErrorNbPlayer.value = true;
     }
 }
-
-// const removePlayer = (player: Player) => {
-//     allPlayers.value.push(player);
-// }
 
 const addingPlayer = () => {
     modalTitle.value = "Nouveau joueur";
@@ -224,7 +211,7 @@ watch(
                                 <div class="player-full-name">{{ player.firstName.length + player.name.length > 18 ? (player.firstName + " " + player.name).substring(0,18) + ".." : player.firstName + " " + player.name}}</div>
                             </div>
                         </div>
-                        <div class="select-player" :class="{'darkmode': isDarkMode}" @click.prevent="selectPlayer(player)"></div>
+                        <div class="select-player" @click.prevent="selectPlayer(player)"></div>
                     </div>
                     <div class="btn-close-modal" @click.prevent="closeModal">Valider</div>
                 </div>

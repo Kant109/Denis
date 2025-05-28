@@ -4,24 +4,11 @@ import { useRouter } from 'vue-router';
 import { useManagementAppStore } from '@/stores/ManagementAppStore';
 import GameContainer from '@/components/GameContainer.vue';
 
-const managementAppStore = useManagementAppStore();
-
 const router = useRouter();
 
 const isAnimationLaunch = ref(false);
 const launchJelloAnimation = ref(false);
 const animationImg = ref('');
-
-const isDarkMode = computed(() => managementAppStore.isDarkMode);
-
-const goToProfile = () => {
-    router.push({ name: "profile"});
-}
-
-const setDarkMode = () => {
-    managementAppStore.isDarkMode = !isDarkMode.value;
-    localStorage.setItem('darkmode-apsidart', managementAppStore.isDarkMode ? 'active' : 'disable');
-}
 
 const launchAnimation = (img: string) => {
     animationImg.value = img;
@@ -64,11 +51,7 @@ const getGameDetails = () => {
 
 <template>
     <div class="header" :class="{'isAnimationLaunch': isAnimationLaunch}">
-        <!-- <div class="profile" @click.prevent="goToProfile"></div> -->
         <h1 class="title">ENIS</h1>
-        <!-- <div class="dark-mode" @click.prevent="setDarkMode">
-            <input id="toggle" class="toggle" :class="{'darkmode': isDarkMode}" type="checkbox">
-        </div> -->
     </div>
     <div class="details-container" :class="{'isAnimationLaunch': isAnimationLaunch}">
         <h2>Général :</h2>
@@ -86,13 +69,11 @@ const getGameDetails = () => {
         <GameContainer
             img="dart"
             title="Fléchettes"
-            route-name="darts-player"
             @click.prevent="getDart()"
         />
         <GameContainer
             img="babyfoot"
             title="Babykon"
-            route-name="babykon-game"
             @click.prevent="getBabykon()"
         /> 
     </div>

@@ -7,7 +7,6 @@ import { computed } from 'vue';
 const props = defineProps<{
   img: string
   title: string
-  routeName: string
 }>()
 
 const managementAppStore = useManagementAppStore();
