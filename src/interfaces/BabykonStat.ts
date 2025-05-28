@@ -1,5 +1,5 @@
 interface BabykonStat {
-    ididPlayer: number,
+    idPlayer: number,
     elo: number,
     nbGame: number,
     nbVictory: number

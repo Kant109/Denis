@@ -1,12 +1,26 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
+import { useManagementAppStore } from "./ManagementAppStore";
 
 export const usePlayerStore = defineStore('Player', () => {
-    const orderedPlayers = ref([] as Array<Player>);
+    const players = ref([] as Array<Player>);
 
-    function setOrderedPlayers(newOrderedPlayers: Array<Player>) {
-        orderedPlayers.value = newOrderedPlayers;
+    async function fetchPlayers() {
+        const managementAppStore = useManagementAppStore();
+
+        const url = import.meta.env.VITE_BE_URL + "/players";
+
+        try {
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error(`Response status: ${response.status}`);
+            }
+            players.value = await response.json();
+            managementAppStore.isAppLoaded = true
+        } catch (error: any) {
+            managementAppStore.isAppOnError = true;
+        }
     }
 
-    return { orderedPlayers, setOrderedPlayers };
+    return { players, fetchPlayers };
 })

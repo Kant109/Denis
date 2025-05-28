@@ -2,8 +2,11 @@
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import Header from '@/components/Header.vue';
+import { usePlayerStore } from '@/stores/PlayerStore';
 
 const router = useRouter();
+
+const playersStore = usePlayerStore();
 
 const stats = ref([] as Array<BabykonStat>);
 const allPlayers = ref([] as Array<Player>);
@@ -19,7 +22,7 @@ const back = () => {
 }
 
 const valider = async () => {
-    if(selectedWinner.value === 0 || selectedLoser.value === 0) {
+    if(selectedWinner.value === selectedLoser.value) {
         alert("Veuillez sélectionner un gagnant, un perdant et entrer des scores valides.");
         return;
     }
@@ -51,16 +54,7 @@ const regame = () => {
 }
 
 onMounted(async () => {
-    const url = import.meta.env.VITE_BE_URL + "/players";
-    try {
-        const retourPlayers = await fetch(url);
-        if (!retourPlayers.ok) {
-            throw new Error(`Response status: ${retourPlayers.status}`);
-        }
-        allPlayers.value = await retourPlayers.json();
-    } catch (error: any) {
-        console.error(error.message);
-    }
+    allPlayers.value = playersStore.players;
 })
 </script>
 
@@ -94,11 +88,19 @@ onMounted(async () => {
             <h1>Yes ! ça fonctionne</h1>
         </div>
     </div>
-    <div v-else class="babykon-container">
+    <div v-else class="end-game-container">
         <h1>Partie terminée !</h1>
-        <div class="score-container">
-            <p class="player-container">Le gagnant est : {{ allPlayers.find(p => p.id === selectedWinner)?.pseudo }}</p>
-            <p class="player-container">Le perdant est : {{ allPlayers.find(p => p.id === selectedLoser)?.pseudo }}</p>
+        <div class="end-game-content">
+            <div class="recap-container">
+                <div class="text">Le gagnant est : {{ allPlayers.find(p => p.id === selectedWinner)?.pseudo }}</div>
+                <div class="text">Elo : {{ stats.find(p => p.idPlayer === selectedWinner)?.elo.toFixed(0) }}</div>
+                <div class="text">{{ stats.find(p => p.idPlayer === selectedWinner)?.nbVictory }}V / {{ stats.find(p => p.idPlayer === selectedWinner)?.nbGame! - stats.find(p => p.idPlayer === selectedWinner)?.nbVictory! }}D</div>
+            </div>
+            <div class="recap-container">
+                <div class="text">Le perdant est : {{ allPlayers.find(p => p.id === selectedLoser)?.pseudo }}</div>
+                <div class="text">Elo : {{ stats.find(p => p.idPlayer === selectedLoser)?.elo.toFixed(0) }}</div>
+                <div class="text">{{ stats.find(p => p.idPlayer === selectedLoser)?.nbVictory }}V / {{ stats.find(p => p.idPlayer === selectedLoser)?.nbGame! - stats.find(p => p.idPlayer === selectedLoser)?.nbVictory! }}D</div>
+            </div>
         </div>
         <button class="valider-btn" @click="regame">Rejouer</button>
     </div>
@@ -187,7 +189,10 @@ onMounted(async () => {
     }
     .valider-btn {  
         @include btn-primary;
-        width: 80%;
+
+        & {
+            width: 80%;
+        }
     }
 
     .success-div {
@@ -196,6 +201,55 @@ onMounted(async () => {
         justify-content: center;
         width: 100%;
         text-align: center;
+    }
+}
+
+.end-game-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 100vw;
+    min-height: 100vh;
+    background-color: #e2fcfb;
+
+    h1 {
+        font-family: "Honk", system-ui;
+        font-size: 3rem;
+        margin-bottom: 1rem;
+    }
+
+    .end-game-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1.5rem;
+
+        .recap-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: .5rem;
+            background-color: white;
+            width: 100%;
+            padding: 2rem;
+            gap: .5rem;
+
+            .text {
+                font-family: "Tilt Warp", sans-serif;
+                font-size: 1.5rem;
+                color: var(--text-color);
+            }
+        }
+    }
+
+    .valider-btn {
+        @include btn-primary;
+
+        & {
+            margin-top: 1.5rem;
+            width: 80%;
+        }
     }
 }
 

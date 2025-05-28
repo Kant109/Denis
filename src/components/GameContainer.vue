@@ -7,17 +7,14 @@ import { computed } from 'vue';
 const props = defineProps<{
   img: string
   title: string
-  routeName: string
 }>()
 
 const managementAppStore = useManagementAppStore();
 
-const isDarkMode = computed(() => managementAppStore.isDarkMode);
-
 </script>
 
 <template>
-    <div class="game-container" :class="{'darkMode': isDarkMode}">
+    <div class="game-container">
         <div class="game-content">
             <img :src="'/icons/' + props.img + '.png'" alt="Image Game">
             <div class="game-text">
@@ -68,12 +65,6 @@ const isDarkMode = computed(() => managementAppStore.isDarkMode);
         width: 1.5rem;
         height: 1.5rem;
         background-image: url("@/assets/images/black-right-arrow.svg");
-    }
-
-    &.darkMode {
-        &::after {
-            background-image: url("@/assets/images/white-right-arrow.svg");
-        }
     }
 }
 
