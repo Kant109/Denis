@@ -7,9 +7,13 @@ const selectedSport = ref("");
 const players = ref([] as Array<PlayerRanking>);
 
 const router = useRouter();
+const sports = [
+    {code: 'dart', name: "Flechette"},
+    {code: "babykon", name: "Babykon"}
+];
 
 const getRanking = async (sport: string) => {
-    const url = import.meta.env.VITE_BE_URL + "/" + sport + "/stat/player/ranking";
+    const url = import.meta.env.VITE_BE_URL + "/ranking/" + sport;
     try {
         const response = await fetch(url);
         if (!response.ok) {
@@ -47,7 +51,7 @@ watch(
             <label for="sport-select">Choisis un sport:</label>
             
             <select name="sport" id="sport-select" v-model="selectedSport">
-                <option value="dart" :selected="selectedSport === 'dart'">Fléchettes</option>
+                <option v-for="sport in sports" :key="sport.code" :value="sport.code">{{sport.name}}</option>
             </select>
         </div>
         <div class="ranking-content">

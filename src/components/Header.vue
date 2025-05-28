@@ -34,7 +34,7 @@ const back = () => {
     justify-content: center;
     width: 100%;
     padding: 1rem .5rem;
-    background-color: var(--bg-color-primary);
+    // background-color: var(--bg-color-primary);
     animation: appear .2s;
 
     &.blur {
