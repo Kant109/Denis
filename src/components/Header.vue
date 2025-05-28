@@ -4,7 +4,6 @@ import { useManagementAppStore } from '@/stores/ManagementAppStore';
 
 const managementAppStore = useManagementAppStore();
 
-const isDarkMode = computed(() => managementAppStore.isDarkMode);
 const blur = computed(() => managementAppStore.blur);
 
 const { madeByMatis = false} = defineProps<{
@@ -21,8 +20,7 @@ const back = () => {
 
 <template>
     <div class="header" :class="{'blur': blur}">
-        <img v-if="!isDarkMode" src="@/assets/images/chevron.svg" alt="Retour" @click.prevent="back">
-        <img v-else src="@/assets/images/chevron-white.svg" alt="Retour" @click.prevent="back">
+        <img src="@/assets/images/chevron-white.svg" alt="Retour" @click.prevent="back">
         <div class="title">
             {{ title }}
             <div class="by-matis" v-if="madeByMatis">by Matis</div>
