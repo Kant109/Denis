@@ -125,7 +125,7 @@ const getGameDetails = () => {
         display: flex;
         justify-content: center;
         align-items: center;
-        font-family: "Michroma", sans-serif;
+        font-family: "Honk", system-ui;
         font-size: 2rem;
         color: var(--text-color);
         margin: 0;

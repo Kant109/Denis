@@ -11,6 +11,7 @@ const selectedWinner = ref(0);
 const selectedLoser = ref(0);
 const scoreLoser = ref(0);
 const scoreWinner = ref(0);
+const isGameOver = ref(false);
 
 
 const back = () => {
@@ -18,28 +19,38 @@ const back = () => {
 }
 
 const valider = async () => {
+    if(selectedWinner.value === 0 || selectedLoser.value === 0) {
+        alert("Veuillez sélectionner un gagnant, un perdant et entrer des scores valides.");
+        return;
+    }
     let payload : BabykonGame = {
         "idLoser": selectedLoser.value,
         "idWinner": selectedWinner.value,
         score: [scoreWinner.value, scoreLoser.value]
     }
     const retourStat = await fetch(import.meta.env.VITE_BE_URL + "/babykon/game", {
-                method: "POST",
-                body: JSON.stringify(payload),
-                headers: {
-                    "Content-Type": "application/json"
-            }
+            method: "POST",
+            body: JSON.stringify(payload),
+            headers: {
+                "Content-Type": "application/json"
+        }
     }); 
     if (!retourStat.ok) {
             throw new Error(`Response status: ${retourStat.status}`);
         }
     stats.value = await retourStat.json();
-    console.log("Response : " + JSON.stringify(stats)) 
+    isGameOver.value = true;
+}
+
+const regame = () => {
+    isGameOver.value = false;
+    selectedWinner.value = 0;
+    selectedLoser.value = 0;
+    scoreLoser.value = 0;
+    scoreWinner.value = 0;
 }
 
 onMounted(async () => {
-
-// recupération des joueurs
     const url = import.meta.env.VITE_BE_URL + "/players";
     try {
         const retourPlayers = await fetch(url);
@@ -54,41 +65,49 @@ onMounted(async () => {
 </script>
 
 <template>
-    <div id="babykon-div">
+    <div class="babykon-container" v-if="!isGameOver">
         <div class="header">
-            <Header title="BabyKon" @previous-route="back" />
+            <Header title="BabyKon" :made-by-matis="true" @previous-route="back" />
         </div>
-        <div id="score-div">
-            <div id="player-div">
+        <div class="score-container">
+            <div class="player-container">
                 <h3>Gagnant</h3>
-                <div id="input-div">
-                    <input type="number" id="score-input" name="scoreWinner" min="1" max="10" required v-model="scoreWinner" />
-                    <select name="winner" id="player-select" v-model="selectedWinner">
+                <div class="player-content">
+                    <input type="number" class="score-input winner" name="scoreWinner" min="0" max="5" required v-model="scoreWinner" inputmode="numeric" />
+                    <select name="winner" class="player-select" v-model="selectedWinner">
                         <option v-for="p in allPlayers" :key="p.id" :value="p.id">{{p.pseudo}}</option>
                     </select>
                 </div>
             </div>
-            <div id="player-div">
+            <div class="player-container">
                 <h3>Perdant</h3>
-                <div id="input-div">
-                    <input type="number" id="score-input" name="scoreLoser" min="1" max="10" required v-model="scoreLoser" />
-                    <select name="loser" id="player-select" v-model="selectedLoser">
+                <div class="player-content">
+                    <input type="number" class="score-input looser" name="scoreLoser" min="0" max="5" required v-model="scoreLoser" inputmode="numeric" />
+                    <select name="loser" class="player-select" v-model="selectedLoser">
                         <option v-for="p in allPlayers" :key="p.id" :value="p.id">{{p.pseudo}}</option>
                     </select>
                 </div>
             </div>
         </div>
-        <button id="valider-btn" @click="valider()" >Valider</button>
+        <button class="valider-btn" @click="valider()" >Valider</button>
+        <div v-if="stats.length > 0" class="success-div">
+            <h1>Yes ! ça fonctionne</h1>
+        </div>
     </div>
-    <div v-if="stats.length > 0" id="success-div">
-        <h1>Yes ! ça fonctionne</h1>
+    <div v-else class="babykon-container">
+        <h1>Partie terminée !</h1>
+        <div class="score-container">
+            <p class="player-container">Le gagnant est : {{ allPlayers.find(p => p.id === selectedWinner)?.pseudo }}</p>
+            <p class="player-container">Le perdant est : {{ allPlayers.find(p => p.id === selectedLoser)?.pseudo }}</p>
+        </div>
+        <button class="valider-btn" @click="regame">Rejouer</button>
     </div>
 </template>
 
 <style lang="scss" scoped>
 @import "@/assets/helpers/mixins.scss";
 
-#babykon-div {
+.babykon-container {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -96,18 +115,23 @@ onMounted(async () => {
     min-height: 100vh;
     background-color: #e2fcfb;
 
-    #score-div {
+    h1 {
+        font-family: "Honk", system-ui;
+        font-size: 3rem;
+    }
+
+    .score-container {
        background-color: #cde6e5ee;
        padding: 2rem 1rem;
        margin: 2rem 1rem;
        border-radius: 5px;
        box-shadow: inset 20px 20px 20px -20px rgba(137, 100, 100, 0.8);
        display: flex;
-       justify-content: space-evenly;
+       justify-content: space-between;
        align-items: center;
        width: 90%;
     
-       #player-div {
+       .player-container {
             background-color: #e2fcfb;
             padding: .5rem .5rem;
             border-radius: 5px;
@@ -125,22 +149,33 @@ onMounted(async () => {
                 color: var(--text-color);
             }
     
-            #input-div {
+            .player-content {
                 display: flex;
                 width: 100%;
                 flex-direction: column;
                 justify-content: center;
                 align-items: center;
     
-                #score-input {
+                .score-input {
                     width: 80%;
                     height: 50px;
                     font-size: larger;
                     padding: 1rem .5rem;
                     border-radius: 5px;
+                    text-align: center;
+                    font-family: "Sixtyfour Convergence", sans-serif;
+                    font-size: 2rem;
+
+                    &.winner {
+                        color: rgb(4, 100, 4);
+                    }
+
+                    &.looser {
+                        color: rgb(158, 3, 3);
+                    }
                 }
 
-                #player-select {
+                .player-select {
                     width: 80%;
                     background-color: rgb(243, 243, 243);
                     padding: 1rem .5rem;
@@ -150,9 +185,17 @@ onMounted(async () => {
             }
         }
     }
-    #valider-btn {  
+    .valider-btn {  
         @include btn-primary;
         width: 80%;
+    }
+
+    .success-div {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        text-align: center;
     }
 }
 

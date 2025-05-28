@@ -7,8 +7,9 @@ const managementAppStore = useManagementAppStore();
 const isDarkMode = computed(() => managementAppStore.isDarkMode);
 const blur = computed(() => managementAppStore.blur);
 
-const props = defineProps<{
-  title: string
+const { madeByMatis = false} = defineProps<{
+  title: string,
+  madeByMatis?: boolean
 }>()
 
 const emit = defineEmits(['previousRoute']);
@@ -22,7 +23,10 @@ const back = () => {
     <div class="header" :class="{'blur': blur}">
         <img v-if="!isDarkMode" src="@/assets/images/chevron.svg" alt="Retour" @click.prevent="back">
         <img v-else src="@/assets/images/chevron-white.svg" alt="Retour" @click.prevent="back">
-        <div class="title">{{ props.title }}</div>
+        <div class="title">
+            {{ title }}
+            <div class="by-matis" v-if="madeByMatis">by Matis</div>
+        </div>
     </div>
 </template>
 
@@ -34,7 +38,7 @@ const back = () => {
     justify-content: center;
     width: 100%;
     padding: 1rem .5rem;
-    // background-color: var(--bg-color-primary);
+    background-color: transparent;
     animation: appear .2s;
 
     &.blur {
@@ -53,10 +57,23 @@ const back = () => {
     .title {
         display: flex;
         justify-content: center;
-        font-family: "Michroma", sans-serif;
-        font-size: 2rem;
+        font-family: "Honk", system-ui;
+        font-size: 4rem;
         color: var(--text-color);
+        position: relative;
+
+        .by-matis {
+            position: absolute;
+            bottom: -.75rem;
+            right: -1.25rem;
+            font-family: "Caveat", cursive;
+            font-style: normal;
+            font-size: 1.5rem;
+            color: red;
+            rotate: -10deg;
+        }
     }
+
 }
 
 </style>
