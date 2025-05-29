@@ -3,6 +3,8 @@ import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import Header from '@/components/Header.vue';
 import { usePlayerStore } from '@/stores/PlayerStore';
+import { LottieAnimation } from "lottie-web-vue";
+import ConfettiAnimation from "@/assets/animations/confetti.json";
 
 const router = useRouter();
 
@@ -92,14 +94,40 @@ onMounted(async () => {
         <h1>Partie terminée !</h1>
         <div class="end-game-content">
             <div class="recap-container">
-                <div class="text">Le gagnant est : {{ allPlayers.find(p => p.id === selectedWinner)?.pseudo }}</div>
-                <div class="text">Elo : {{ stats.find(p => p.idPlayer === selectedWinner)?.elo.toFixed(0) }}</div>
-                <div class="text">{{ stats.find(p => p.idPlayer === selectedWinner)?.nbVictory }}V / {{ stats.find(p => p.idPlayer === selectedWinner)?.nbGame! - stats.find(p => p.idPlayer === selectedWinner)?.nbVictory! }}D</div>
+                <LottieAnimation
+                    class="animation"
+                    :animation-data="ConfettiAnimation"
+                    :auto-play="true"
+                    :loop="false"
+                    :speed="0.8"
+                    ref="anim"/>
+                <img src="@/assets/images/trophy_3d.png" alt="Trophée">
+                <div class="player-presentation">
+                    <img class="player-img" :src="'https://api.dicebear.com/9.x/adventurer/svg?seed=' +  allPlayers.find(p => p.id === selectedWinner)?.firstName +  allPlayers.find(p => p.id === selectedWinner)?.pseudo +  allPlayers.find(p => p.id === selectedWinner)?.name" alt="Avatar">
+                    <div class="text">{{ allPlayers.find(p => p.id === selectedWinner)?.pseudo }}</div>
+                </div>
+                <div class="player-stat">
+                    <img src="@/assets/images/star.svg" alt="Elo">
+                    <div class="text">{{ stats.find(p => p.idPlayer === selectedWinner)?.elo.toFixed(0) }}</div>
+                    <img src="@/assets/images/cup.svg" alt="Nombre de victoire">
+                    <div class="text">{{ stats.find(p => p.idPlayer === selectedWinner)?.nbVictory }}</div>
+                    <img src="@/assets/images/shield-bad.svg" alt="Nombre de défaite">
+                    <div class="text">{{ stats.find(p => p.idPlayer === selectedWinner)?.nbGame! - stats.find(p => p.idPlayer === selectedWinner)?.nbVictory! }}</div>
+                </div>
             </div>
             <div class="recap-container">
-                <div class="text">Le perdant est : {{ allPlayers.find(p => p.id === selectedLoser)?.pseudo }}</div>
-                <div class="text">Elo : {{ stats.find(p => p.idPlayer === selectedLoser)?.elo.toFixed(0) }}</div>
-                <div class="text">{{ stats.find(p => p.idPlayer === selectedLoser)?.nbVictory }}V / {{ stats.find(p => p.idPlayer === selectedLoser)?.nbGame! - stats.find(p => p.idPlayer === selectedLoser)?.nbVictory! }}D</div>
+                <div class="player-presentation">
+                    <img class="player-img" :src="'https://api.dicebear.com/9.x/adventurer/svg?seed=' +  allPlayers.find(p => p.id === selectedLoser)?.firstName +  allPlayers.find(p => p.id === selectedLoser)?.pseudo +  allPlayers.find(p => p.id === selectedLoser)?.name" alt="Avatar">
+                    <div class="text">{{ allPlayers.find(p => p.id === selectedLoser)?.pseudo }}</div>
+                </div>
+                <div class="player-stat">
+                    <img src="@/assets/images/star.svg" alt="Elo">
+                    <div class="text">{{ stats.find(p => p.idPlayer === selectedLoser)?.elo.toFixed(0) }}</div>
+                    <img src="@/assets/images/cup.svg" alt="Nombre de victoire">
+                    <div class="text">{{ stats.find(p => p.idPlayer === selectedLoser)?.nbVictory }}</div>
+                    <img src="@/assets/images/shield-bad.svg" alt="Nombre de défaite">
+                    <div class="text">{{ stats.find(p => p.idPlayer === selectedLoser)?.nbGame! - stats.find(p => p.idPlayer === selectedLoser)?.nbVictory! }}</div>
+                </div>
             </div>
         </div>
         <button class="valider-btn" @click="regame">Rejouer</button>
@@ -205,9 +233,10 @@ onMounted(async () => {
 }
 
 .end-game-container {
-    display: flex;
     flex-direction: column;
     align-items: center;
+    padding-left: 1rem;
+    padding-right: 1rem;
     min-width: 100vw;
     min-height: 100vh;
     background-color: #e2fcfb;
@@ -223,6 +252,8 @@ onMounted(async () => {
         flex-direction: column;
         align-items: center;
         gap: 1.5rem;
+        margin-left: 2rem;
+        margin-right: 2rem;
 
         .recap-container {
             display: flex;
@@ -230,15 +261,67 @@ onMounted(async () => {
             align-items: center;
             justify-content: center;
             border-radius: .5rem;
-            background-color: white;
+            background-color: #cce2e2;
+            box-shadow: inset 20px 20px 20px -20px rgba(137, 100, 100, 0.8); 
             width: 100%;
             padding: 2rem;
             gap: .5rem;
 
+            .player-presentation{
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+            }
+
+            .player-stat{
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-items: auto;
+                background-color: #e2fcfb;
+                border-radius: 5%;
+                padding: 0.5rem;
+
+                img {
+                    display: flex;
+                    height: 1.5rem;
+                    width: 1.5rem;
+                    border-radius: 50%;
+                    margin-right: 0.2rem;
+                    margin-left: 0.4rem;
+
+                }
+
+                .text {
+                    font-family: "Tilt Warp", sans-serif;
+                    font-size: 1.2rem;
+                    color: var(--text-color);
+            }
+
+            }
+
+            .player-img {
+                display: flex;
+                height: 4rem;
+                width: 4rem;
+                border-radius: 50%;
+                margin-right: 1rem;
+            }
             .text {
                 font-family: "Tilt Warp", sans-serif;
-                font-size: 1.5rem;
+                font-size: 1.8rem;
                 color: var(--text-color);
+            }
+
+            img {
+                width: 6rem;
+                height: 6rem;
+            }
+
+            .animation {
+                position: absolute;
+                top: 0;
+                left: 0;
             }
         }
     }
