@@ -91,7 +91,7 @@ onMounted(async () => {
         </div>
     </div>
     <div v-else class="end-game-container">
-        <h1>Partie terminée !</h1>
+        <h1>Partie terminée</h1>
         <div class="end-game-content">
             <div class="recap-container">
                 <LottieAnimation
@@ -143,7 +143,7 @@ onMounted(async () => {
     align-items: center;
     min-width: 100vw;
     min-height: 100vh;
-    background-color: #e2fcfb;
+    background-color: #a4eeeb;
 
     h1 {
         font-family: "Honk", system-ui;
@@ -151,7 +151,7 @@ onMounted(async () => {
     }
 
     .score-container {
-       background-color: #cde6e5ee;
+       background-color: #64d4d1ee;
        padding: 2rem 1rem;
        margin: 2rem 1rem;
        border-radius: 5px;
@@ -162,7 +162,7 @@ onMounted(async () => {
        width: 90%;
     
        .player-container {
-            background-color: #e2fcfb;
+            background-color: #a4eeeb;
             padding: .5rem .5rem;
             border-radius: 5px;
             margin: 5px;
@@ -239,7 +239,7 @@ onMounted(async () => {
     padding-right: 1rem;
     min-width: 100vw;
     min-height: 100vh;
-    background-color: #e2fcfb;
+    background-color: #a4eeeb;
 
     h1 {
         font-family: "Honk", system-ui;
@@ -278,7 +278,7 @@ onMounted(async () => {
                 flex-direction: row;
                 align-items: center;
                 justify-items: auto;
-                background-color: #e2fcfb;
+                background-color: #a4eeeb;
                 border-radius: 5%;
                 padding: 0.5rem;
 
