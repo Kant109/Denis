@@ -125,7 +125,7 @@ watch(
 
         .players {
             display: grid;
-            grid-template-columns: 10% 50% 15% 15% 10%;
+            grid-template-columns: 8% 62% 8% 8% 14%;
             align-items: center;
             width: 100%;
             min-height: 3rem;
@@ -134,7 +134,7 @@ watch(
             border-radius: 8px;
             cursor: pointer;
             font-family: "Playpen Sans", sans-serif;
-            font-size: 1rem;
+            font-size: 0.8rem;
 
             .position, .name, .elo, .nb-victory, .nb-defeat {
                 display: flex;
@@ -161,6 +161,7 @@ watch(
                     margin-right: .5rem;
                     font-weight: 700;
                 }
+
             }
         }
     }
