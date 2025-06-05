@@ -62,6 +62,14 @@ watch(
                 <div class="name">
                     {{ player.lastName }} <span>"{{ player.pseudo }}"</span> {{ player.name }}
                 </div>
+                <div class="nb-victory">
+                    <img src="@/assets/images/cup.svg" alt="Nombre de victoire">
+                    {{  player.nbVictory }}
+                </div>
+                <div class="nb-defeat">
+                    <img src="@/assets/images/shield-bad.svg" alt="Nombre de défaite">
+                    {{  player.nbGame - player.nbVictory }}
+                </div>
                 <div class="elo">
                     {{ player.elo }}
                 </div>
@@ -117,7 +125,7 @@ watch(
 
         .players {
             display: grid;
-            grid-template-columns: 10% 60% 30%;
+            grid-template-columns: 10% 50% 15% 15% 10%;
             align-items: center;
             width: 100%;
             min-height: 3rem;
@@ -128,9 +136,13 @@ watch(
             font-family: "Playpen Sans", sans-serif;
             font-size: 1rem;
 
-            .position, .name, .elo {
+            .position, .name, .elo, .nb-victory, .nb-defeat {
                 display: flex;
                 flex-direction: row;
+
+                img  {
+                    width: 1rem;
+                };
 
                 &:is(.position) {
                     margin-left: .5rem;
