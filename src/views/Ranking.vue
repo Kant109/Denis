@@ -125,7 +125,7 @@ watch(
 
         .players {
             display: grid;
-            grid-template-columns: 8% 62% 8% 8% 14%;
+            grid-template-columns: 6% 60% 10% 10% 14%;
             align-items: center;
             width: 100%;
             min-height: 3rem;
