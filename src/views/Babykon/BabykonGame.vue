@@ -71,7 +71,7 @@ onMounted(async () => {
                 <div class="player-content">
                     <input type="number" class="score-input winner" name="scoreWinner" min="0" max="5" required v-model="scoreWinner" inputmode="numeric" />
                     <select name="winner" class="player-select" v-model="selectedWinner">
-                        <option v-for="p in allPlayers" :key="p.id" :value="p.id">{{p.pseudo}}</option>
+                        <option v-for="p in allPlayers" :key="p.id" :value="p.id">{{p.firstName + ' ' + p.pseudo + ' ' + p.name}}</option>
                     </select>
                 </div>
             </div>
@@ -261,7 +261,7 @@ onMounted(async () => {
             align-items: center;
             justify-content: center;
             border-radius: .5rem;
-            background-color: #cce2e2;
+            background-color: #64d4d1ee;
             box-shadow: inset 20px 20px 20px -20px rgba(137, 100, 100, 0.8); 
             width: 100%;
             padding: 2rem;
@@ -279,8 +279,9 @@ onMounted(async () => {
                 align-items: center;
                 justify-items: auto;
                 background-color: #a4eeeb;
-                border-radius: 5%;
-                padding: 0.5rem;
+                box-shadow:  20px 20px 20px -20px rgba(137, 100, 100, 0.8);
+                border-radius: 3rem;
+                padding: 1rem;
 
                 img {
                     display: flex;
@@ -316,6 +317,7 @@ onMounted(async () => {
             img {
                 width: 6rem;
                 height: 6rem;
+
             }
 
             .animation {
