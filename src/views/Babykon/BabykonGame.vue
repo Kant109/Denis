@@ -80,7 +80,7 @@ onMounted(async () => {
                 <div class="player-content">
                     <input type="number" class="score-input looser" name="scoreLoser" min="0" max="5" required v-model="scoreLoser" inputmode="numeric" />
                     <select name="loser" class="player-select" v-model="selectedLoser">
-                        <option v-for="p in allPlayers" :key="p.id" :value="p.id">{{p.pseudo}}</option>
+                        <option v-for="p in allPlayers" :key="p.id" :value="p.id">{{p.firstName + ' ' + p.pseudo + ' ' + p.name}}</option>
                     </select>
                 </div>
             </div>
