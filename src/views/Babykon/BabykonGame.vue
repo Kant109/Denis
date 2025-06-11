@@ -55,6 +55,29 @@ const regame = () => {
     scoreWinner.value = 0;
 }
 
+const valueList = [-2, -1, 0, 1, 2, 3, 4, 5]
+const winnerValue = ref(5);
+const loserValue = ref(0);
+
+function minusWinnerValue() {
+    const index = valueList.indexOf(winnerValue.value) - 1;
+    winnerValue.value = valueList[index <= 0 ? 0 : index];
+}
+
+function plusWinnerValue() {
+    const index = valueList.indexOf(winnerValue.value) + 1;
+    winnerValue.value = valueList[index >= valueList.length - 1 ? valueList.length - 1 : index];
+}
+
+function minusLoserValue() {
+    const index = valueList.indexOf(loserValue.value) - 1;
+    loserValue.value = valueList[index <= 0 ? 0 : index];
+}
+
+function plusLoserValue() {
+    const index = valueList.indexOf(loserValue.value) + 1;
+    loserValue.value = valueList[index >= valueList.length - 1 ? valueList.length - 1 : index];
+}
 onMounted(async () => {
     allPlayers.value = playersStore.players;
 })
@@ -63,13 +86,19 @@ onMounted(async () => {
 <template>
     <div class="babykon-container" v-if="!isGameOver">
         <div class="header">
-            <Header title="BabyKon" :made-by-matis="true" @previous-route="back" />
+            <Header title="BabyKon" :made-by-matis="true" :improve-by-simon="true" @previous-route="back" />
         </div>
         <div class="score-container">
             <div class="player-container">
                 <h3>Gagnant</h3>
                 <div class="player-content">
-                    <input type="number" class="score-input winner" name="scoreWinner" min="0" max="5" required v-model="scoreWinner" inputmode="numeric" />
+                    <button class="action-btn" @click="minusWinnerValue">-</button>
+                    <select v-model="winnerValue" class="value-select winner">
+                        <option v-for="option in valueList" :value="option.valueOf()">{{option}}</option>
+                    </select>
+                    <button class="action-btn" @click="plusWinnerValue">+</button>
+                </div>
+                <div class="player-content">
                     <select name="winner" class="player-select" v-model="selectedWinner">
                         <option v-for="p in allPlayers" :key="p.id" :value="p.id">{{p.firstName + ' ' + p.pseudo + ' ' + p.name}}</option>
                     </select>
@@ -78,7 +107,13 @@ onMounted(async () => {
             <div class="player-container">
                 <h3>Perdant</h3>
                 <div class="player-content">
-                    <input type="number" class="score-input looser" name="scoreLoser" min="0" max="5" required v-model="scoreLoser" inputmode="numeric" />
+                    <button class="action-btn" @click="minusLoserValue">-</button>
+                    <select v-model="loserValue" class="value-select looser" name="scoreLoser">
+                        <option v-for="option in valueList" :value="option.valueOf()">{{option}}</option>
+                    </select>
+                    <button class="action-btn" @click="plusLoserValue">+</button>
+                </div>
+                <div class="player-content">
                     <select name="loser" class="player-select" v-model="selectedLoser">
                         <option v-for="p in allPlayers" :key="p.id" :value="p.id">{{p.firstName + ' ' + p.pseudo + ' ' + p.name}}</option>
                     </select>
@@ -182,7 +217,7 @@ onMounted(async () => {
             .player-content {
                 display: flex;
                 width: 100%;
-                flex-direction: column;
+                flex-direction: row;
                 justify-content: center;
                 align-items: center;
     
@@ -205,21 +240,56 @@ onMounted(async () => {
                     }
                 }
 
-                .player-select {
-                    width: 80%;
+                .player-select, .value-select {
+                    width: 100%;
                     background-color: rgb(243, 243, 243);
                     padding: 1rem .5rem;
                     margin: 1rem .5rem;
                     border-radius: 5px;
+                    text-align: center;
+                }
+
+                .value-select {
+                    text-align: center;
+                    color: rgb(249 0 0);
+                    font-family: "Sixtyfour Convergence", sans-serif;
+                    font-size: 2rem;
+                    background-color: rgb(104 214 211);
+                    border: none;
+                    box-shadow: inset 16px 15px 18px -20px rgba(137, 100, 100, 0.8);
+                    appearance: none;
+                    padding-left: 10px;
                 }
             }
         }
+        @media only screen and (max-width: 800px) {
+            .player-container {
+                width: 90%;
+            }
+        }
     }
+    @media only screen and (max-width: 800px) {
+        .score-container {
+            flex-direction: column
+        }
+    }
+
     .valider-btn {  
         @include btn-primary;
 
         & {
             width: 80%;
+        }
+    }
+
+    .action-btn {
+        @include btn-primary;
+
+        & {
+            width: 40%;
+            font-size: 2em;
+            min-width: 40px;
+            margin: 0.2em;
         }
     }
 
