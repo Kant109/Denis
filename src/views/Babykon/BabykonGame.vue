@@ -93,7 +93,7 @@ onMounted(async () => {
                 <h3>Gagnant</h3>
                 <div class="player-content">
                     <button class="action-btn" @click="minusWinnerValue">-</button>
-                    <select v-model="winnerValue" class="value-select winner">
+                    <select v-model="winnerValue" class="value-select winner" name="scoreWinner">
                         <option v-for="option in valueList" :value="option.valueOf()">{{option}}</option>
                     </select>
                     <button class="action-btn" @click="plusWinnerValue">+</button>

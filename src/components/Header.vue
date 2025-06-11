@@ -25,7 +25,7 @@ const back = () => {
         <div class="title">
             {{ title }}
             <div class="by-matis" v-if="madeByMatis">by Matis</div>
-            <div class="improve-by-matis" v-if="madeByMatis && improveBySimon">improve by Simon </div>
+            <div class="improve-by-simon" v-if="madeByMatis && improveBySimon">improve by Simon </div>
         </div>
     </div>
 </template>
@@ -62,7 +62,7 @@ const back = () => {
         color: var(--text-color);
         position: relative;
 
-        .by-matis, .improve-by-matis {
+        .by-matis, .improve-by-simon {
             position: absolute;
             bottom: -.75rem;
             right: -1.25rem;
@@ -74,7 +74,7 @@ const back = () => {
         }
 
         
-        .improve-by-matis {
+        .improve-by-simon {
             bottom: -1rem;
             right: -6rem;
             font-size: 1rem;
