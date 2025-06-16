@@ -1,0 +1,162 @@
+<script setup lang="ts">
+import Header from '@/components/Header.vue';
+import { usePlayerStore } from '@/stores/PlayerStore';
+import { onMounted, ref, watch } from 'vue';
+
+const playersStore = usePlayerStore();
+
+const players = ref([] as Array<Player>);
+const selectedPlayers = ref([] as Array<Player>);
+const searchPlayer = ref('');
+const time = ref(null as any);
+
+const selectPlayer = (player: Player) => {
+    searchPlayer.value = '';
+    players.value.splice(players.value.indexOf(player), 1);
+    selectedPlayers.value.push(player);
+    players.value = playersStore.players;
+}
+
+const removePlayer = (player: Player) => {
+    selectedPlayers.value.splice(selectedPlayers.value.indexOf(player), 1);
+    players.value.push(player);
+}
+
+onMounted(() => {
+    players.value = playersStore.players;
+})
+
+watch(
+    () => searchPlayer.value,
+    () => {
+        clearTimeout(time.value);
+        time.value = setTimeout(() => {
+            
+        }, 500);
+    }
+)
+</script>
+
+<template>
+    <div class="babykon-tournament-container">
+        <div class="header">
+            <Header title="Tournoi" />
+        </div>
+        <div class="babykon-tournament-select-player">
+            <h2 class="title">Choisis les joueurs</h2>
+
+            <div class="search-player">
+                <input type="text" placeholder="Rechercher un joueur" v-model="searchPlayer"/>
+            </div>
+            <div class="players-container">
+                <div class="player" v-for="player in players" :key="player.id" :class="{'selected': selectedPlayers.includes(player)}">
+                    <div class="player-content" @click.prevent="selectPlayer(player)">
+                        <img class="player-img" :src="'https://api.dicebear.com/9.x/adventurer/svg?seed=' + player.firstName + player.pseudo + player.name" alt="Avatar" />
+                        <div class="player-name">{{ player.pseudo.length > 5 ? player.pseudo.substring(0,5) + ".." : player.pseudo}}</div>
+                    </div>
+                </div>
+            </div>
+
+            <h2 class="title">Joueur sélectionné</h2>
+            <div v-if="selectedPlayers.length > 0" class="players-selected">
+                <div class="player" v-for="player in selectedPlayers" :key="player.id">
+                    <div class="player-content" @click.prevent="removePlayer(player)">
+                        <img class="player-img" :src="'https://api.dicebear.com/9.x/adventurer/svg?seed=' + player.firstName + player.pseudo + player.name" alt="Avatar" />
+                        <div class="player-name">{{ player.pseudo.length > 5 ? player.pseudo.substring(0,5) + ".." : player.pseudo}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="babykon-tournament-start">
+            <button class="btn" :disabled="selectedPlayers.length < 3">Commencer le tournoi</button>
+        </div>
+    </div>
+</template>
+
+<style lang="scss" scoped>
+@import "@/assets/helpers/mixins.scss";
+
+.babykon-tournament-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    min-height: 100%;
+    background-color: #a4eeeb;
+
+    .babykon-tournament-select-player {
+        display: flex;;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        gap: 1rem;
+
+        .search-player {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+
+            input {
+                width: 80%;
+                height: 35px;
+                border-radius: .5rem;
+            }
+        }
+
+        .players-container, .players-selected {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: auto;
+            grid-column-gap: 1rem;
+            grid-row-gap: 1rem;
+            background-color: var(--bg-color-secondary);
+            border-radius: .5rem;
+            width: 90%;
+            padding: 1rem;
+            box-shadow: rgb(0, 0, 0, .25) 0px 5px 5px 0px inset;
+
+            .player {
+                .player-content {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    gap: .5rem;
+                    padding: .5rem 0;
+            
+                    .player-img {
+                        height: 3rem;
+                        width: 3rem;
+                        border-radius: 50%;
+                        background-color: white;
+                        cursor: pointer;
+                    }
+            
+            
+                    .player-name {
+                        font-family: "Tilt Warp", sans-serif;
+                        font-size: 1rem;
+                        color: var(--text-color);
+                    }
+                }
+            }
+        }
+    }
+
+    .babykon-tournament-start {
+        display: flex;
+        justify-content: center;
+
+        .btn {
+            @include btn-primary;
+
+            & {
+                width: 90%;
+                margin-top: 1rem;;
+            }
+        }
+    }
+
+}
+
+</style>
