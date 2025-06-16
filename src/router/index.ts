@@ -12,6 +12,7 @@ import X01Winner from '@/views/Darts/X01/X01Winner.vue'
 import Ranking from '@/views/Ranking.vue'
 import GameDetails from '@/views/GameDetails.vue'
 import BabykonGame from '@/views/Babykon/BabykonGame.vue'
+import BabykonTournament from '@/views/Babykon/BabykonTournament.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -80,6 +81,11 @@ const router = createRouter({
       path: '/babykon/game',
       name: 'babykon-game',
       component: BabykonGame
+    },
+    {
+      path: '/babykon/tournament',
+      name: 'babykon-tournament',
+      component: BabykonTournament
     }
   ]
 })
