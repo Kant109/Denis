@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { useManagementAppStore } from '@/stores/ManagementAppStore';
 import GameContainer from '@/components/GameContainer.vue';
 
 const router = useRouter();
@@ -36,7 +35,7 @@ const getDart = () => {
 const getBabykon = () => {
     launchAnimation('babyfoot');
     setTimeout(() => {
-        router.push({ name: "babykon-game"});
+        router.push({ name: "babykon-mode"});
     }, 1100);
 }
 

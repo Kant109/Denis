@@ -20,7 +20,7 @@ const isGameOver = ref(false);
 
 
 const back = () => {
-    router.push({ name: "home" });
+    router.push({ name: "babykon-mode" });
 }
 
 const valider = async () => {
