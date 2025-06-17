@@ -24,7 +24,7 @@ const openSearchPlayer = ref(false);
 const isSelectPlayerOne = ref(true);
 
 const back = () => {
-    router.push({ name: "home" });
+    router.push({ name: "babykon-mode" });
 }
 
 const valider = async () => {

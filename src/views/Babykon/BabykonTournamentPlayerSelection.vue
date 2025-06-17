@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import Header from '@/components/Header.vue';
+import router from '@/router';
+import { useBabykonStore } from '@/stores/BabykonStore';
 import { usePlayerStore } from '@/stores/PlayerStore';
 import { onMounted, ref, watch } from 'vue';
 
 const playersStore = usePlayerStore();
+const babykonStore = useBabykonStore();
 
 const players = ref([] as Array<Player>);
 const selectedPlayers = ref([] as Array<Player>);
@@ -19,6 +22,15 @@ const selectPlayer = (player: Player) => {
 const removePlayer = (player: Player) => {
     selectedPlayers.value.splice(selectedPlayers.value.indexOf(player), 1);
     players.value.push(player);
+}
+
+const startTournament = () => {
+    babykonStore.players = selectedPlayers.value;
+    router.push({ name: "babykon-tournament" });
+}
+
+const previousRoute = () => {
+    router.push({ name: "babykon-mode" });
 }
 
 onMounted(() => {
@@ -50,15 +62,18 @@ watch(
 <template>
     <div class="babykon-tournament-container">
         <div class="header">
-            <Header title="Tournoi" />
+            <Header
+                title="Tournoi"
+                @previous-route="previousRoute"
+            />
         </div>
         <div class="babykon-tournament-select-player">
-            <h2 class="title">Choisis les joueurs</h2>
+            <h2 class="title">Choix des joueurs</h2>
 
             <div class="search-player">
                 <input type="text" placeholder="Rechercher un joueur" v-model="searchPlayer"/>
             </div>
-            <div class="players-container">
+            <div class="players-container" v-if="players.length < 9">
                 <div class="player" v-for="player in players" :key="player.id">
                     <div class="player-content" @click.prevent="selectPlayer(player)">
                         <img class="player-img" :src="'https://api.dicebear.com/9.x/adventurer/svg?seed=' + player.firstName + player.pseudo + player.name" alt="Avatar" />
@@ -67,7 +82,7 @@ watch(
                 </div>
             </div>
 
-            <h2 v-if="selectedPlayers.length > 0" class="title">Joueur sélectionné</h2>
+            <h2 v-if="selectedPlayers.length > 0" class="title">Joueurs sélectionnés</h2>
             <div v-if="selectedPlayers.length > 0" class="players-selected">
                 <div class="player" v-for="player in selectedPlayers" :key="player.id">
                     <div class="player-content" @click.prevent="removePlayer(player)">
@@ -78,7 +93,7 @@ watch(
             </div>
         </div>
         <div class="babykon-tournament-start">
-            <button class="btn" :disabled="selectedPlayers.length < 3">Commencer le tournoi</button>
+            <button class="btn" :disabled="selectedPlayers.length < 3" @click.prevent="startTournament()">Commencer le tournoi</button>
         </div>
     </div>
 </template>
