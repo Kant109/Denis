@@ -14,7 +14,6 @@ const selectPlayer = (player: Player) => {
     searchPlayer.value = '';
     players.value.splice(players.value.indexOf(player), 1);
     selectedPlayers.value.push(player);
-    players.value = playersStore.players;
 }
 
 const removePlayer = (player: Player) => {
@@ -23,7 +22,7 @@ const removePlayer = (player: Player) => {
 }
 
 onMounted(() => {
-    players.value = playersStore.players;
+    players.value = playersStore.players.slice();
 })
 
 watch(
@@ -31,7 +30,18 @@ watch(
     () => {
         clearTimeout(time.value);
         time.value = setTimeout(() => {
-            
+            if(searchPlayer.value === "") {
+                players.value = playersStore.players.slice();
+                selectedPlayers.value.forEach(selectedPlayer => {
+                    players.value.splice(players.value.indexOf(selectedPlayer), 1);
+                });
+            } else {
+                playersStore.players.forEach(player => {
+                    if(!(player.pseudo.toLowerCase().includes(searchPlayer.value.toLowerCase()))) {
+                        players.value = players.value.filter(p => p.id !== player.id);
+                    }
+                });
+            }
         }, 500);
     }
 )
@@ -49,7 +59,7 @@ watch(
                 <input type="text" placeholder="Rechercher un joueur" v-model="searchPlayer"/>
             </div>
             <div class="players-container">
-                <div class="player" v-for="player in players" :key="player.id" :class="{'selected': selectedPlayers.includes(player)}">
+                <div class="player" v-for="player in players" :key="player.id">
                     <div class="player-content" @click.prevent="selectPlayer(player)">
                         <img class="player-img" :src="'https://api.dicebear.com/9.x/adventurer/svg?seed=' + player.firstName + player.pseudo + player.name" alt="Avatar" />
                         <div class="player-name">{{ player.pseudo.length > 5 ? player.pseudo.substring(0,5) + ".." : player.pseudo}}</div>
@@ -57,7 +67,7 @@ watch(
                 </div>
             </div>
 
-            <h2 class="title">Joueur sélectionné</h2>
+            <h2 v-if="selectedPlayers.length > 0" class="title">Joueur sélectionné</h2>
             <div v-if="selectedPlayers.length > 0" class="players-selected">
                 <div class="player" v-for="player in selectedPlayers" :key="player.id">
                     <div class="player-content" @click.prevent="removePlayer(player)">
