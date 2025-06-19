@@ -20,7 +20,7 @@ const endTournament = () => {
 <template>
     <div class="results-container">
         <div class="header">
-            <Header title="Résultats" @previous-route="$router.back()" />
+            <Header title="Résultats" @previous-route="endTournament()" />
         </div>
         <div class="results-list">
             <div v-for="player in players" :key="player.id" class="player">
@@ -30,6 +30,7 @@ const endTournament = () => {
                 <span class="player-name">{{ player.firstName }} "{{ player.pseudo }}" {{ player.name }}</span>
                 <span class="player-wins">Victoires : {{ player.nbWins }}</span>
                 <span class="player-goals">Buts : {{ player.score }}</span>
+                <span class="player-elo">Elo : {{ player.elo?.toFixed(0) }}</span>
             </div>
         </div>
         <div class="return-home">
@@ -84,7 +85,8 @@ const endTournament = () => {
             }
             
             .player-wins,
-            .player-goals {
+            .player-goals,
+            .player-elo {
                 font-family: "Tilt Warp", sans-serif;
                 font-size: 1rem;
                 color: var(--text-color);

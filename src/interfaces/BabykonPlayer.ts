@@ -4,5 +4,6 @@ interface BabykonPlayer {
     name: string,
     pseudo: string,
     nbWins: number,
-    score: number
+    score: number,
+    elo?: number,
 }

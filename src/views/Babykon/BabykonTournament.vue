@@ -13,6 +13,7 @@ const babykonStore = useBabykonStore();
 const players = computed(() => babykonStore.players);
 const matchs = computed(() => babykonStore.matchs);
 const startAnimation = ref(false);
+const openDialogModal = ref(false);
 
 function genererMatchs(players: Array<BabykonPlayer>) {
     let matchId = 0;
@@ -71,16 +72,55 @@ const getRanking = async () => {
     babykonStore.players = players.value;
 }
 
+const sendResults = async () => {
+    const data = {
+        date: new Date().toISOString(),
+        rankings: players.value.map(player => ({
+            idPlayer: player.id,
+            nbVictory: player.nbWins,
+            rank: players.value.indexOf(player) + 1,
+        })),
+        nbGames: matchs.value.length
+    }
+
+    const maPromesse = new Promise(async (resolve, reject) => {
+        const response = await fetch(import.meta.env.VITE_BE_URL + "/babykon/tournament", {
+            method: "POST",
+            body: JSON.stringify(data),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+        resolve(response.json());
+    })
+    maPromesse.then((data: any) => {
+        players.value.forEach(player => {
+            data.forEach((results: { idPlayer: number; elo: number | undefined; }) => {
+                results.idPlayer === player.id ? player.elo = results.elo : null;
+            });
+        });
+    });
+}
+
 const getResults = async () => {
     if(await isResultsOk()) {
+        openDialogModal.value = true;
+    } else {
+        alert('Veuillez sélectionner un gagnant pour chaque match.');
+    }
+}
+
+const confirmEndGame = async (confirm: boolean) => {
+    if(confirm) {
         startAnimation.value = true;
         await getRanking();
+        await sendResults();
         setTimeout(() => {
             startAnimation.value = false;
             router.push({ name: 'babykon-tournament-results' });
         }, 2000);
     } else {
-        alert('Veuillez sélectionner un gagnant pour chaque match.');
+        openDialogModal.value = false;
     }
 }
 
@@ -98,7 +138,7 @@ onBeforeMount(() => {
 </script>
 
 <template>
-    <div class="babykon-tournament-container" v-if="!startAnimation">
+    <div class="babykon-tournament-container" v-if="!openDialogModal">
         <div class="header">
             <Header
                 title="Tournoi"
@@ -132,12 +172,12 @@ onBeforeMount(() => {
         </div>
 
         <div class="babykon-tournament-end">
-            <button class="btn" @click.prevent="getResults()">Voir les résultats</button>
+            <button class="btn-results" @click.prevent="getResults()">Voir les résultats</button>
         </div>
     </div>
     <Teleport to="main" v-else>
         <dialog class="confirm-end-game-dialog" open>
-            <div class="loader">
+            <div class="loader" v-if="startAnimation">
                 <LottieAnimation 
                     :animation-data="LoaderAnimation"
                     :auto-play="true"
@@ -146,6 +186,14 @@ onBeforeMount(() => {
                     ref="anim"
                     class="anim"
                 />
+            </div>
+            <div class="confirm-end-game-container" v-else>
+                <div class="title">Le tournoi est terminé</div>
+                <div class="text">Confirmez-vous la fin du tounoi ?</div>
+                <div class="btn-container">
+                    <div class="btn cancel" @click.prevent="confirmEndGame(false)">Annuler</div>
+                    <div class="btn end" @click.prevent="confirmEndGame(true)">Terminer</div>
+                </div>
             </div>
         </dialog>
     </Teleport>
@@ -271,7 +319,7 @@ onBeforeMount(() => {
         justify-content: center;
         width: 100%;
 
-        .btn {
+        .btn-results {
             @include btn-primary;
 
             & {
