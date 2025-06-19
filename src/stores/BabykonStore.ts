@@ -2,7 +2,13 @@ import { defineStore } from "pinia";
 import { ref } from "vue";
 
 export const useBabykonStore = defineStore('Babykon', () => {
-    const players = ref([] as Array<Player>);
+    const players = ref([] as Array<BabykonPlayer>);
+    const matchs = ref([] as Array<BabykonMatch>);
 
-    return { players };
+    const reset = () => {
+        players.value = [];
+        matchs.value = [];
+    };
+
+    return { players, matchs, reset };
 })

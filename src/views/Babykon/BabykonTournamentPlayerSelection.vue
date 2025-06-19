@@ -25,7 +25,13 @@ const removePlayer = (player: Player) => {
 }
 
 const startTournament = () => {
-    babykonStore.players = selectedPlayers.value;
+    selectedPlayers.value.forEach(player => {
+        babykonStore.players.push({
+            ...player,
+            nbWins: 0,
+            score: 0
+        });
+    });
     router.push({ name: "babykon-tournament" });
 }
 
@@ -35,6 +41,16 @@ const previousRoute = () => {
 
 onMounted(() => {
     players.value = playersStore.players.slice();
+
+    selectedPlayers.value = babykonStore.players.slice();
+
+    players.value.forEach(player => {
+        if(selectedPlayers.value.find(selectedPlayer => selectedPlayer.id === player.id)) {
+            players.value.splice(players.value.indexOf(player), 1);
+        }
+    });
+
+    babykonStore.players = [];
 })
 
 watch(
@@ -70,14 +86,16 @@ watch(
         <div class="babykon-tournament-select-player">
             <h2 class="title">Choix des joueurs</h2>
 
-            <div class="search-player">
-                <input type="text" placeholder="Rechercher un joueur" v-model="searchPlayer"/>
-            </div>
-            <div class="players-container" v-if="players.length < 9">
-                <div class="player" v-for="player in players" :key="player.id">
-                    <div class="player-content" @click.prevent="selectPlayer(player)">
-                        <img class="player-img" :src="'https://api.dicebear.com/9.x/adventurer/svg?seed=' + player.firstName + player.pseudo + player.name" alt="Avatar" />
-                        <div class="player-name">{{ player.pseudo.length > 5 ? player.pseudo.substring(0,5) + ".." : player.pseudo}}</div>
+            <div class="search-zone">
+                <div class="search-player">
+                    <input type="text" placeholder="Rechercher un joueur" v-model="searchPlayer"/>
+                </div>
+                <div class="players-container" v-if="players.length < 9">
+                    <div class="player" v-for="player in players" :key="player.id">
+                        <div class="player-content" @click.prevent="selectPlayer(player)">
+                            <img class="player-img" :src="'https://api.dicebear.com/9.x/adventurer/svg?seed=' + player.firstName + player.pseudo + player.name" alt="Avatar" />
+                            <div class="player-name">{{ player.pseudo.length > 5 ? player.pseudo.substring(0,5) + ".." : player.pseudo}}</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -106,8 +124,8 @@ watch(
     flex-direction: column;
     align-items: center;
     width: 100%;
-    min-height: 100%;
-    background-color: #a4eeeb;
+    background-color: var(--bg-color-primary);
+    padding-bottom: 2rem;
 
     .babykon-tournament-select-player {
         display: flex;;
@@ -116,45 +134,53 @@ watch(
         width: 100%;
         gap: 1rem;
 
-        .search-player {
+        .search-zone {
             display: flex;
-            justify-content: center;
-            width: 100%;
-
-            input {
-                width: 80%;
-                height: 35px;
-                border-radius: .5rem;
-            }
-        }
-
-        .players-container, .players-selected {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            grid-template-rows: auto;
-            grid-column-gap: 1rem;
-            grid-row-gap: 1rem;
+            flex-direction: column;
+            align-items: center;
             background-color: var(--bg-color-secondary);
             border-radius: .5rem;
             width: 90%;
             padding: 1rem;
             box-shadow: rgb(0, 0, 0, .25) 0px 5px 5px 0px inset;
+            gap: 1rem;
 
-            .player {
-                .player-content {
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    justify-content: center;
-                    gap: .5rem;
-                    padding: .5rem 0;
+            .search-player {
+                display: flex;
+                justify-content: center;
+                width: 100%;
+
+                input {
+                    width: 80%;
+                    height: 35px;
+                    border-radius: .5rem;
+                }
+            }
             
-                    .player-img {
-                        height: 3rem;
-                        width: 3rem;
-                        border-radius: 50%;
-                        background-color: white;
-                        cursor: pointer;
+            .players-container, .players-selected {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                grid-template-rows: auto;
+                grid-column-gap: 1rem;
+                grid-row-gap: 1rem;
+                width: 100%;
+                
+                .player {
+                    .player-content {
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        justify-content: center;
+                        gap: .5rem;
+                        padding: .5rem 0;
+                        
+                        .player-img {
+                            height: 3rem;
+                            width: 3rem;
+                            border-radius: 50%;
+                            background-color: white;
+                            cursor: pointer;
+                        }
                     }
             
             
@@ -165,6 +191,46 @@ watch(
                     }
                 }
             }
+        }
+
+        .players-selected {
+            display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                grid-template-rows: auto;
+                grid-column-gap: 1rem;
+                grid-row-gap: 1rem;
+                width: 100%;
+                background-color: var(--bg-color-secondary);
+                border-radius: .5rem;
+                width: 90%;
+                padding: 1rem;
+                box-shadow: rgb(0, 0, 0, .25) 0px 5px 5px 0px inset;
+                
+                .player {
+                    .player-content {
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        justify-content: center;
+                        gap: .5rem;
+                        padding: .5rem 0;
+                        
+                        .player-img {
+                            height: 3rem;
+                            width: 3rem;
+                            border-radius: 50%;
+                            background-color: white;
+                            cursor: pointer;
+                        }
+                    }
+            
+            
+                    .player-name {
+                        font-family: "Tilt Warp", sans-serif;
+                        font-size: 1rem;
+                        color: var(--text-color);
+                    }
+                }
         }
     }
 

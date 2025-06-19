@@ -15,6 +15,7 @@ import BabykonGame from '@/views/Babykon/BabykonGame.vue'
 import BabykonTournamentPlayerSelection from '@/views/Babykon/BabykonTournamentPlayerSelection.vue'
 import BabykonTournament from '@/views/Babykon/BabykonTournament.vue'
 import BabykonMode from '@/views/Babykon/BabykonMode.vue'
+import BabykonTournamentResults from '@/views/Babykon/BabykonTournamentResults.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -98,6 +99,11 @@ const router = createRouter({
       path: '/babykon/tournament',
       name: 'babykon-tournament',
       component: BabykonTournament
+    },
+    {
+      path: '/babykon/tournament/results',
+      name: 'babykon-tournament-results',
+      component: BabykonTournamentResults
     }
   ]
 })
