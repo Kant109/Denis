@@ -67,7 +67,6 @@ onMounted(() => {
     align-items: center;
     justify-content: center;
     width: 100%;
-    background-color: var(--bg-color-primary);
     padding-bottom: 3rem;
 
     .animation {

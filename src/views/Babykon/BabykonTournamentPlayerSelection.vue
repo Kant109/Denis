@@ -124,7 +124,6 @@ watch(
     flex-direction: column;
     align-items: center;
     width: 100%;
-    background-color: var(--bg-color-primary);
     padding-bottom: 2rem;
 
     .babykon-tournament-select-player {

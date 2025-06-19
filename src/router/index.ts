@@ -16,6 +16,8 @@ import BabykonTournamentPlayerSelection from '@/views/Babykon/BabykonTournamentP
 import BabykonTournament from '@/views/Babykon/BabykonTournament.vue'
 import BabykonMode from '@/views/Babykon/BabykonMode.vue'
 import BabykonTournamentResults from '@/views/Babykon/BabykonTournamentResults.vue'
+import PetanqueMode from '@/views/Petanque/PetanqueMode.vue'
+import PetanqueGame from '@/views/Petanque/PetanqueGame.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -104,7 +106,17 @@ const router = createRouter({
       path: '/babykon/tournament/results',
       name: 'babykon-tournament-results',
       component: BabykonTournamentResults
-    }
+    },
+    {
+      path: '/petanque',
+      name: 'petanque-mode',
+      component: PetanqueMode
+    },
+    {
+      path: '/petanque/game',
+      name: 'petanque-game',
+      component: PetanqueGame
+    },
   ]
 })
 

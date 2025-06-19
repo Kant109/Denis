@@ -284,6 +284,7 @@ html h2, body h2, #app h2, main h2 {
   font-size: 1.5rem;
   color: var(--text-color);
   margin: 0;
+  text-align: center;
 }
 
 @keyframes send-out {

@@ -151,7 +151,6 @@ onBeforeMount(async () => {
 .end-game-container {
     position: relative;
     width: 100%;
-    background-color: var(--bg-color-primary);
 
     .close {
         position: absolute;
