@@ -90,7 +90,7 @@ watch(
                 <div class="search-player">
                     <input type="text" placeholder="Rechercher un joueur" v-model="searchPlayer"/>
                 </div>
-                <div class="players-container" v-if="players.length < 9">
+                <div class="players-container">
                     <div class="player" v-for="player in players" :key="player.id">
                         <div class="player-content" @click.prevent="selectPlayer(player)">
                             <img class="player-img" :src="'https://api.dicebear.com/9.x/adventurer/svg?seed=' + player.firstName + player.pseudo + player.name" alt="Avatar" />
