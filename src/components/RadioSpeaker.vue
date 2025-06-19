@@ -32,7 +32,6 @@ const stopSpeaker = () => {
     align-items: center;
     justify-content: center;
     height: 90px;
-    background-color: var(--bg-color-primary);
     padding: 0 1rem .5rem 1rem;
     border: 2px red solid;
     border-top: red 10px solid;

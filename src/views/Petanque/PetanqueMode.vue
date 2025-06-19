@@ -38,10 +38,10 @@ const back = () => {
                 </select>
             </div>
 
-            <div class="sponsor">
+            <!-- <div class="sponsor">
                 <img src="@/assets/images/ricard.svg" alt="Ricard" />
                 <p>Sponsored by Ricard</p>
-            </div>
+            </div> -->
 
             <div class="start-game" v-if="nbTeams !== null && nbPlayer !== null">
                 <button class="btn" @click.prevent="startGame()">Commencer la partie</button>
@@ -60,6 +60,11 @@ const back = () => {
     flex-direction: column;
     align-items: center;
     position: relative;
+    background-image: url('/icons/ricard.png');
+    background-color: #ffffff80;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
 
     .petanque-mode-chose-mode {
         display: flex;

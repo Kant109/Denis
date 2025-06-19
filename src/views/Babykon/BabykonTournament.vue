@@ -207,7 +207,6 @@ onBeforeMount(() => {
     flex-direction: column;
     align-items: center;
     width: 100%;
-    background-color: var(--bg-color-primary);
 
     .header {
         width: 100%;

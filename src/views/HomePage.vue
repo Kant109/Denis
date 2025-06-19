@@ -84,7 +84,7 @@ const getGameDetails = () => {
         /> 
         <GameContainer
             img="petanque"
-            title="Petanque"
+            title="Pétanque"
             @click.prevent="getPetanque()"
         /> 
     </div>
@@ -103,7 +103,6 @@ const getGameDetails = () => {
     justify-content: center;
     width: 100%;
     padding: 1rem 1rem;
-    background-color: var(--bg-color-primary);
 
     .profile {
         height: 3rem;
