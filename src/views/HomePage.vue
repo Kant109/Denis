@@ -39,6 +39,13 @@ const getBabykon = () => {
     }, 1100);
 }
 
+const getPetanque = () => {
+    launchAnimation('petanque');
+    setTimeout(() => {
+        router.push({ name: "petanque-mode"});
+    }, 1100);
+}
+
 const getGameDetails = () => {
     launchAnimation('crossed_swords_3d');
     setTimeout(() => {
@@ -74,6 +81,11 @@ const getGameDetails = () => {
             img="babyfoot"
             title="Babykon"
             @click.prevent="getBabykon()"
+        /> 
+        <GameContainer
+            img="petanque"
+            title="Petanque"
+            @click.prevent="getPetanque()"
         /> 
     </div>
     <div v-if="isAnimationLaunch" class="container-animation">
