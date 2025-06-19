@@ -59,9 +59,10 @@ const getRanking = async () => {
         players.value.forEach(player => {
             if(match.winnerId === player.id) {
                 player.nbWins += 1;
-                player.score += player === match.player1 ? match.scoreP1 : match.scoreP2;
             }
         })
+        players.value[players.value.indexOf(match.player1)].score += match.scoreP1;
+        players.value[players.value.indexOf(match.player2)].score += match.scoreP2;
     })
     players.value.sort((a, b) => {
         if (b.nbWins === a.nbWins) {
