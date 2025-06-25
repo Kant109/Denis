@@ -6,7 +6,7 @@ const managementAppStore = useManagementAppStore();
 
 const blur = computed(() => managementAppStore.blur);
 
-const { madeByMatis = false, improveBySimon = false} = defineProps<{
+const { madeByMatis = false, improveBySimon = false } = defineProps<{
   title: string,
   madeByMatis?: boolean
   improveBySimon?: boolean
@@ -25,7 +25,7 @@ const back = () => {
         <div class="title">
             {{ title }}
             <div class="by-matis" v-if="madeByMatis">by Matis</div>
-            <div class="improve-by-matis" v-if="madeByMatis && improveBySimon">improve by Simon </div>
+            <div class="improve-by-simon" v-if="madeByMatis && improveBySimon">improve by Simon </div>
         </div>
     </div>
 </template>
@@ -62,7 +62,7 @@ const back = () => {
         color: var(--text-color);
         position: relative;
 
-        .by-matis, .improve-by-matis {
+        .by-matis, .improve-by-simon {
             position: absolute;
             bottom: -.75rem;
             right: -1.25rem;
@@ -71,15 +71,15 @@ const back = () => {
             font-size: 1.5rem;
             color: red;
             rotate: -10deg;
+
+            &:is(.improve-by-simon) {
+                bottom: -1rem;
+                right: -6rem;
+                font-size: 1rem;
+                color: #c1ad42;
+            }
         }
 
-        
-        .improve-by-matis {
-            bottom: -1rem;
-            right: -6rem;
-            font-size: 1rem;
-            color: #c1ad42;
-        }
     }
 
 }

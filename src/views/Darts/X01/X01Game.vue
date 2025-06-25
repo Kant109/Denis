@@ -64,7 +64,6 @@ watch(() => isGameFinish.value, () => router.push({ name: "x01-winner" }));
             align-items: center;
             justify-content: center;
             border-radius: 5px;
-            background-color: var(--bg-color-primary);
             width: 1.5rem;
             aspect-ratio: 1/1;
         }
@@ -77,7 +76,6 @@ watch(() => isGameFinish.value, () => router.push({ name: "x01-winner" }));
     align-items: center;
     width: 100%;
     height: calc(100% - 287px);
-    background-color: var(--bg-color-primary);
     padding-bottom: 2rem;
     overflow: scroll;
     -ms-overflow-style: none;  /* IE and Edge */

@@ -39,6 +39,13 @@ const getBabykon = () => {
     }, 1100);
 }
 
+const getPetanque = () => {
+    launchAnimation('petanque');
+    setTimeout(() => {
+        router.push({ name: "petanque-mode"});
+    }, 1100);
+}
+
 const getGameDetails = () => {
     launchAnimation('crossed_swords_3d');
     setTimeout(() => {
@@ -75,6 +82,11 @@ const getGameDetails = () => {
             title="Babykon"
             @click.prevent="getBabykon()"
         /> 
+        <GameContainer
+            img="petanque"
+            title="Pétanque"
+            @click.prevent="getPetanque()"
+        /> 
     </div>
     <div v-if="isAnimationLaunch" class="container-animation">
         <div class="scale-animation" :class="{'jello-animation': launchJelloAnimation}">
@@ -91,7 +103,6 @@ const getGameDetails = () => {
     justify-content: center;
     width: 100%;
     padding: 1rem 1rem;
-    background-color: var(--bg-color-primary);
 
     .profile {
         height: 3rem;
