@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import Header from '@/components/Header.vue';
+import { usePetanqueStore } from '@/stores/PetanqueStore';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
+
+const petanqueStore = usePetanqueStore();
 
 const nbTeamsValueList = [2, 3, 4, 5];
 const nbPlayerValueList = [1, 2, 3];
@@ -11,7 +14,13 @@ const nbTeams = ref(null as number | null);
 const nbPlayer = ref(null as number | null);
 
 const startGame = () => {
-    router.push({ name: "petanque-game" });
+    if(nbTeams.value !== null && nbPlayer.value !== null) {
+        petanqueStore.nbTeams = nbTeams.value;
+        petanqueStore.nbPlayersByTeam = nbPlayer.value;
+        router.push({ name: "petanque-game" });
+    } else {
+        alert("Veuillez sélectionner le nombre d'équipes et de joueurs par équipe.");
+    }
 }
 
 const back = () => { 
@@ -38,11 +47,6 @@ const back = () => {
                 </select>
             </div>
 
-            <!-- <div class="sponsor">
-                <img src="@/assets/images/ricard.svg" alt="Ricard" />
-                <p>Sponsored by Ricard</p>
-            </div> -->
-
             <div class="start-game" v-if="nbTeams !== null && nbPlayer !== null">
                 <button class="btn" @click.prevent="startGame()">Commencer la partie</button>
             </div>
@@ -59,12 +63,6 @@ const back = () => {
     height: 100%;
     flex-direction: column;
     align-items: center;
-    position: relative;
-    background-image: url('/icons/ricard.png');
-    background-color: #ffffff80;
-    background-size: contain;
-    background-position: center;
-    background-repeat: no-repeat;
 
     .petanque-mode-chose-mode {
         display: flex;
@@ -106,25 +104,6 @@ const back = () => {
 
             .btn-cancel {
                 @include btn-secondary;
-            }
-        }
-
-        .sponsor {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-top: 2rem;
-
-            img {
-                width: 10rem;
-                height: 10rem;
-            }
-
-            p {
-                font-family: "Tilt Warp", sans-serif;
-                font-size: 1.5rem;
-                color: var(--text-color);
-                margin-top: 1rem;
             }
         }
 

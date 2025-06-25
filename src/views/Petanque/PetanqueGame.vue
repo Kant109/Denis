@@ -12,7 +12,7 @@ const back = () => {
 
 <template>
     <div class="petanque-game-container">
-        <Header title="PETANQUE" :sponsored-by-ricard="true" @previous-route="back" />
+        <Header title="PETANQUE" @previous-route="back" />
 
         <div class="petanque-game-chose-mode">
             

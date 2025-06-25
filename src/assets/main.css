@@ -15,7 +15,7 @@
 html, body, #app, main {
   margin: 0;
   padding: 0;
-  height: 100%;
+  min-height: 100vh;
 }
 html .search-player-dialog, body .search-player-dialog, #app .search-player-dialog, main .search-player-dialog {
   width: 90%;
