@@ -6,7 +6,7 @@
             <h1>Ah bah merde c'est KO</h1>
         </div>
     </main>
-  
+
 </template>
 
 <script setup lang="ts">
@@ -42,6 +42,35 @@ main {
         display: flex;
         height: 100%;
         align-items: center;
+    }
+}
+.text-center {
+    text-align: center;
+}
+.w-100 {
+    width: 100%;
+}
+.d-flex {
+    display: flex;
+}
+.justify-content-center {
+    justify-content: center;
+}
+.align-items-center {
+    align-items: center
+}
+
+@keyframes scale-animation {
+    0% {
+        scale: 1;
+    }
+
+    50% {
+        scale: 1.02;
+    }
+
+    100% {
+        scale: 1;
     }
 }
 </style>

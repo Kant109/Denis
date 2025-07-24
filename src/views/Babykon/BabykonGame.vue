@@ -5,6 +5,7 @@ import Header from '@/components/Header.vue';
 import { usePlayerStore } from '@/stores/PlayerStore';
 import { LottieAnimation } from "lottie-web-vue";
 import ConfettiAnimation from "@/assets/animations/confetti.json";
+import BabykonPlayer from './BabykonPlayer.vue';
 
 const router = useRouter();
 
@@ -12,165 +13,249 @@ const playersStore = usePlayerStore();
 
 const stats = ref([] as Array<BabykonStat>);
 const allPlayers = ref([] as Array<Player>);
-const selectedWinner = ref(0);
-const selectedLoser = ref(0);
 const scoreLoser = ref(0);
 const scoreWinner = ref(0);
 const isGameOver = ref(false);
 
+const winner = ref({} as Player);
+const loser = ref({} as Player);
+
+const openSearchPlayer = ref(false);
+const isSelectPlayerOne = ref(true);
 
 const back = () => {
     router.push({ name: "babykon-mode" });
 }
 
 const valider = async () => {
-    if(selectedWinner.value === selectedLoser.value) {
+    if (!winner.value.id || !loser.value.id) {
         alert("Veuillez sélectionner un gagnant, un perdant et entrer des scores valides.");
         return;
     }
-    let payload : BabykonGame = {
-        "idLoser": selectedLoser.value,
-        "idWinner": selectedWinner.value,
+    const payload: BabykonGame = {
+        "idLoser": loser.value.id,
+        "idWinner": winner.value.id,
         score: [scoreWinner.value, scoreLoser.value]
     }
-    const retourStat = await fetch(import.meta.env.VITE_BE_URL + "/babykon/game", {
+    const retourStat = await fetch(`${import.meta.env.VITE_BE_URL}/babykon/game`,
+        {
             method: "POST",
             body: JSON.stringify(payload),
             headers: {
                 "Content-Type": "application/json"
+            }
         }
-    }); 
+    );
     if (!retourStat.ok) {
-            throw new Error(`Response status: ${retourStat.status}`);
-        }
+        throw new Error(`Response status: ${retourStat.status}`);
+    }
     stats.value = await retourStat.json();
     isGameOver.value = true;
 }
 
-const regame = () => {
+const replay = () => {
     isGameOver.value = false;
-    selectedWinner.value = 0;
-    selectedLoser.value = 0;
     scoreLoser.value = 0;
-    scoreWinner.value = 0;
+    scoreWinner.value = 5;
 }
 
-const valueList = [-2, -1, 0, 1, 2, 3, 4, 5]
-const winnerValue = ref(5);
-const loserValue = ref(0);
-
-function minusWinnerValue() {
-    const index = valueList.indexOf(winnerValue.value) - 1;
-    winnerValue.value = valueList[index <= 0 ? 0 : index];
-}
-
-function plusWinnerValue() {
-    const index = valueList.indexOf(winnerValue.value) + 1;
-    winnerValue.value = valueList[index >= valueList.length - 1 ? valueList.length - 1 : index];
-}
-
-function minusLoserValue() {
-    const index = valueList.indexOf(loserValue.value) - 1;
-    loserValue.value = valueList[index <= 0 ? 0 : index];
-}
-
-function plusLoserValue() {
-    const index = valueList.indexOf(loserValue.value) + 1;
-    loserValue.value = valueList[index >= valueList.length - 1 ? valueList.length - 1 : index];
-}
 onMounted(async () => {
     allPlayers.value = playersStore.players;
-})
+});
+
+const selectPlayer = (player: Player) => {
+    if (isSelectPlayerOne.value) {
+        winner.value = player;
+    } else {
+        loser.value = player;
+    }
+    openSearchPlayer.value = false;
+}
+
+const invertPlayer = () => {
+    const tempWinner = winner.value;
+    winner.value = loser.value;
+    loser.value = tempWinner;
+}
 </script>
 
 <template>
     <div class="babykon-container" v-if="!isGameOver">
         <div class="header">
-            <Header title="BabyKon" :made-by-matis="true" :improve-by-simon="true" @previous-route="back" />
+            <Header title="BabyKon" @previous-route="back" />
         </div>
         <div class="score-container">
             <div class="player-container">
-                <h3>Gagnant</h3>
-                <div class="player-content">
-                    <button class="action-btn" @click="minusWinnerValue">-</button>
-                    <select v-model="winnerValue" class="value-select winner">
-                        <option v-for="option in valueList" :value="option.valueOf()">{{option}}</option>
-                    </select>
-                    <button class="action-btn" @click="plusWinnerValue">+</button>
+                <BabykonPlayer title="Gagnant" :player="winner" :default-value="5"
+                    @select-player="(n) => { isSelectPlayerOne = true; openSearchPlayer = true; scoreWinner = n }"
+                    @score-change="(n) => scoreWinner = n" />
+                <div class="d-flex justify-content-center">
+                    <img v-if="winner.id && loser.id" class="invert-player-img" @click="invertPlayer"
+                        src="@/assets/images/sync.svg" width="30" height="30" />
                 </div>
-                <div class="player-content">
-                    <select name="winner" class="player-select" v-model="selectedWinner">
-                        <option v-for="p in allPlayers" :key="p.id" :value="p.id">{{p.firstName + ' ' + p.pseudo + ' ' + p.name}}</option>
-                    </select>
-                </div>
-            </div>
-            <div class="player-container">
-                <h3>Perdant</h3>
-                <div class="player-content">
-                    <button class="action-btn" @click="minusLoserValue">-</button>
-                    <select v-model="loserValue" class="value-select looser" name="scoreLoser">
-                        <option v-for="option in valueList" :value="option.valueOf()">{{option}}</option>
-                    </select>
-                    <button class="action-btn" @click="plusLoserValue">+</button>
-                </div>
-                <div class="player-content">
-                    <select name="loser" class="player-select" v-model="selectedLoser">
-                        <option v-for="p in allPlayers" :key="p.id" :value="p.id">{{p.firstName + ' ' + p.pseudo + ' ' + p.name}}</option>
-                    </select>
-                </div>
+                <BabykonPlayer title="Perdant" :player="loser"
+                    @select-player="(n) => { isSelectPlayerOne = false; openSearchPlayer = true; scoreLoser = n }"
+                    @score-change="(n) => scoreLoser = n" />
             </div>
         </div>
-        <button class="valider-btn" @click="valider()" >Valider</button>
-        <div v-if="stats.length > 0" class="success-div">
-            <h1>Yes ! ça fonctionne</h1>
+        <div class="w-100 d-flex justify-content-center">
+            <button class="valider-btn" @click="valider()">Valider</button>
         </div>
     </div>
-    <div v-else class="end-game-container">
-        <h1>Partie terminée</h1>
+    <div v-else class="babykon-container end-game-container">
+        <h1 class="text-center">Partie terminée</h1>
         <div class="end-game-content">
-            <div class="recap-container">
-                <LottieAnimation
-                    class="animation"
-                    :animation-data="ConfettiAnimation"
-                    :auto-play="true"
-                    :loop="false"
-                    :speed="0.8"
-                    ref="anim"/>
-                <img src="@/assets/images/trophy_3d.png" alt="Trophée">
+            <div class="recap-container"
+                style="    animation-name: scale-animation;   animation-duration: 1.2s;    animation-iteration-count: infinite;">
+                <LottieAnimation class="animation" :animation-data="ConfettiAnimation" :auto-play="true" :loop="false"
+                    :speed="0.8" ref="anim" />
                 <div class="player-presentation">
-                    <img class="player-img" :src="'https://api.dicebear.com/9.x/adventurer/svg?seed=' +  allPlayers.find(p => p.id === selectedWinner)?.firstName +  allPlayers.find(p => p.id === selectedWinner)?.pseudo +  allPlayers.find(p => p.id === selectedWinner)?.name" alt="Avatar">
-                    <div class="text">{{ allPlayers.find(p => p.id === selectedWinner)?.pseudo }}</div>
+                    <img src="@/assets/images/trophy_3d.png" alt="Trophée" height="60">
+                    <img class="player-img" width="100" height="100"
+                        :src="`https://api.dicebear.com/9.x/adventurer/svg?seed=${winner.firstName}${winner.pseudo}${winner.name}`"
+                        alt="Avatar" />
+                    <div class="text">{{ winner?.pseudo }}</div>
                 </div>
                 <div class="player-stat">
                     <img src="@/assets/images/star.svg" alt="Elo">
-                    <div class="text">{{ stats.find(p => p.idPlayer === selectedWinner)?.elo.toFixed(0) }}</div>
+                    <div class="text">{{stats.find(p => p.idPlayer === winner.id)?.elo.toFixed(0)}}</div>
                     <img src="@/assets/images/cup.svg" alt="Nombre de victoire">
-                    <div class="text">{{ stats.find(p => p.idPlayer === selectedWinner)?.nbVictory }}</div>
+                    <div class="text">{{stats.find(p => p.idPlayer === winner.id)?.nbVictory}}</div>
                     <img src="@/assets/images/shield-bad.svg" alt="Nombre de défaite">
-                    <div class="text">{{ stats.find(p => p.idPlayer === selectedWinner)?.nbGame! - stats.find(p => p.idPlayer === selectedWinner)?.nbVictory! }}</div>
+                    <div class="text">{{stats.find(p => p.idPlayer === winner.id)?.nbGame! - stats.find(p =>
+                        p.idPlayer
+                        === winner.id)?.nbVictory!}}</div>
                 </div>
+            </div>
+            <div class="d-flex align-items-center" style="gap:1rem;">
+                <div class="score"> {{ scoreWinner }}</div>
+                <span class="score-separator">VS</span>
+                <div class="score">{{ scoreLoser }}</div>
             </div>
             <div class="recap-container">
                 <div class="player-presentation">
-                    <img class="player-img" :src="'https://api.dicebear.com/9.x/adventurer/svg?seed=' +  allPlayers.find(p => p.id === selectedLoser)?.firstName +  allPlayers.find(p => p.id === selectedLoser)?.pseudo +  allPlayers.find(p => p.id === selectedLoser)?.name" alt="Avatar">
-                    <div class="text">{{ allPlayers.find(p => p.id === selectedLoser)?.pseudo }}</div>
+                    <img class="player-img" width="100" height="100"
+                        :src="`https://api.dicebear.com/9.x/adventurer/svg?seed=${loser.firstName}${loser.pseudo}${loser.name}`"
+                        alt="Avatar" />
+                    <div class="text">{{allPlayers.find(p => p.id === loser.id)?.pseudo}}</div>
                 </div>
                 <div class="player-stat">
                     <img src="@/assets/images/star.svg" alt="Elo">
-                    <div class="text">{{ stats.find(p => p.idPlayer === selectedLoser)?.elo.toFixed(0) }}</div>
+                    <div class="text">{{stats.find(p => p.idPlayer === loser.id)?.elo.toFixed(0)}}</div>
                     <img src="@/assets/images/cup.svg" alt="Nombre de victoire">
-                    <div class="text">{{ stats.find(p => p.idPlayer === selectedLoser)?.nbVictory }}</div>
+                    <div class="text">{{stats.find(p => p.idPlayer === loser.id)?.nbVictory}}</div>
                     <img src="@/assets/images/shield-bad.svg" alt="Nombre de défaite">
-                    <div class="text">{{ stats.find(p => p.idPlayer === selectedLoser)?.nbGame! - stats.find(p => p.idPlayer === selectedLoser)?.nbVictory! }}</div>
+                    <div class="text">{{stats.find(p => p.idPlayer === loser.id)?.nbGame! - stats.find(p =>
+                        p.idPlayer
+                        === loser.id)?.nbVictory!}}</div>
                 </div>
             </div>
         </div>
-        <button class="valider-btn" @click="regame">Rejouer</button>
+        <div class="btn-container w-100 d-flex justify-content-center">
+            <button class="valider-btn" @click="replay">Rejouer</button>
+            <button class="back-btn" @click="back">Accueil</button>
+        </div>
     </div>
+    <dialog class="search-player-dialog" :open="openSearchPlayer">
+        <div class="content">
+            <div class="dialog-title">
+                Sélectionner le {{ isSelectPlayerOne ? "gagnant" : "perdant" }}
+                <span class="dialog-close" @click="openSearchPlayer = false">x</span>
+            </div>
+            <div class="search-player">
+                <div class="select-player-container">
+                    <div class="select-player d-flex"
+                        v-for="player in allPlayers.filter(p => p.id !== winner.id && p.id !== loser.id)"
+                        @click="selectPlayer(player)">
+                        <img class="player-img" :src="'https://api.dicebear.com/9.x/adventurer/svg?seed=' +
+                            player.firstName +
+                            player.pseudo +
+                            player.name
+                            " alt="Avatar" />
+                        <div class="player-name">
+                            <div class="player-name-pseudo">
+                                {{
+                                player.pseudo.length > 18
+                                ? player.pseudo.substring(0, 18) + ".."
+                                : player.pseudo
+                                }}
+                            </div>
+                            <div class="player-full-name">
+                                {{
+                                player.firstName.length + player.name.length > 18
+                                ? (player.firstName + " " + player.name).substring(
+                                0,
+                                18
+                                ) + ".."
+                                : player.firstName + " " + player.name
+                                }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </dialog>
 </template>
 
 <style lang="scss" scoped>
 @import "@/assets/helpers/mixins.scss";
+
+.dialog-title {
+    font-size: 1.2em;
+
+    .dialog-close {
+        padding: 0.5em;
+        position: absolute;
+        right: 0;
+        top: 0;
+        font-size: 1rem;
+    }
+}
+
+.search-player-dialog {
+    width: 90%;
+    max-height: 85vh;
+    border-radius: 0.5rem;
+    border: none;
+    position: absolute;
+    top: 15vw;
+    overflow: hidden;
+}
+
+.select-player-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 10px;
+    grid-auto-rows: minmax(10px, auto);
+
+    .select-player {
+        background-color: var(--bg-color-primary);
+        height: auto;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 0.5rem;
+        padding: 0.5rem 0;
+        background-color: var(--bg-color-primary);
+        border: 5px solid var(--bg-color-primary);
+        border-radius: 0.5rem;
+        font-family: "Tilt Warp", sans-serif;
+        font-size: 0.8rem;
+
+        .player-img {
+            height: 3rem;
+            width: 3rem;
+            border-radius: 50%;
+            background-color: white;
+            cursor: pointer;
+        }
+    }
+}
+
+.invert-player-img {
+    transform: rotate(-90deg);
+}
 
 .babykon-container {
     display: flex;
@@ -179,105 +264,49 @@ onMounted(async () => {
     min-width: 100vw;
     min-height: 100vh;
     background-color: #a4eeeb;
+    justify-content: space-between;
 
     h1 {
         font-family: "Honk", system-ui;
         font-size: 3rem;
     }
 
-    .score-container {
-       background-color: #64d4d1ee;
-       padding: 2rem 1rem;
-       margin: 2rem 1rem;
-       border-radius: 5px;
-       box-shadow: inset 20px 20px 20px -20px rgba(137, 100, 100, 0.8);
-       display: flex;
-       justify-content: space-between;
-       align-items: center;
-       width: 90%;
-    
-       .player-container {
-            background-color: #a4eeeb;
-            padding: .5rem .5rem;
-            border-radius: 5px;
-            margin: 5px;
-            box-shadow:  20px 20px 20px -20px rgba(137, 100, 100, 0.8);
+    .player-container {
+        display: flex;
+        flex-direction: column;
+        gap: .5rem;
+
+        .player-content {
             display: flex;
-            justify-content: center;
-            align-items: center;
             flex-direction: column;
-            width: 45%;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 0.2rem 0.1rem;
+            border-radius: 0.5rem;
+            font-family: "Tilt Warp", sans-serif;
+            font-size: 0.8rem;
 
-            h3 {
-                font-family: "Tilt Warp", sans-serif;
-                font-size: 1.5rem;
-                color: var(--text-color);
-            }
-    
-            .player-content {
-                display: flex;
-                width: 100%;
-                flex-direction: row;
-                justify-content: center;
-                align-items: center;
-    
-                .score-input {
-                    width: 80%;
-                    height: 50px;
-                    font-size: larger;
-                    padding: 1rem .5rem;
-                    border-radius: 5px;
-                    text-align: center;
-                    font-family: "Sixtyfour Convergence", sans-serif;
-                    font-size: 2rem;
-
-                    &.winner {
-                        color: rgb(4, 100, 4);
-                    }
-
-                    &.looser {
-                        color: rgb(158, 3, 3);
-                    }
-                }
-
-                .player-select, .value-select {
-                    width: 100%;
-                    background-color: rgb(243, 243, 243);
-                    padding: 1rem .5rem;
-                    margin: 1rem .5rem;
-                    border-radius: 5px;
-                    text-align: center;
-                }
-
-                .value-select {
-                    text-align: center;
-                    color: rgb(249 0 0);
-                    font-family: "Sixtyfour Convergence", sans-serif;
-                    font-size: 2rem;
-                    background-color: rgb(104 214 211);
-                    border: none;
-                    box-shadow: inset 16px 15px 18px -20px rgba(137, 100, 100, 0.8);
-                    appearance: none;
-                    padding-left: 10px;
-                }
-            }
-        }
-        @media only screen and (max-width: 800px) {
-            .player-container {
-                width: 90%;
+            .player-img {
+                height: 3rem;
+                width: 3rem;
+                border-radius: 50%;
+                background-color: white;
+                cursor: pointer;
             }
         }
     }
+
     @media only screen and (max-width: 800px) {
         .score-container {
             flex-direction: column
         }
     }
 
-    .valider-btn {  
+    .valider-btn {
         @include btn-primary;
 
         & {
+            margin: 1rem 0;
             width: 80%;
         }
     }
@@ -303,14 +332,6 @@ onMounted(async () => {
 }
 
 .end-game-container {
-    flex-direction: column;
-    align-items: center;
-    padding-left: 1rem;
-    padding-right: 1rem;
-    min-width: 100vw;
-    min-height: 100vh;
-    background-color: #a4eeeb;
-
     h1 {
         font-family: "Honk", system-ui;
         font-size: 3rem;
@@ -332,24 +353,24 @@ onMounted(async () => {
             justify-content: center;
             border-radius: .5rem;
             background-color: #64d4d1ee;
-            box-shadow: inset 20px 20px 20px -20px rgba(137, 100, 100, 0.8); 
+            box-shadow: inset 20px 20px 20px -20px rgba(137, 100, 100, 0.8);
             width: 100%;
             padding: 2rem;
             gap: .5rem;
 
-            .player-presentation{
+            .player-presentation {
                 display: flex;
                 flex-direction: row;
                 align-items: center;
             }
 
-            .player-stat{
+            .player-stat {
                 display: flex;
                 flex-direction: row;
                 align-items: center;
                 justify-items: auto;
                 background-color: #a4eeeb;
-                box-shadow:  20px 20px 20px -20px rgba(137, 100, 100, 0.8);
+                box-shadow: 20px 20px 20px -20px rgba(137, 100, 100, 0.8);
                 border-radius: 3rem;
                 padding: 1rem;
 
@@ -367,7 +388,7 @@ onMounted(async () => {
                     font-family: "Tilt Warp", sans-serif;
                     font-size: 1.2rem;
                     color: var(--text-color);
-            }
+                }
 
             }
 
@@ -378,16 +399,11 @@ onMounted(async () => {
                 border-radius: 50%;
                 margin-right: 1rem;
             }
+
             .text {
                 font-family: "Tilt Warp", sans-serif;
                 font-size: 1.8rem;
                 color: var(--text-color);
-            }
-
-            img {
-                width: 6rem;
-                height: 6rem;
-
             }
 
             .animation {
@@ -398,14 +414,30 @@ onMounted(async () => {
         }
     }
 
-    .valider-btn {
-        @include btn-primary;
+    .score {
+        background-color: white;
+        padding: 0.5rem 1rem;
+        font-size: 1.5rem;
+        border-radius: .5rem;
+        font-family: "Tilt Warp", sans-serif;
+    }
 
-        & {
-            margin-top: 1.5rem;
-            width: 80%;
+    .score-separator {
+        font-family: "Tilt Warp", sans-serif;
+    }
+
+    .btn-container {
+        gap: .2em;
+
+        .valider-btn,
+        .back-btn {
+            @include btn-primary;
+
+            & {
+                margin: .5rem;
+                width: 80%;
+            }
         }
     }
 }
-
 </style>

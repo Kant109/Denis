@@ -3,31 +3,39 @@
 }
 
 :root {
-  --bg-color-primary: #FFECD1;
+  --bg-color-primary: #ffecd1;
   --bg-color-secondary: white;
   --button-primary: white;
   --text-color: #121212;
   --cricket-door-disable: rgba(0, 0, 0, 0.1);
   --cricket-door-confirm: black;
-  --active-player: #F9CD61;
+  --active-player: #f9cd61;
 }
 
-html, body, #app, main {
+html,
+body,
+#app,
+main {
   margin: 0;
   padding: 0;
   height: 100%;
 }
-html .search-player-dialog, body .search-player-dialog, #app .search-player-dialog, main .search-player-dialog {
+html .search-player-dialog,
+body .search-player-dialog,
+#app .search-player-dialog,
+main .search-player-dialog {
   width: 90%;
   max-height: 90vh;
   border-radius: 0.5rem;
   border: none;
-  background-color: var(--bg-color-secondary);
   position: absolute;
   top: 15vw;
   overflow: hidden;
 }
-html .search-player-dialog .dialog-title, body .search-player-dialog .dialog-title, #app .search-player-dialog .dialog-title, main .search-player-dialog .dialog-title {
+html .search-player-dialog .dialog-title,
+body .search-player-dialog .dialog-title,
+#app .search-player-dialog .dialog-title,
+main .search-player-dialog .dialog-title {
   display: flex;
   font-family: "Tilt Warp", sans-serif;
   font-size: 1.5rem;
@@ -37,7 +45,10 @@ html .search-player-dialog .dialog-title, body .search-player-dialog .dialog-tit
   align-items: center;
   margin-bottom: 1rem;
 }
-html .search-player-dialog .btn-create-modal, body .search-player-dialog .btn-create-modal, #app .search-player-dialog .btn-create-modal, main .search-player-dialog .btn-create-modal {
+html .search-player-dialog .btn-create-modal,
+body .search-player-dialog .btn-create-modal,
+#app .search-player-dialog .btn-create-modal,
+main .search-player-dialog .btn-create-modal {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -47,20 +58,32 @@ html .search-player-dialog .btn-create-modal, body .search-player-dialog .btn-cr
   text-decoration: underline;
   margin-bottom: 0.5rem;
 }
-html .search-player-dialog .btn-create-modal:hover, body .search-player-dialog .btn-create-modal:hover, #app .search-player-dialog .btn-create-modal:hover, main .search-player-dialog .btn-create-modal:hover {
+html .search-player-dialog .btn-create-modal:hover,
+body .search-player-dialog .btn-create-modal:hover,
+#app .search-player-dialog .btn-create-modal:hover,
+main .search-player-dialog .btn-create-modal:hover {
   cursor: pointer;
 }
-html .search-player-dialog .search-player, body .search-player-dialog .search-player, #app .search-player-dialog .search-player, main .search-player-dialog .search-player {
+html .search-player-dialog .search-player,
+body .search-player-dialog .search-player,
+#app .search-player-dialog .search-player,
+main .search-player-dialog .search-player {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
   max-height: 70vh;
   overflow: scroll;
 }
-html .search-player-dialog .search-player div.send-out, body .search-player-dialog .search-player div.send-out, #app .search-player-dialog .search-player div.send-out, main .search-player-dialog .search-player div.send-out {
+html .search-player-dialog .search-player div.send-out,
+body .search-player-dialog .search-player div.send-out,
+#app .search-player-dialog .search-player div.send-out,
+main .search-player-dialog .search-player div.send-out {
   animation: send-out 1s;
 }
-html .search-player-dialog .search-player div .select-player-container, body .search-player-dialog .search-player div .select-player-container, #app .search-player-dialog .search-player div .select-player-container, main .search-player-dialog .search-player div .select-player-container {
+html .search-player-dialog .search-player div .select-player-container,
+body .search-player-dialog .search-player div .select-player-container,
+#app .search-player-dialog .search-player div .select-player-container,
+main .search-player-dialog .search-player div .select-player-container {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   grid-template-rows: 1fr;
@@ -68,34 +91,134 @@ html .search-player-dialog .search-player div .select-player-container, body .se
   grid-row-gap: 0px;
   align-items: center;
 }
-html .search-player-dialog .search-player div .select-player-container .player-img, body .search-player-dialog .search-player div .select-player-container .player-img, #app .search-player-dialog .search-player div .select-player-container .player-img, main .search-player-dialog .search-player div .select-player-container .player-img {
+html
+  .search-player-dialog
+  .search-player
+  div
+  .select-player-container
+  .player-img,
+body
+  .search-player-dialog
+  .search-player
+  div
+  .select-player-container
+  .player-img,
+#app
+  .search-player-dialog
+  .search-player
+  div
+  .select-player-container
+  .player-img,
+main
+  .search-player-dialog
+  .search-player
+  div
+  .select-player-container
+  .player-img {
   height: 2rem;
   width: 2rem;
   border-radius: 50%;
   border: 1px solid black;
   background-color: white;
   cursor: pointer;
-  grid-area: 1/1/2/2;
+  grid-area: 1 / 1 / 2 / 2;
 }
-html .search-player-dialog .search-player div .select-player-container .player-name, body .search-player-dialog .search-player div .select-player-container .player-name, #app .search-player-dialog .search-player div .select-player-container .player-name, main .search-player-dialog .search-player div .select-player-container .player-name {
+html
+  .search-player-dialog
+  .search-player
+  div
+  .select-player-container
+  .player-name,
+body
+  .search-player-dialog
+  .search-player
+  div
+  .select-player-container
+  .player-name,
+#app
+  .search-player-dialog
+  .search-player
+  div
+  .select-player-container
+  .player-name,
+main
+  .search-player-dialog
+  .search-player
+  div
+  .select-player-container
+  .player-name {
   display: flex;
   justify-content: center;
   flex-direction: column;
   font-family: "Tilt Warp", sans-serif;
   font-size: 1.5rem;
-  grid-area: 1/2/2/5;
+  grid-area: 1 / 2 / 2 / 5;
 }
-html .search-player-dialog .search-player div .select-player-container .player-name .player-name-pseudo, html .search-player-dialog .search-player div .select-player-container .player-name .player-full-name, body .search-player-dialog .search-player div .select-player-container .player-name .player-name-pseudo, body .search-player-dialog .search-player div .select-player-container .player-name .player-full-name, #app .search-player-dialog .search-player div .select-player-container .player-name .player-name-pseudo, #app .search-player-dialog .search-player div .select-player-container .player-name .player-full-name, main .search-player-dialog .search-player div .select-player-container .player-name .player-name-pseudo, main .search-player-dialog .search-player div .select-player-container .player-name .player-full-name {
+html
+  .search-player-dialog
+  .search-player
+  div
+  .select-player-container
+  .player-name
+  .player-name-pseudo,
+html
+  .search-player-dialog
+  .search-player
+  div
+  .select-player-container
+  .player-name
+  .player-full-name,
+body
+  .search-player-dialog
+  .search-player
+  div
+  .select-player-container
+  .player-name
+  .player-name-pseudo,
+body
+  .search-player-dialog
+  .search-player
+  div
+  .select-player-container
+  .player-name
+  .player-full-name,
+#app
+  .search-player-dialog
+  .search-player
+  div
+  .select-player-container
+  .player-name
+  .player-name-pseudo,
+#app
+  .search-player-dialog
+  .search-player
+  div
+  .select-player-container
+  .player-name
+  .player-full-name,
+main
+  .search-player-dialog
+  .search-player
+  div
+  .select-player-container
+  .player-name
+  .player-name-pseudo,
+main
+  .search-player-dialog
+  .search-player
+  div
+  .select-player-container
+  .player-name
+  .player-full-name {
   display: flex;
   font-family: "Tilt Warp", sans-serif;
   font-size: 1rem;
   color: var(--text-color);
 }
-html .search-player-dialog .search-player div .select-player, body .search-player-dialog .search-player div .select-player, #app .search-player-dialog .search-player div .select-player, main .search-player-dialog .search-player div .select-player {
-  position: relative;
-  background-color: black;
-}
-html .search-player-dialog .search-player div .select-player::after, body .search-player-dialog .search-player div .select-player::after, #app .search-player-dialog .search-player div .select-player::after, main .search-player-dialog .search-player div .select-player::after {
+html .search-player-dialog .search-player div .select-player::after,
+body .search-player-dialog .search-player div .select-player::after,
+#app .search-player-dialog .search-player div .select-player::after,
+main .search-player-dialog .search-player div .select-player::after {
   content: "";
   display: block;
   position: absolute;
@@ -105,10 +228,16 @@ html .search-player-dialog .search-player div .select-player::after, body .searc
   height: 1.5rem;
   background-image: url("@/assets/images/black-right-arrow.svg");
 }
-html .search-player-dialog .search-player div .select-player.darkmode::after, body .search-player-dialog .search-player div .select-player.darkmode::after, #app .search-player-dialog .search-player div .select-player.darkmode::after, main .search-player-dialog .search-player div .select-player.darkmode::after {
+html .search-player-dialog .search-player div .select-player.darkmode::after,
+body .search-player-dialog .search-player div .select-player.darkmode::after,
+#app .search-player-dialog .search-player div .select-player.darkmode::after,
+main .search-player-dialog .search-player div .select-player.darkmode::after {
   background-image: url("@/assets/images/white-right-arrow.svg");
 }
-html .search-player-dialog .search-player .btn-close-modal, body .search-player-dialog .search-player .btn-close-modal, #app .search-player-dialog .search-player .btn-close-modal, main .search-player-dialog .search-player .btn-close-modal {
+html .search-player-dialog .search-player .btn-close-modal,
+body .search-player-dialog .search-player .btn-close-modal,
+#app .search-player-dialog .search-player .btn-close-modal,
+main .search-player-dialog .search-player .btn-close-modal {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -121,29 +250,42 @@ html .search-player-dialog .search-player .btn-close-modal, body .search-player-
   font-size: 1.5rem;
   color: var(--text-color);
   padding-bottom: 5px;
-  --tw-shadow: inset 0 -5px 0 0 rgba(0, 0, 0, .25);
-  box-shadow: var(--tw-ring-offset-shadow, 0 0 rgba(0, 0, 0, 0)), var(--tw-ring-shadow, 0 0 rgba(0, 0, 0, 0)), var(--tw-shadow);
+  --tw-shadow: inset 0 -5px 0 0 rgba(0, 0, 0, 0.25);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),
+    var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
   border: 1px solid rgba(0, 0, 0, 0.25);
 }
-html .search-player-dialog .search-player .btn-close-modal:active, body .search-player-dialog .search-player .btn-close-modal:active, #app .search-player-dialog .search-player .btn-close-modal:active, main .search-player-dialog .search-player .btn-close-modal:active {
+html .search-player-dialog .search-player .btn-close-modal:active,
+body .search-player-dialog .search-player .btn-close-modal:active,
+#app .search-player-dialog .search-player .btn-close-modal:active,
+main .search-player-dialog .search-player .btn-close-modal:active {
   color: rgba(0, 0, 0, 0.25);
   transform: translateY(5px);
   box-shadow: none;
 }
-html .search-player-dialog .create-player, body .search-player-dialog .create-player, #app .search-player-dialog .create-player, main .search-player-dialog .create-player {
+html .search-player-dialog .create-player,
+body .search-player-dialog .create-player,
+#app .search-player-dialog .create-player,
+main .search-player-dialog .create-player {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 1.5rem;
 }
-html .search-player-dialog .create-player .input, body .search-player-dialog .create-player .input, #app .search-player-dialog .create-player .input, main .search-player-dialog .create-player .input {
+html .search-player-dialog .create-player .input,
+body .search-player-dialog .create-player .input,
+#app .search-player-dialog .create-player .input,
+main .search-player-dialog .create-player .input {
   width: 100%;
   display: block;
   position: relative;
   box-sizing: border-box;
 }
-html .search-player-dialog .create-player .input label, body .search-player-dialog .create-player .input label, #app .search-player-dialog .create-player .input label, main .search-player-dialog .create-player .input label {
+html .search-player-dialog .create-player .input label,
+body .search-player-dialog .create-player .input label,
+#app .search-player-dialog .create-player .input label,
+main .search-player-dialog .create-player .input label {
   font-size: 1rem;
   margin-left: 1rem;
   z-index: 1;
@@ -156,7 +298,10 @@ html .search-player-dialog .create-player .input label, body .search-player-dial
   font-family: "Tilt Warp", sans-serif;
   color: var(--text-color);
 }
-html .search-player-dialog .create-player .input input, body .search-player-dialog .create-player .input input, #app .search-player-dialog .create-player .input input, main .search-player-dialog .create-player .input input {
+html .search-player-dialog .create-player .input input,
+body .search-player-dialog .create-player .input input,
+#app .search-player-dialog .create-player .input input,
+main .search-player-dialog .create-player .input input {
   display: flex;
   align-items: center;
   width: 100%;
@@ -168,18 +313,34 @@ html .search-player-dialog .create-player .input input, body .search-player-dial
   border: 1px solid var(--text-color);
   color: var(--text-color);
 }
-html .search-player-dialog .create-player .input span, body .search-player-dialog .create-player .input span, #app .search-player-dialog .create-player .input span, main .search-player-dialog .create-player .input span {
+html .search-player-dialog .create-player .input span,
+body .search-player-dialog .create-player .input span,
+#app .search-player-dialog .create-player .input span,
+main .search-player-dialog .create-player .input span {
   font-family: "Tilt Warp", sans-serif;
   font-size: 0.75rem;
   color: #878787;
 }
-html .search-player-dialog .create-player .input.error input, body .search-player-dialog .create-player .input.error input, #app .search-player-dialog .create-player .input.error input, main .search-player-dialog .create-player .input.error input {
+html .search-player-dialog .create-player .input.error input,
+body .search-player-dialog .create-player .input.error input,
+#app .search-player-dialog .create-player .input.error input,
+main .search-player-dialog .create-player .input.error input {
   border-color: red;
 }
-html .search-player-dialog .create-player .input.error label, html .search-player-dialog .create-player .input.error span, body .search-player-dialog .create-player .input.error label, body .search-player-dialog .create-player .input.error span, #app .search-player-dialog .create-player .input.error label, #app .search-player-dialog .create-player .input.error span, main .search-player-dialog .create-player .input.error label, main .search-player-dialog .create-player .input.error span {
+html .search-player-dialog .create-player .input.error label,
+html .search-player-dialog .create-player .input.error span,
+body .search-player-dialog .create-player .input.error label,
+body .search-player-dialog .create-player .input.error span,
+#app .search-player-dialog .create-player .input.error label,
+#app .search-player-dialog .create-player .input.error span,
+main .search-player-dialog .create-player .input.error label,
+main .search-player-dialog .create-player .input.error span {
   color: red;
 }
-html .search-player-dialog .create-player .btn-save-player-modal, body .search-player-dialog .create-player .btn-save-player-modal, #app .search-player-dialog .create-player .btn-save-player-modal, main .search-player-dialog .create-player .btn-save-player-modal {
+html .search-player-dialog .create-player .btn-save-player-modal,
+body .search-player-dialog .create-player .btn-save-player-modal,
+#app .search-player-dialog .create-player .btn-save-player-modal,
+main .search-player-dialog .create-player .btn-save-player-modal {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -192,16 +353,23 @@ html .search-player-dialog .create-player .btn-save-player-modal, body .search-p
   font-size: 1.5rem;
   color: var(--text-color);
   padding-bottom: 5px;
-  --tw-shadow: inset 0 -5px 0 0 rgba(0, 0, 0, .25);
-  box-shadow: var(--tw-ring-offset-shadow, 0 0 rgba(0, 0, 0, 0)), var(--tw-ring-shadow, 0 0 rgba(0, 0, 0, 0)), var(--tw-shadow);
+  --tw-shadow: inset 0 -5px 0 0 rgba(0, 0, 0, 0.25);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),
+    var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
   border: 1px solid rgba(0, 0, 0, 0.25);
 }
-html .search-player-dialog .create-player .btn-save-player-modal:active, body .search-player-dialog .create-player .btn-save-player-modal:active, #app .search-player-dialog .create-player .btn-save-player-modal:active, main .search-player-dialog .create-player .btn-save-player-modal:active {
+html .search-player-dialog .create-player .btn-save-player-modal:active,
+body .search-player-dialog .create-player .btn-save-player-modal:active,
+#app .search-player-dialog .create-player .btn-save-player-modal:active,
+main .search-player-dialog .create-player .btn-save-player-modal:active {
   color: rgba(0, 0, 0, 0.25);
   transform: translateY(5px);
   box-shadow: none;
 }
-html .search-player-dialog .create-player .btn-cancel-modal, body .search-player-dialog .create-player .btn-cancel-modal, #app .search-player-dialog .create-player .btn-cancel-modal, main .search-player-dialog .create-player .btn-cancel-modal {
+html .search-player-dialog .create-player .btn-cancel-modal,
+body .search-player-dialog .create-player .btn-cancel-modal,
+#app .search-player-dialog .create-player .btn-cancel-modal,
+main .search-player-dialog .create-player .btn-cancel-modal {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -210,10 +378,16 @@ html .search-player-dialog .create-player .btn-cancel-modal, body .search-player
   color: var(--text-color);
   text-decoration: underline;
 }
-html .search-player-dialog .create-player .btn-cancel-modal:hover, body .search-player-dialog .create-player .btn-cancel-modal:hover, #app .search-player-dialog .create-player .btn-cancel-modal:hover, main .search-player-dialog .create-player .btn-cancel-modal:hover {
+html .search-player-dialog .create-player .btn-cancel-modal:hover,
+body .search-player-dialog .create-player .btn-cancel-modal:hover,
+#app .search-player-dialog .create-player .btn-cancel-modal:hover,
+main .search-player-dialog .create-player .btn-cancel-modal:hover {
   cursor: pointer;
 }
-html .confirm-end-game-dialog, body .confirm-end-game-dialog, #app .confirm-end-game-dialog, main .confirm-end-game-dialog {
+html .confirm-end-game-dialog,
+body .confirm-end-game-dialog,
+#app .confirm-end-game-dialog,
+main .confirm-end-game-dialog {
   border: none;
   border-radius: 8px;
   position: absolute;
@@ -222,34 +396,52 @@ html .confirm-end-game-dialog, body .confirm-end-game-dialog, #app .confirm-end-
   box-shadow: 0px 0px 20px 3px rgba(0, 0, 0, 0.6);
   z-index: 1000;
 }
-html .confirm-end-game-dialog .loader, body .confirm-end-game-dialog .loader, #app .confirm-end-game-dialog .loader, main .confirm-end-game-dialog .loader {
+html .confirm-end-game-dialog .loader,
+body .confirm-end-game-dialog .loader,
+#app .confirm-end-game-dialog .loader,
+main .confirm-end-game-dialog .loader {
   padding: 0.5rem;
 }
-html .confirm-end-game-dialog .loader .anim, body .confirm-end-game-dialog .loader .anim, #app .confirm-end-game-dialog .loader .anim, main .confirm-end-game-dialog .loader .anim {
+html .confirm-end-game-dialog .loader .anim,
+body .confirm-end-game-dialog .loader .anim,
+#app .confirm-end-game-dialog .loader .anim,
+main .confirm-end-game-dialog .loader .anim {
   height: 146px;
 }
-html .confirm-end-game-dialog .confirm-end-game-container, body .confirm-end-game-dialog .confirm-end-game-container, #app .confirm-end-game-dialog .confirm-end-game-container, main .confirm-end-game-dialog .confirm-end-game-container {
+html .confirm-end-game-dialog .confirm-end-game-container,
+body .confirm-end-game-dialog .confirm-end-game-container,
+#app .confirm-end-game-dialog .confirm-end-game-container,
+main .confirm-end-game-dialog .confirm-end-game-container {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
   gap: 0.5rem;
 }
-html .confirm-end-game-dialog .confirm-end-game-container .title, body .confirm-end-game-dialog .confirm-end-game-container .title, #app .confirm-end-game-dialog .confirm-end-game-container .title, main .confirm-end-game-dialog .confirm-end-game-container .title {
+html .confirm-end-game-dialog .confirm-end-game-container .title,
+body .confirm-end-game-dialog .confirm-end-game-container .title,
+#app .confirm-end-game-dialog .confirm-end-game-container .title,
+main .confirm-end-game-dialog .confirm-end-game-container .title {
   font-family: "Tilt Warp", sans-serif;
   font-size: 1rem;
   color: var(--text-color);
   text-align: center;
   padding-top: 1rem;
 }
-html .confirm-end-game-dialog .confirm-end-game-container .text, body .confirm-end-game-dialog .confirm-end-game-container .text, #app .confirm-end-game-dialog .confirm-end-game-container .text, main .confirm-end-game-dialog .confirm-end-game-container .text {
+html .confirm-end-game-dialog .confirm-end-game-container .text,
+body .confirm-end-game-dialog .confirm-end-game-container .text,
+#app .confirm-end-game-dialog .confirm-end-game-container .text,
+main .confirm-end-game-dialog .confirm-end-game-container .text {
   font-family: "Tilt Warp", sans-serif;
   font-size: 0.75rem;
   color: grey;
   text-align: center;
   width: 95%;
 }
-html .confirm-end-game-dialog .confirm-end-game-container .btn-container, body .confirm-end-game-dialog .confirm-end-game-container .btn-container, #app .confirm-end-game-dialog .confirm-end-game-container .btn-container, main .confirm-end-game-dialog .confirm-end-game-container .btn-container {
+html .confirm-end-game-dialog .confirm-end-game-container .btn-container,
+body .confirm-end-game-dialog .confirm-end-game-container .btn-container,
+#app .confirm-end-game-dialog .confirm-end-game-container .btn-container,
+main .confirm-end-game-dialog .confirm-end-game-container .btn-container {
   display: flex;
   width: 100%;
   border-top: 1px solid lightgrey;
@@ -261,7 +453,10 @@ html .confirm-end-game-dialog .confirm-end-game-container .btn-container, body .
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
 }
-html .confirm-end-game-dialog .confirm-end-game-container .btn-container .btn, body .confirm-end-game-dialog .confirm-end-game-container .btn-container .btn, #app .confirm-end-game-dialog .confirm-end-game-container .btn-container .btn, main .confirm-end-game-dialog .confirm-end-game-container .btn-container .btn {
+html .confirm-end-game-dialog .confirm-end-game-container .btn-container .btn,
+body .confirm-end-game-dialog .confirm-end-game-container .btn-container .btn,
+#app .confirm-end-game-dialog .confirm-end-game-container .btn-container .btn,
+main .confirm-end-game-dialog .confirm-end-game-container .btn-container .btn {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -271,15 +466,56 @@ html .confirm-end-game-dialog .confirm-end-game-container .btn-container .btn, b
   height: 100%;
   width: 100%;
 }
-html .confirm-end-game-dialog .confirm-end-game-container .btn-container .btn.cancel, body .confirm-end-game-dialog .confirm-end-game-container .btn-container .btn.cancel, #app .confirm-end-game-dialog .confirm-end-game-container .btn-container .btn.cancel, main .confirm-end-game-dialog .confirm-end-game-container .btn-container .btn.cancel {
+html
+  .confirm-end-game-dialog
+  .confirm-end-game-container
+  .btn-container
+  .btn.cancel,
+body
+  .confirm-end-game-dialog
+  .confirm-end-game-container
+  .btn-container
+  .btn.cancel,
+#app
+  .confirm-end-game-dialog
+  .confirm-end-game-container
+  .btn-container
+  .btn.cancel,
+main
+  .confirm-end-game-dialog
+  .confirm-end-game-container
+  .btn-container
+  .btn.cancel {
   background-color: white;
   border-bottom-left-radius: 8px;
 }
-html .confirm-end-game-dialog .confirm-end-game-container .btn-container .btn.end, body .confirm-end-game-dialog .confirm-end-game-container .btn-container .btn.end, #app .confirm-end-game-dialog .confirm-end-game-container .btn-container .btn.end, main .confirm-end-game-dialog .confirm-end-game-container .btn-container .btn.end {
+html
+  .confirm-end-game-dialog
+  .confirm-end-game-container
+  .btn-container
+  .btn.end,
+body
+  .confirm-end-game-dialog
+  .confirm-end-game-container
+  .btn-container
+  .btn.end,
+#app
+  .confirm-end-game-dialog
+  .confirm-end-game-container
+  .btn-container
+  .btn.end,
+main
+  .confirm-end-game-dialog
+  .confirm-end-game-container
+  .btn-container
+  .btn.end {
   background-color: var(--active-player);
   border-bottom-right-radius: 8px;
 }
-html h2, body h2, #app h2, main h2 {
+html h2,
+body h2,
+#app h2,
+main h2 {
   font-family: "Honk", system-ui;
   font-size: 1.5rem;
   color: var(--text-color);

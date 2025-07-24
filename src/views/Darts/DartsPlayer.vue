@@ -378,6 +378,10 @@ watch(
     }
 }
 
+.search-player-dialog {
+    background-color: var(--bg-color-secondary);
+}
+
 .btn-container-add {
     display: flex;
     justify-content: center;
@@ -395,7 +399,7 @@ watch(
     font-size: 50px;
     top: -6px;
     position: relative;
-    color: var(--active-player);
+    color: #a4eeeb;
 }
 
 .btn-remove {
