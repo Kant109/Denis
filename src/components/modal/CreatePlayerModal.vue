@@ -60,7 +60,7 @@ const createPlayer = async () => {
     <div class="dialog-content">
       <div class="dialog-header dialog-header--sticky">
         <h3 class="dialog-title">{{ title }}</h3>
-        <span class="dialog-close" @click="$emit('close-modal')">x</span>
+        <span class="dialog-close" @click.prevent="emit('close-modal')">x</span>
       </div>
       <div class="dialog-body">
         <div class="create-player-container">
@@ -95,14 +95,14 @@ const createPlayer = async () => {
         </div>
       </div>
       <div class="dialog-footer">
-            <button @click="createPlayer">Créer le joueur</button>
-            <button @click.prevent="$emit('close-modal')">Annuler</button>
+            <button @click.prevent="createPlayer">Créer le joueur</button>
+            <button @click.prevent="emit('close-modal')">Annuler</button>
       </div>
     </div>
   </dialog>
 </template>
 <style lang="scss" scoped>
-  @import "../../assets/helpers/dialog.scss";
+  @use "../../assets/helpers/dialog.scss";
 
 .create-player-container {
     max-height: 80vh;

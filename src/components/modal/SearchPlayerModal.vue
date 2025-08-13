@@ -26,7 +26,7 @@ const openCreatePlayer = ref(false);
     <div class="dialog-content">
       <div class="dialog-header dialog-header--sticky">
         <h3 class="dialog-title">{{ title }}</h3>
-        <span class="dialog-close" @click="searchText='';$emit('close-modal')">x</span>
+        <span class="dialog-close" @click.prevent="searchText='';$emit('close-modal')">x</span>
       </div>
       <div class="dialog-body">
           <div class="search-player-container">
@@ -39,7 +39,7 @@ const openCreatePlayer = ref(false);
               v-for="player in allPlayers.filter(
                 (p) => !unselectablePlayerIds.find((id) => p.id === id) && getPlayerLibelle(p).toLocaleLowerCase().includes(searchText)
               )"
-              @click="$emit('select-player', player)"
+              @click.prevent="$emit('select-player', player)"
             >
               <img
                 class="player-img"
@@ -60,12 +60,12 @@ const openCreatePlayer = ref(false);
     </div>
   </dialog>
   <Teleport to="main">
-    <CreatePlayerModal v-if="openCreatePlayer" :open-modal="openCreatePlayer" title="Créer un nouveau joueur" v-on:close-modal="openCreatePlayer=false" 
-      v-on:create-player="(player: Player) => {allPlayers.push(player);openCreatePlayer=false}"></CreatePlayerModal>
+    <CreatePlayerModal v-if="openCreatePlayer" :open-modal="openCreatePlayer" title="Créer un nouveau joueur" @close-modal="openCreatePlayer=false" 
+      @create-player="(player: Player) => {allPlayers.push(player);openCreatePlayer=false}"></CreatePlayerModal>
   </Teleport>
 </template>
 <style lang="scss" scoped>
-  @import "../../assets/helpers/dialog.scss";
+  @use "../../assets/helpers/dialog.scss";
 
 .select-player-container {
   display: grid;

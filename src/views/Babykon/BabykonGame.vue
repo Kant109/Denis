@@ -107,7 +107,7 @@ const openModal = (isSelectingWinner: boolean, scorePlayer: number) => {
                     @select-player="(n) => openModal(true, n)"
                     @score-change="(n) => scoreWinner = n" />
                 <div class="d-flex justify-content-center">
-                    <img v-if="winner.id && loser.id" class="invert-player-img" @click="invertPlayer"
+                    <img v-if="winner.id && loser.id" class="invert-player-img" @click.prevent="invertPlayer"
                         src="@/assets/images/sync.svg" width="30" height="30" />
                 </div>
                 <BabykonPlayer title="Perdant" :player="loser"
@@ -169,12 +169,12 @@ const openModal = (isSelectingWinner: boolean, scorePlayer: number) => {
             </div>
         </div>
         <div class="btn-container w-100 d-flex justify-content-center">
-            <button class="valider-btn" @click="replay">Rejouer</button>
-            <button class="back-btn" @click="home">Accueil</button>
+            <button class="valider-btn" @click.prevent="replay">Rejouer</button>
+            <button class="back-btn" @click.prevent="home">Accueil</button>
         </div>
     </div>
     <SearchPlayerModal :title="modalTitle" :open-modal="openSearchPlayer" :unselectable-player-ids="[winner.id, loser.id]" 
-        v-on:close-modal="openSearchPlayer=false" v-on:select-player="(player: Player) => selectPlayer(player)"></SearchPlayerModal>
+        @close-modal="openSearchPlayer=false" @select-player="(player: Player) => selectPlayer(player)"></SearchPlayerModal>
 </template>
 
 <style lang="scss" scoped>
