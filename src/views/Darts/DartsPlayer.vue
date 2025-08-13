@@ -121,7 +121,7 @@ watch(
 </template>
 
 <style lang="scss" scoped>
-@use "@/assets/helpers/mixins.scss";
+@import "@/assets/helpers/mixins.scss";
 
 .settings-container {
     display: flex;

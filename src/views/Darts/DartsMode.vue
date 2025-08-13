@@ -32,7 +32,7 @@ const back = () => {
 </template>
 
 <style lang="scss" scoped>
-@use "@/assets/helpers/mixins.scss";
+@import "@/assets/helpers/mixins.scss";
 
 .darts-game-container {
     display: flex;

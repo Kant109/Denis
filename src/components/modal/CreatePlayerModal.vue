@@ -102,7 +102,7 @@ const createPlayer = async () => {
   </dialog>
 </template>
 <style lang="scss" scoped>
-  @use "../../assets/helpers/dialog.scss";
+  @import "@/assets/helpers/dialog.scss";
 
 .create-player-container {
     max-height: 80vh;

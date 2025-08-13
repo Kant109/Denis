@@ -65,7 +65,7 @@ const openCreatePlayer = ref(false);
   </Teleport>
 </template>
 <style lang="scss" scoped>
-  @use "../../assets/helpers/dialog.scss";
+  @import "@/assets/helpers/dialog.scss";
 
 .select-player-container {
   display: grid;
