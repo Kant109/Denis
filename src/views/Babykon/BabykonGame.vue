@@ -6,6 +6,7 @@ import { usePlayerStore } from '@/stores/PlayerStore';
 import { LottieAnimation } from "lottie-web-vue";
 import ConfettiAnimation from "@/assets/animations/confetti.json";
 import BabykonPlayer from './BabykonPlayer.vue';
+import SearchPlayerModal from '@/components/modal/SearchPlayerModal.vue';
 
 const router = useRouter();
 
@@ -22,9 +23,14 @@ const loser = ref({} as Player);
 
 const openSearchPlayer = ref(false);
 const isSelectPlayerOne = ref(true);
+const modalTitle = ref('');
 
 const back = () => {
     router.push({ name: "babykon-mode" });
+}
+
+const home = () => {
+    router.push({ name: "home" });
 }
 
 const valider = async () => {
@@ -77,6 +83,17 @@ const invertPlayer = () => {
     winner.value = loser.value;
     loser.value = tempWinner;
 }
+const openModal = (isSelectingWinner: boolean, scorePlayer: number) => {
+    isSelectPlayerOne.value = isSelectingWinner;
+    openSearchPlayer.value = true;
+    if(isSelectingWinner) {
+        scoreWinner.value = scorePlayer;
+        modalTitle.value = 'Sélectionner le gagnant';
+    } else {
+        scoreLoser.value = scorePlayer;
+        modalTitle.value = 'Sélectionner le perdant';
+    }
+}
 </script>
 
 <template>
@@ -87,14 +104,14 @@ const invertPlayer = () => {
         <div class="score-container">
             <div class="player-container">
                 <BabykonPlayer title="Gagnant" :player="winner" :default-value="5"
-                    @select-player="(n) => { isSelectPlayerOne = true; openSearchPlayer = true; scoreWinner = n }"
+                    @select-player="(n) => openModal(true, n)"
                     @score-change="(n) => scoreWinner = n" />
                 <div class="d-flex justify-content-center">
                     <img v-if="winner.id && loser.id" class="invert-player-img" @click="invertPlayer"
                         src="@/assets/images/sync.svg" width="30" height="30" />
                 </div>
                 <BabykonPlayer title="Perdant" :player="loser"
-                    @select-player="(n) => { isSelectPlayerOne = false; openSearchPlayer = true; scoreLoser = n }"
+                    @select-player="(n) => openModal(false, n)"
                     @score-change="(n) => scoreLoser = n" />
             </div>
         </div>
@@ -153,105 +170,16 @@ const invertPlayer = () => {
         </div>
         <div class="btn-container w-100 d-flex justify-content-center">
             <button class="valider-btn" @click="replay">Rejouer</button>
-            <button class="back-btn" @click="back">Accueil</button>
+            <button class="back-btn" @click="home">Accueil</button>
         </div>
     </div>
-    <dialog class="search-player-dialog" :open="openSearchPlayer">
-        <div class="content">
-            <div class="dialog-title">
-                Sélectionner le {{ isSelectPlayerOne ? "gagnant" : "perdant" }}
-                <span class="dialog-close" @click="openSearchPlayer = false">x</span>
-            </div>
-            <div class="search-player">
-                <div class="select-player-container">
-                    <div class="select-player d-flex"
-                        v-for="player in allPlayers.filter(p => p.id !== winner.id && p.id !== loser.id)"
-                        @click="selectPlayer(player)">
-                        <img class="player-img" :src="'https://api.dicebear.com/9.x/adventurer/svg?seed=' +
-                            player.firstName +
-                            player.pseudo +
-                            player.name
-                            " alt="Avatar" />
-                        <div class="player-name">
-                            <div class="player-name-pseudo">
-                                {{
-                                player.pseudo.length > 18
-                                ? player.pseudo.substring(0, 18) + ".."
-                                : player.pseudo
-                                }}
-                            </div>
-                            <div class="player-full-name">
-                                {{
-                                player.firstName.length + player.name.length > 18
-                                ? (player.firstName + " " + player.name).substring(
-                                0,
-                                18
-                                ) + ".."
-                                : player.firstName + " " + player.name
-                                }}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </dialog>
+    <SearchPlayerModal :title="modalTitle" :open-modal="openSearchPlayer" :unselectable-player-ids="[winner.id, loser.id]" 
+        v-on:close-modal="openSearchPlayer=false" v-on:select-player="(player: Player) => selectPlayer(player)"></SearchPlayerModal>
 </template>
 
 <style lang="scss" scoped>
 @import "@/assets/helpers/mixins.scss";
 
-.dialog-title {
-    font-size: 1.2em;
-
-    .dialog-close {
-        padding: 0.5em;
-        position: absolute;
-        right: 0;
-        top: 0;
-        font-size: 1rem;
-    }
-}
-
-.search-player-dialog {
-    width: 90%;
-    max-height: 85vh;
-    border-radius: 0.5rem;
-    border: none;
-    position: absolute;
-    top: 15vw;
-    overflow: hidden;
-}
-
-.select-player-container {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-gap: 10px;
-    grid-auto-rows: minmax(10px, auto);
-
-    .select-player {
-        background-color: var(--bg-color-primary);
-        height: auto;
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
-        gap: 0.5rem;
-        padding: 0.5rem 0;
-        background-color: var(--bg-color-primary);
-        border: 5px solid var(--bg-color-primary);
-        border-radius: 0.5rem;
-        font-family: "Tilt Warp", sans-serif;
-        font-size: 0.8rem;
-
-        .player-img {
-            height: 3rem;
-            width: 3rem;
-            border-radius: 50%;
-            background-color: white;
-            cursor: pointer;
-        }
-    }
-}
 
 .invert-player-img {
     transform: rotate(-90deg);

@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 
 const props = defineProps<{
-    player?: Player,
+    player: Player,
     title: string,
     defaultValue?: number
 }>()
@@ -26,8 +26,7 @@ function plusValue() {
     <div class="player-content" v-if="player?.id">
         <h3>{{ title }}</h3>
         <div class="player-informations">
-            <img class="change-player-img" src="@/assets/images/sync-rotate.svg" width="25" height="25
-            "
+            <img class="change-player-img" src="@/assets/images/sync-rotate.svg" width="25" height="25"
                 @click="$emit('select-player', score)" />
             <img class="player-img" width="100" height="100"
                 :src="`https://api.dicebear.com/9.x/adventurer/svg?seed=${player.firstName}${player.pseudo}${player.name}`"
@@ -122,12 +121,9 @@ function plusValue() {
 
 .value-select {
     text-align: center;
-    // color: rgb(249 0 0);
     font-family: "Sixtyfour Convergence", sans-serif;
     font-size: 2rem;
-    // background-color: rgb(104 214 211);
     border: none;
-    // box-shadow: inset 16px 15px 18px -20px rgba(137, 100, 100, 0.8);
     appearance: none;
     padding-left: 10px;
     background-color: inherit;
@@ -144,13 +140,9 @@ function plusValue() {
 
 .alerts-border {
     border-radius: 5px;
-    /* this doesn't work */
     border-width: 4px;
     border-style: solid;
     border-image: linear-gradient(to right, red, purple);
-    // animation: blink 1s;
-    // animation-iteration-count: infinite;
-
     height: 40px;
     width: 40px;
 }

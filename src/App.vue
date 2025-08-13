@@ -30,13 +30,17 @@ onMounted(async () => {
 
 <style lang="scss">
 
+body {
+    background-color: var(--bg-color-primary);
+}
 main {
     display: flex;
     flex-direction: column;
     align-items: center;
     height: 100%;
     position: relative;
-    background-color: var(--bg-color-primary);
+    margin-left: 5vw;
+    margin-right: 5vw;
 
     .error-message {
         display: flex;
