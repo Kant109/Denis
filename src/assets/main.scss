@@ -1,346 +1,126 @@
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 :root {
-    --bg-color-primary: #FFECD1;
-    --bg-color-secondary: white;
-    --button-primary: white;
-    --text-color: #121212;
-    --cricket-door-disable: rgba(0, 0, 0, 0.1);
-    --cricket-door-confirm: black;
-    --active-player: #F9CD61;
+  --bg-color-primary: #ffecd1;
+  --bg-color-secondary: white;
+  --button-primary: white;
+  --text-color: #121212;
+  --cricket-door-disable: rgba(0, 0, 0, 0.1);
+  --cricket-door-confirm: black;
+  --active-player: #f9cd61;
 }
 
-html, body, #app, main {
+html,
+body,
+#app,
+main > * {
+  font-family: "Tilt Warp", sans-serif;
+}
+
+html,
+body,
+#app,
+main {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+
+  h2 {
+    font-family: "Honk", system-ui;
+    font-size: 1.5rem;
+    color: var(--text-color);
     margin: 0;
+  }
+
+  .confirm-end-game-dialog {
+    border: none;
+    border-radius: 8px;
+
+    position: absolute;
+    top: calc(50vh - 73px);
+
     padding: 0;
-    height: 100%;
 
-    .search-player-dialog {
-        width: 90%;
-        max-height: 90vh;
-        border-radius: .5rem;
-        border: none;
-        position: absolute;
-        top: 15vw;
-        overflow: hidden;
+    box-shadow: 0px 0px 20px 3px rgba(0, 0, 0, 0.6);
+    z-index: 1000;
 
-        .dialog-title {
-            display: flex;
-            font-family: "Tilt Warp", sans-serif;
-            font-size: 1.5rem;
-            color: var(--text-color);
-            text-align: center;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
+    .loader {
+      padding: 0.5rem;
 
-        .btn-create-modal {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: "Tilt Warp", sans-serif;
-            font-size: 1rem;
-            color: var(--text-color);
-            text-decoration: underline;
-            margin-bottom: .5rem;
-
-            &:hover {
-                cursor: pointer;
-            }
-        }
-
-        .search-player {
-            display: flex;
-            flex-direction: column;
-            gap: .5rem;
-            max-height: 70vh;
-            overflow: scroll;
-            
-            div {
-                &.send-out {
-                    animation: send-out 1s;
-                }
-
-                .select-player-container {
-                    display: grid;
-                    grid-template-columns: repeat(5, 1fr);
-                    grid-template-rows: 1fr;
-                    grid-column-gap: 0px;
-                    grid-row-gap: 0px;
-                    align-items: center;
-
-                    .player-img {
-                        height: 2rem;
-                        width: 2rem;
-                        border-radius: 50%;
-                        border: 1px solid black;
-                        background-color: white;
-                        cursor: pointer;
-                        grid-area: 1 / 1 / 2 / 2;
-                    }
-
-                    .player-name {
-                        display: flex;
-                        justify-content: center;
-                        flex-direction: column;
-                        font-family: "Tilt Warp", sans-serif;
-                        font-size: 1.5rem;
-                        grid-area: 1 / 2 / 2 / 5;
-
-                        .player-name-pseudo, .player-full-name {
-                            display: flex;
-                            font-family: "Tilt Warp", sans-serif;
-                            font-size: 1rem;
-                            color: var(--text-color);
-                        }
-                    }
-                }
-                    
-                .select-player {
-                    position: relative;
-                    background-color: black;
-
-                    &::after {
-                        content: "";
-                        display: block;
-                        position: absolute;
-                        top: -1.5rem;
-                        right: .5rem;
-                        width: 1.5rem;
-                        height: 1.5rem;
-                        background-image: url("@/assets/images/black-right-arrow.svg");
-                    }
-
-                    &.darkmode {
-                        &::after {
-                            background-image: url("@/assets/images/white-right-arrow.svg");
-                        }
-                    }
-                }
-            }
-
-            .btn-close-modal {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                background-color: var(--bg-color-secondary);
-                min-height: 60px;
-                width: 100%;
-                border-radius: 1rem;
-                margin-top: .5rem;
-                
-                font-family: "Tilt Warp", sans-serif;
-                font-size: 1.5rem;
-                color: var(--text-color);
-                padding-bottom: 5px;
-                
-                --tw-shadow: inset 0 -5px 0 0 rgba(0, 0, 0, .25);
-                box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
-                border: 1px solid rgba(0, 0, 0, .25);
-                
-                &:active {
-                    color: rgba(black, .25);
-                    transform: translateY(5px);
-                    box-shadow: none;
-                }
-            }
-        }
-
-        .create-player {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 1.5rem;
-
-            .input {
-                width: 100%;
-                display: block;
-                position: relative;
-                box-sizing: border-box;
-            
-                label {
-                    $labelSize: 1rem;
-                    font-size: $labelSize;
-                    margin-left: $labelSize;
-                    z-index: 1;
-                    background: transparent;
-                    text-align: center;
-                    padding: 0 5px;
-                    position: absolute;
-                    top: calc(#{$labelSize} * -0.55);
-                    background-color: var(--bg-color-secondary);
-                    font-family: "Tilt Warp", sans-serif;
-                    color: var(--text-color);
-                }
-                
-                input {
-                    display: flex;
-                    align-items: center;
-                    width: 100%;
-                    background: var(--bg-color-secondary);
-                    padding: 1rem 2.8rem 1rem 1rem;
-                    font-size: 1rem;
-                    border-radius: 1rem;
-                    font-family: "Tilt Warp", sans-serif;
-                    border: 1px solid var(--text-color);
-                    color: var(--text-color);
-                }
-
-                span {
-                    font-family: "Tilt Warp", sans-serif;
-                    font-size: .75rem;
-                    color: #878787;
-                }
-
-                &.error {
-                    input {
-                        border-color: red;
-                    }
-                    label, span {
-                        color: red;
-                    }
-                }
-            }
-
-            .btn-save-player-modal {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                background-color: var(--bg-color-secondary);
-                height: 60px;
-                width: 100%;
-                border-radius: 1rem;
-                margin-top: .5rem;
-                
-                font-family: "Tilt Warp", sans-serif;
-                font-size: 1.5rem;
-                color: var(--text-color);
-                padding-bottom: 5px;
-                
-                --tw-shadow: inset 0 -5px 0 0 rgba(0, 0, 0, .25);
-                box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
-                border: 1px solid rgba(0, 0, 0, .25);
-                
-                &:active {
-                    color: rgba(black, .25);
-                    transform: translateY(5px);
-                    box-shadow: none;
-                }
-            }
-
-            .btn-cancel-modal {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-family: "Tilt Warp", sans-serif;
-                font-size: 1rem;
-                color: var(--text-color);
-                text-decoration: underline;
-
-                &:hover {
-                    cursor: pointer;
-                }
-            }
-        }
+      .anim {
+        height: 146px;
+      }
     }
 
-    .confirm-end-game-dialog {
-        border: none;
-        border-radius: 8px;
+    .confirm-end-game-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 0.5rem;
 
-        position: absolute;
-        top: calc(50vh - 73px);
-
-        padding: 0;
-
-        box-shadow: 0px 0px 20px 3px rgba(0,0,0,0.6);
-        z-index: 1000;
-
-        .loader {         
-            padding: .5rem;   
-            
-            .anim {
-                height: 146px;
-            }
-        }
-
-        .confirm-end-game-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            gap: .5rem;
-
-            .title {
-                font-family: "Tilt Warp", sans-serif;
-                font-size: 1rem;
-                color: var(--text-color);
-                text-align: center;
-                padding-top: 1rem;
-            }
-
-            .text {
-                font-family: "Tilt Warp", sans-serif;
-                font-size: .75rem;
-                color: grey;
-                text-align: center;
-                width: 95%;
-            }
-
-            .btn-container {
-                display: flex;
-                width: 100%;
-                border-top: 1px solid lightgrey;
-                align-items: center;
-                justify-content: space-around;
-                background-color: lightgray;
-                gap: 1px;
-                height: 35px;
-                border-bottom-left-radius: 8px;
-                border-bottom-right-radius: 8px;
-                
-                .btn {
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    
-                    font-family: "Tilt Warp", sans-serif;
-                    font-size: 1rem;
-                    color: var(--text-color);
-                    
-                    height: 100%;
-                    width: 100%;
-                    
-                    &.cancel {
-                        background-color: white;
-                        border-bottom-left-radius: 8px;
-                    }
-                    &.end {
-                        background-color: var(--active-player);
-                        border-bottom-right-radius: 8px;
-                    }
-                }
-            }
-        }
-    }
-
-    h2 {
-        font-family: "Honk", system-ui;
-        font-size: 1.5rem;
+      .title {
+        font-family: "Tilt Warp", sans-serif;
+        font-size: 1rem;
         color: var(--text-color);
-        margin: 0;
+        text-align: center;
+        padding-top: 1rem;
+      }
+
+      .text {
+        font-family: "Tilt Warp", sans-serif;
+        font-size: 0.75rem;
+        color: grey;
+        text-align: center;
+        width: 95%;
+      }
+
+      .btn-container {
+        display: flex;
+        width: 100%;
+        border-top: 1px solid lightgrey;
+        align-items: center;
+        justify-content: space-around;
+        background-color: lightgray;
+        gap: 1px;
+        height: 35px;
+        border-bottom-left-radius: 8px;
+        border-bottom-right-radius: 8px;
+
+        .btn {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          font-family: "Tilt Warp", sans-serif;
+          font-size: 1rem;
+          color: var(--text-color);
+
+          height: 100%;
+          width: 100%;
+
+          &.cancel {
+            background-color: white;
+            border-bottom-left-radius: 8px;
+          }
+
+          &.end {
+            background-color: var(--active-player);
+            border-bottom-right-radius: 8px;
+          }
+        }
+      }
     }
+  }
 }
 
 @keyframes send-out {
-    0% {
-        transform: translateX(0);
-    }
-    100% {
-        transform: translateX(1000px);
-    }
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(1000px);
+  }
 }

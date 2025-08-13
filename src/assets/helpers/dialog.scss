@@ -1,0 +1,47 @@
+.dialog {
+    position: fixed;
+    inset-block-start: 0px;
+    inset-block-end: 0px;
+    width: calc(100% - 2em);
+    height: calc(100% - 2em);
+    user-select: text;
+    visibility: visible;
+    border: none;
+    padding: 0;
+    border-radius: 0.5rem;
+}
+
+.dialog-header {
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    background-color: canvas;
+    padding: 16px;
+    border-radius: 0.5rem;
+    min-height: 20%;
+
+    .dialog-title {
+        font-size: 1.5rem;
+        color: var(--text-color);
+        margin: 0;
+    }
+
+    .dialog-close {
+        padding: 0.5em;
+        position: absolute;
+        right: 0;
+        top: 12px;
+        font-size: 1rem;
+    }
+}
+
+.dialog-body {
+    overflow-y: auto;
+    height: 100%;
+    border-radius: 0.5rem;
+    margin-bottom: 10px;
+    max-height: 80vh;
+    min-width: 80vw;
+}

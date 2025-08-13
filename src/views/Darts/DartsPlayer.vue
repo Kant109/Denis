@@ -1,12 +1,10 @@
 <script setup lang="ts">
 import Header from '@/components/Header.vue';
-import { useManagementAppStore } from '@/stores/ManagementAppStore';
 import { usePlayerStore } from '@/stores/PlayerStore';
 import { onMounted, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import draggable from 'vuedraggable';
-import { LottieAnimation } from "lottie-web-vue";
-import DartsAnimation from "../../assets/animations/loader.json";
+import SearchPlayerModal from '@/components/modal/SearchPlayerModal.vue';
 
 const router = useRouter();
 
@@ -18,12 +16,8 @@ const deletedPlayers = ref([] as Array<Player>);
 const openSearchPlayer = ref(false);
 const modalTitle = ref("Sélectionner des joueurs");
 const creatingPlayer = ref(false);
-const formError = ref(false);
 const messageErrorNbPlayer = ref(false);
 
-const name = ref("");
-const firstname = ref("");
-const pseudo = ref("");
 let drag = ref(false);
 const loader = ref(true);
 
@@ -39,15 +33,6 @@ onMounted(async () => {
 
     allPlayers.value = playersStore.players;
 
-    if(selectedPlayers.value.length > 0) {
-        selectedPlayers.value.forEach(player => {
-            allPlayers.value.forEach(playerFromApi => {
-                if(player.id === playerFromApi.id) {
-                    allPlayers.value.splice(allPlayers.value.indexOf(playerFromApi), 1);
-                }
-            })
-        });
-    }
     setTimeout(() => {
         loader.value = false;
     }, 1000);
@@ -58,16 +43,8 @@ const addNewPlayer = async () => {
     messageErrorNbPlayer.value = false;
 }
 
-const closeModal = () => {
-    openSearchPlayer.value = false;
-}
-
 const selectPlayer = (player: Player) => {
-    const indexOfPlayer = allPlayers.value.indexOf(player);
     selectedPlayers.value.push(player);
-    setTimeout(() => {
-        allPlayers.value.splice(indexOfPlayer, 1);
-    }, 400);
 }
 
 const startGame = () => {
@@ -79,56 +56,6 @@ const startGame = () => {
     }
 }
 
-const addingPlayer = () => {
-    modalTitle.value = "Nouveau joueur";
-    creatingPlayer.value = true;
-}
-
-const createPlayer = async () => {
-    if (firstname.value.length < 1 && name.value.length < 1 && pseudo.value.length < 1) {
-        formError.value = true;
-        return;
-    }
-
-    modalTitle.value = "Sélectionner des joueurs";
-    creatingPlayer.value = false;
-    formError.value = false;
-    
-    let player = {
-        "firstName": firstname.value,
-        "name": name.value,
-        "pseudo": pseudo.value
-    }
-
-    firstname.value = "";
-    name.value = "";
-    pseudo.value = "";
-    
-    try {
-        const response = await fetch(import.meta.env.VITE_BE_URL + "/players", {
-            method: "POST",
-            body: JSON.stringify(player),
-            headers: {
-                "Content-Type": "application/json"
-            }
-        });
-        if (!response.ok) {
-            throw new Error(`Response status: ${response.status}`);
-        }
-
-        Object.assign(player, { id: await response.json() });
-        Object.assign(player, { order: (selectedPlayers.value.length + 1).toString() });
-
-        selectedPlayers.value.push(player as Player);
-    } catch (error: any) {
-        console.error(error.message);
-    }
-}
-
-const cancel = () => {
-    creatingPlayer.value = false;
-}
-
 const back = () => {
     router.push({ name: "home" });
 }
@@ -136,7 +63,6 @@ const back = () => {
 watch(
     () => deletedPlayers.value,
     () => {
-        allPlayers.value.push(deletedPlayers.value[0]);
         deletedPlayers.value.pop();
     }
 )
@@ -189,56 +115,8 @@ watch(
         </div>
     </div>
     <Teleport to="main">
-        <dialog class="search-player-dialog" :open="openSearchPlayer">
-            <div class="loader" v-if="loader">
-                <LottieAnimation 
-                    :animation-data="DartsAnimation"
-                    :auto-play="true"
-                    :loop="true"
-                    :speed="1"
-                    ref="anim"
-                />
-            </div>
-            <div class="content" v-else>
-                <div class="dialog-title">{{ modalTitle }}</div>
-                <div class="search-player" v-if="!creatingPlayer">
-                    <div class="btn-create-modal" @click.prevent="addingPlayer">Créer un joueur</div>
-                    <div v-for="player in allPlayers" :class="{'send-out': selectedPlayers.includes(player)}">  
-                        <div class="select-player-container" v-if="allPlayers.includes(player)">
-                            <img class="player-img" :src="'https://api.dicebear.com/9.x/adventurer/svg?seed=' + player.firstName + player.pseudo + player.name" alt="Avatar" />
-                            <div class="player-name">
-                                <div class="player-name-pseudo">{{ player.pseudo.length > 18 ? player.pseudo.substring(0,18) + ".." : player.pseudo}}</div>
-                                <div class="player-full-name">{{ player.firstName.length + player.name.length > 18 ? (player.firstName + " " + player.name).substring(0,18) + ".." : player.firstName + " " + player.name}}</div>
-                            </div>
-                        </div>
-                        <div class="select-player" @click.prevent="selectPlayer(player)"></div>
-                    </div>
-                    <div class="btn-close-modal" @click.prevent="closeModal">Valider</div>
-                </div>
-                <div class="create-player" v-if="creatingPlayer">
-                    <div class="input" :class="{'error': formError}">
-                        <label for="firstname">Prénom</label>
-                        <input type="text" id="firstname" name="firstname" minlength="2" required v-model="firstname" />
-                        <span>Votre nom doit contenir au moins 2 caractères</span>
-                    </div>
-                    
-                    <div class="input" :class="{'error': formError}">
-                        <label for="name">Nom</label>
-                        <input type="text" id="name" name="name" minlength="2" required v-model="name" />
-                        <span>Votre prénom doit contenir au moins 2 caractères</span>
-                    </div>
-                    
-                    <div class="input" :class="{'error': formError}">
-                        <label for="name">Pseudo</label>
-                        <input type="text" id="name" name="name" required minlength="2" v-model="pseudo" />
-                        <span>Votre pseudo doit contenir au moins 2 caractères</span>
-                    </div>
-
-                    <div class="btn-save-player-modal" @click.prevent="createPlayer">Créer le joueur</div>
-                    <div class="btn-cancel-modal" @click.prevent="cancel">Annuler</div>
-                </div>
-            </div>
-        </dialog>
+        <SearchPlayerModal :title="modalTitle" :open-modal="openSearchPlayer" :unselectable-player-ids="selectedPlayers.map((player: Player) => player.id)" 
+            @close-modal="openSearchPlayer=false" @select-player="(player: Player) => selectPlayer(player)"/>
     </Teleport>
 </template>
 
@@ -277,7 +155,7 @@ watch(
                 grid-row-gap: 1rem;
                 background-color: var(--bg-color-secondary);
                 border-radius: .5rem;
-                width: 90%;
+                width: 100%;
                 padding: 1rem;
                 box-shadow: rgb(0, 0, 0, .25) 0px 5px 5px 0px inset;
             }
@@ -367,19 +245,15 @@ watch(
             width: 80%;
             gap: 1rem;
             
-            .btn-start-game, .btn-save-players {
+            .btn-start-game {
                 @include btn-primary;
             }
             
-            .btn-add-player, .btn-modif-player, .btn-change-order {
+            .btn-add-player {
                 @include btn-secondary;
             }
         }
     }
-}
-
-.search-player-dialog {
-    background-color: var(--bg-color-secondary);
 }
 
 .btn-container-add {
@@ -402,52 +276,12 @@ watch(
     color: #a4eeeb;
 }
 
-.btn-remove {
-    position: absolute;
-    top: -10px;
-    right: -10px;
-    background-color: white;
-    width: 26px;
-    height: 26px;
-    min-height: 26px;
-    border-radius: 16px;
-    display: flex;
-    box-shadow: 1px 2px 1px 1px rgb(39 39 81 / 33%);
-    border: 1px solid rgba(0, 0, 0, .25);
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-
-    &:hover {
-        cursor: pointer;
-    }
-
-    .btn-remove-icon {
-        font-family: system-ui;
-        font-size: 18px;
-        font-style: normal;
-        font-weight: bolder;
-        top: -2px;
-        position: relative;
-        color:red;
-    }
-}
-
 @keyframes appear {
     0% {
         opacity: 0;
     }
     100% {
         opacity: 1;
-    }
-}
-
-@keyframes bounce-border-color {
-    0%, 100% {
-        border-color: rgba(red, .25);
-    }
-    50% {
-        border-color: red;
     }
 }
 

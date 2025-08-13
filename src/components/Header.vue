@@ -42,7 +42,7 @@ const back = () => {
     }
 
     img {
-        position: absolute;
+        position: fixed;
         left: 0;
         transform: rotate(180deg);
         width: 1rem;
@@ -54,7 +54,7 @@ const back = () => {
         display: flex;
         justify-content: center;
         font-family: "Honk", system-ui;
-        font-size: 4rem;
+        font-size: 3rem;
         color: var(--text-color);
         position: relative;
 
