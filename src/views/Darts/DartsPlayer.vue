@@ -1,12 +1,9 @@
 <script setup lang="ts">
 import Header from '@/components/Header.vue';
-import { useManagementAppStore } from '@/stores/ManagementAppStore';
 import { usePlayerStore } from '@/stores/PlayerStore';
 import { onMounted, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import draggable from 'vuedraggable';
-import { LottieAnimation } from "lottie-web-vue";
-import DartsAnimation from "../../assets/animations/loader.json";
 import SearchPlayerModal from '@/components/modal/SearchPlayerModal.vue';
 
 const router = useRouter();
@@ -119,12 +116,12 @@ watch(
     </div>
     <Teleport to="main">
         <SearchPlayerModal :title="modalTitle" :open-modal="openSearchPlayer" :unselectable-player-ids="selectedPlayers.map((player: Player) => player.id)" 
-            v-on:close-modal="openSearchPlayer=false" v-on:select-player="(player: Player) => selectPlayer(player)"></SearchPlayerModal>
+            @close-modal="openSearchPlayer=false" @select-player="(player: Player) => selectPlayer(player)"/>
     </Teleport>
 </template>
 
 <style lang="scss" scoped>
-@import "@/assets/helpers/mixins.scss";
+@use "@/assets/helpers/mixins.scss";
 
 .settings-container {
     display: flex;
