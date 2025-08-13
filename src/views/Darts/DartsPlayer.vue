@@ -39,8 +39,6 @@ onMounted(async () => {
     setTimeout(() => {
         loader.value = false;
     }, 1000);
-
-    console.log(selectedPlayers.value);
 })
 
 const addNewPlayer = async () => {
