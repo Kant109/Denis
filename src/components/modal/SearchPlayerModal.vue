@@ -37,7 +37,7 @@ const openCreatePlayer = ref(false);
             <div
               class="select-player d-flex"
               v-for="player in allPlayers.filter(
-                (p) => !unselectablePlayerIds.find((id) => p.id === id) && getPlayerLibelle(p).toLocaleLowerCase().includes(searchText)
+                (p) => !unselectablePlayerIds.find((id) => p.id === id) && getPlayerLibelle(p).toLocaleLowerCase().includes(searchText.toLocaleLowerCase())
               )"
               @click.prevent="emit('select-player', player)"
             >
