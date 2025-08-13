@@ -1,39 +1,126 @@
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 :root {
-    --bg-color-primary: #FFECD1;
-    --bg-color-secondary: white;
-    --button-primary: white;
-    --text-color: #121212;
-    --cricket-door-disable: rgba(0, 0, 0, 0.1);
-    --cricket-door-confirm: black;
-    --active-player: #F9CD61;
+  --bg-color-primary: #ffecd1;
+  --bg-color-secondary: white;
+  --button-primary: white;
+  --text-color: #121212;
+  --cricket-door-disable: rgba(0, 0, 0, 0.1);
+  --cricket-door-confirm: black;
+  --active-player: #f9cd61;
 }
 
-html, body, #app, main > * {
-    font-family: "Tilt Warp", sans-serif;
+html,
+body,
+#app,
+main > * {
+  font-family: "Tilt Warp", sans-serif;
 }
 
-html, body, #app, main {
+html,
+body,
+#app,
+main {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+
+  h2 {
+    font-family: "Honk", system-ui;
+    font-size: 1.5rem;
+    color: var(--text-color);
     margin: 0;
-    padding: 0;
-    height: 100%;
+  }
 
-    h2 {
-        font-family: "Honk", system-ui;
-        font-size: 1.5rem;
-        color: var(--text-color);
-        margin: 0;
+  .confirm-end-game-dialog {
+    border: none;
+    border-radius: 8px;
+
+    position: absolute;
+    top: calc(50vh - 73px);
+
+    padding: 0;
+
+    box-shadow: 0px 0px 20px 3px rgba(0, 0, 0, 0.6);
+    z-index: 1000;
+
+    .loader {
+      padding: 0.5rem;
+
+      .anim {
+        height: 146px;
+      }
     }
+
+    .confirm-end-game-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 0.5rem;
+
+      .title {
+        font-family: "Tilt Warp", sans-serif;
+        font-size: 1rem;
+        color: var(--text-color);
+        text-align: center;
+        padding-top: 1rem;
+      }
+
+      .text {
+        font-family: "Tilt Warp", sans-serif;
+        font-size: 0.75rem;
+        color: grey;
+        text-align: center;
+        width: 95%;
+      }
+
+      .btn-container {
+        display: flex;
+        width: 100%;
+        border-top: 1px solid lightgrey;
+        align-items: center;
+        justify-content: space-around;
+        background-color: lightgray;
+        gap: 1px;
+        height: 35px;
+        border-bottom-left-radius: 8px;
+        border-bottom-right-radius: 8px;
+
+        .btn {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          font-family: "Tilt Warp", sans-serif;
+          font-size: 1rem;
+          color: var(--text-color);
+
+          height: 100%;
+          width: 100%;
+
+          &.cancel {
+            background-color: white;
+            border-bottom-left-radius: 8px;
+          }
+
+          &.end {
+            background-color: var(--active-player);
+            border-bottom-right-radius: 8px;
+          }
+        }
+      }
+    }
+  }
 }
 
 @keyframes send-out {
-    0% {
-        transform: translateX(0);
-    }
-    100% {
-        transform: translateX(1000px);
-    }
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(1000px);
+  }
 }
