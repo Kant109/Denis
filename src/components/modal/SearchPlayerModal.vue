@@ -9,7 +9,7 @@ const props = defineProps<{
   title: string;
   unselectablePlayerIds: number[];
 }>();
-defineEmits(["close-modal", "select-player"]);
+const emit = defineEmits(["close-modal", "select-player"]);
 
 onMounted(async () => {
   allPlayers.value = playersStore.players;
@@ -26,7 +26,7 @@ const openCreatePlayer = ref(false);
     <div class="dialog-content">
       <div class="dialog-header dialog-header--sticky">
         <h3 class="dialog-title">{{ title }}</h3>
-        <span class="dialog-close" @click.prevent="searchText='';$emit('close-modal')">x</span>
+        <span class="dialog-close" @click.prevent="searchText=''; emit('close-modal')">x</span>
       </div>
       <div class="dialog-body">
           <div class="search-player-container">
@@ -39,7 +39,7 @@ const openCreatePlayer = ref(false);
               v-for="player in allPlayers.filter(
                 (p) => !unselectablePlayerIds.find((id) => p.id === id) && getPlayerLibelle(p).toLocaleLowerCase().includes(searchText)
               )"
-              @click.prevent="$emit('select-player', player)"
+              @click.prevent="emit('select-player', player)"
             >
               <img
                 class="player-img"

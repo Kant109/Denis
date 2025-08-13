@@ -6,7 +6,7 @@ const props = defineProps<{
     title: string,
     defaultValue?: number
 }>()
-defineEmits(['select-player', 'score-change']);
+const emit = defineEmits(['select-player', 'score-change']);
 
 const valueList = [-2, -1, 0, 1, 2, 3, 4, 5];
 const score = ref(props.defaultValue ?? 0);
@@ -27,21 +27,21 @@ function plusValue() {
         <h3>{{ title }}</h3>
         <div class="player-informations">
             <img class="change-player-img" src="@/assets/images/sync-rotate.svg" width="25" height="25"
-                @click.prevent="$emit('select-player', score)" />
+                @click.prevent="emit('select-player', score)" />
             <img class="player-img" width="100" height="100"
                 :src="`https://api.dicebear.com/9.x/adventurer/svg?seed=${player.firstName}${player.pseudo}${player.name}`"
                 alt="Avatar" />
             <p class="player-full-name">{{ `${player.firstName} '${player.pseudo}' ${player.name}` }}</p>
         </div>
         <div class="player-score">
-            <button class="action-btn" @click.prevent="minusValue(); $emit('score-change', score);">–</button>
-            <select v-model="score" class="value-select" @change="$emit('score-change', score);">
+            <button class="action-btn" @click.prevent="minusValue(); emit('score-change', score);">–</button>
+            <select v-model="score" class="value-select" @change="emit('score-change', score);">
                 <option v-for="option in valueList" :value="option.valueOf()">{{ option }}</option>
             </select>
-            <button class="action-btn" @click.prevent="plusValue(); $emit('score-change', score);">+</button>
+            <button class="action-btn" @click.prevent="plusValue(); emit('score-change', score);">+</button>
         </div>
     </div>
-    <div class="player-content-empty" v-else @click="$emit('select-player', score)">
+    <div class="player-content-empty" v-else @click.prevent="emit('select-player', score)">
         <span class="btn-select-player">Sélectionner {{ title }}</span>
     </div>
 </template>
