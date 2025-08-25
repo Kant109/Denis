@@ -5,21 +5,31 @@ import { useManagementAppStore } from "./ManagementAppStore";
 export const usePlayerStore = defineStore('Player', () => {
     const players = ref([] as Array<Player>);
 
-    async function fetchPlayers() {
+    function fetchPlayers() {
         const managementAppStore = useManagementAppStore();
 
         const url = import.meta.env.VITE_BE_URL + "/players";
 
-        try {
-            const response = await fetch(url);
-            if (!response.ok) {
-                throw new Error(`Response status: ${response.status}`);
+        const maPromesse = new Promise(async (resolve, reject) => {
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`HTTP Error: ${response.status}`);
+                }
+                const data = await response.json();
+                resolve(data);
+            } catch (error) {
+                reject(error);
             }
-            players.value = await response.json();
-            managementAppStore.isAppLoaded = true
-        } catch (error: any) {
+        });
+
+        maPromesse.then((data: any) => {
+            players.value = data;
+            managementAppStore.isAppLoaded = true;
+        }).catch((error: any) => {
+            console.log(error);
             managementAppStore.isAppOnError = true;
-        }
+        });
     }
 
     return { players, fetchPlayers };
