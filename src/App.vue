@@ -24,6 +24,9 @@ const isAppOnError = computed(() => managementAppStore.isAppOnError);
 
 onMounted(() => {
     playerStore.fetchPlayers();
+    setTimeout(() => {
+        managementAppStore.isAppLoaded = true;
+    }, 2500);
 })
 
 </script>
