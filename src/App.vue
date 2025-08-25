@@ -22,7 +22,7 @@ const playerStore = usePlayerStore();
 const isAppLoaded = computed(() => managementAppStore.isAppLoaded);
 const isAppOnError = computed(() => managementAppStore.isAppOnError);
 
-onMounted(async () => {
+onMounted(() => {
     playerStore.fetchPlayers();
 })
 
