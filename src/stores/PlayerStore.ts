@@ -25,10 +25,10 @@ export const usePlayerStore = defineStore('Player', () => {
 
         maPromesse.then((data: any) => {
             players.value = data;
-            managementAppStore.isAppLoaded = true;
         }).catch((error: any) => {
             console.log(error);
             managementAppStore.isAppOnError = true;
+            managementAppStore.isAppLoaded = false;
         });
     }
 
