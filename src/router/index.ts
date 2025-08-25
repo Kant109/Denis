@@ -17,6 +17,7 @@ import BabykonTournament from '@/views/Babykon/BabykonTournament.vue'
 import BabykonMode from '@/views/Babykon/BabykonMode.vue'
 import BabykonTournamentResults from '@/views/Babykon/BabykonTournamentResults.vue'
 import Streaming from '@/views/Streaming.vue'
+import SeeStreaming from '@/views/SeeStreaming.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -110,6 +111,11 @@ const router = createRouter({
       path: '/streaming',
       name: 'streaming',
       component: Streaming
+    },
+    {
+      path: '/see-streaming',
+      name: 'see-streaming',
+      component: SeeStreaming
     }
   ]
 })
