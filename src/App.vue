@@ -26,7 +26,7 @@ onMounted(() => {
     playerStore.fetchPlayers();
     setTimeout(() => {
         managementAppStore.isAppLoaded = true;
-    }, 1000);
+    }, 2500);
 })
 
 </script>
