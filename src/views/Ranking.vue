@@ -77,7 +77,7 @@ watch(
         <Podium v-if="players.length > 0" :top-tree-players="topTreePlayers" />
         <hr/>
         <div v-if="players.length > 0" class="ranking-content">
-            <details class="players" v-for="player in players">
+            <details class="players" v-for="player in players.slice(3)">
                 <summary class="player-summary">
                     <span class="position">{{ players.indexOf(player) + 1 }}</span>
                     <div class="name">
