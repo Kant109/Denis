@@ -44,10 +44,6 @@ const sportIcon = (name: String) => {
     }
 }
 
-// const winrate = (nbGame: number, nbWin: number) => {
-//     return Math.round(nbWin / nbGame * 100);
-// }
-
 onBeforeMount(() => {
     selectedSport.value = localStorage.getItem('sports-ranking-denis') !== null ? localStorage.getItem('sports-ranking-denis') as string : 'dart';
     getRanking(selectedSport.value);

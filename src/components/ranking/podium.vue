@@ -1,10 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue';
 import PodiumPlayer from './podium-player.vue'
-
-const isCheckDataFirst = ref(false);
-const isCheckDataSecond = ref(false);
-const isCheckDataThird = ref(false);
 
 defineProps<{
   topTreePlayers: Array<PlayerRanking>;
