@@ -11,6 +11,6 @@ export function getPlayerRankingFullName(player: PlayerRanking): string {
   return `${player.name} ${player.name}`;
 }
 
-export function winrate(nbGame: number, nbWin: number) {
-  return Math.round((nbWin / nbGame) * 100);
+export function winrate(nbGame: number, nbWin: number): string {
+  return((nbWin / nbGame) * 100).toFixed(1).replace('.', ',');
 };
