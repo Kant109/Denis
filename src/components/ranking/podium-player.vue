@@ -10,12 +10,12 @@ defineProps<{
 
 const isCheckStats = ref(false);
 
-const baseUrl = () => import.meta.env.VITE_DICEBEAR_SVG_URL;
+const baseUrl = import.meta.env.VITE_DICEBEAR_SVG_URL;
 </script>
 <template>
         <div class="podium" :class="className" @click.prevent="isCheckStats = !isCheckStats">
             <div class="podium-player">
-                <img height="80" class="player-img" :src="`${baseUrl()}${getPlayerRankingLibelle(player)}`"
+                <img height="80" class="player-img" :src="`${baseUrl}${getPlayerRankingLibelle(player)}`"
                     alt="Avatar" />
                 <span class="podium-player-name">{{
                     `${player.name} ${player.lastName[0]}`
