@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useCricketGameStore } from '@/stores/CricketGameStore';
 import { computed, ref, watch } from 'vue';
+import CricketDoor from './CricketDoor.vue';
 
 const props = defineProps<{
   player: CricketPlayer
@@ -25,6 +26,17 @@ watch(
     }
 )
 
+const getLastVolley = computed(() => {
+    if(props.player.volleys.length <= 0) return null;
+    return props.player.volleys[props.player.volleys.length - 1];
+});
+
+const getVolleyValue = (position: number) => {  
+    const volley = getLastVolley.value;
+    if(volley === null) return "";
+    return volley[position];
+}
+
 const isStatOpen = ref(false);
 
 const openStat = () => {
@@ -39,13 +51,13 @@ const openStat = () => {
             <div class="player-name">{{ player.pseudo.length > 5 ? player.pseudo.substring(0,5) + ".." : player.pseudo}}</div>
             <div class="recap">
                 <div class="doors">
-                    <div class="door" :class="{'first': player.doors[15] !== 0, 'second': player.doors[15] >= 2, 'full': player.doors[15] >= 3}"></div>
-                    <div class="door" :class="{'first': player.doors[16] !== 0, 'second': player.doors[16] >= 2, 'full': player.doors[16] >= 3}"></div>
-                    <div class="door" :class="{'first': player.doors[17] !== 0, 'second': player.doors[17] >= 2, 'full': player.doors[17] >= 3}"></div>
-                    <div class="door" :class="{'first': player.doors[18] !== 0, 'second': player.doors[18] >= 2, 'full': player.doors[18] >= 3}"></div>
-                    <div class="door" :class="{'first': player.doors[19] !== 0, 'second': player.doors[19] >= 2, 'full': player.doors[19] >= 3}"></div>
-                    <div class="door" :class="{'first': player.doors[20] !== 0, 'second': player.doors[20] >= 2, 'full': player.doors[20] >= 3}"></div>
-                    <div class="door" :class="{'first': player.doors[25] !== 0, 'second': player.doors[25] >= 2, 'full': player.doors[25] >= 3}"></div>
+                    <CricketDoor :number=15 :hit=player.doors[15] :volley=getLastVolley />
+                    <CricketDoor :number=16 :hit=player.doors[16] :volley=getLastVolley />
+                    <CricketDoor :number=17 :hit=player.doors[17] :volley=getLastVolley />
+                    <CricketDoor :number=18 :hit=player.doors[18] :volley=getLastVolley />
+                    <CricketDoor :number=19 :hit=player.doors[19] :volley=getLastVolley />
+                    <CricketDoor :number=20 :hit=player.doors[20] :volley=getLastVolley />
+                    <CricketDoor :number=25 :hit=player.doors[25] :volley=getLastVolley />
                 </div>
             </div>
             <div class="points-taken">{{ player.points.total }}</div>
@@ -61,9 +73,9 @@ const openStat = () => {
                 <div class="recap-door">25</div>
             </div>
             <div class="current-points">
-                <div class="points">{{ player.volleys.length > 0 ? player.volleys[player.volleys.length - 1][0] : "" }}</div>
-                <div class="points">{{ player.volleys.length > 0 ? player.volleys[player.volleys.length - 1][1] : "" }}</div>
-                <div class="points">{{ player.volleys.length > 0 ? player.volleys[player.volleys.length - 1][2] : "" }}</div>
+                <div class="points">{{ getVolleyValue(0) }}</div>
+                <div class="points">{{ getVolleyValue(1) }}</div>
+                <div class="points">{{ getVolleyValue(2) }}</div>
             </div>
             <div class="points-recap" :class="{'isPlayerActive': player.isActive}">
                 <div class="doors">
@@ -136,45 +148,58 @@ const openStat = () => {
             justify-content: center;
             gap: .5rem;
             
-            .door {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                border: 2px solid var(--cricket-door-disable);
-                border-radius: 50%;
-                height: 1.5rem;
-                width: 1.5rem;
-                position: relative;
+            // .door {
+            //     display: flex;
+            //     justify-content: center;
+            //     align-items: center;
+            //     border: 2px solid var(--cricket-door-disable);
+            //     border-radius: 50%;
+            //     height: 1.5rem;
+            //     width: 1.5rem;
+            //     position: relative;
 
-                &::before, &::after {
-                    content: '';
-                    position: absolute;
-                    width: 100%;
-                    background-color: var(--cricket-door-disable);
-                    height: 2px;
-                }
+            //     &::before, &::after {
+            //         content: '';
+            //         position: absolute;
+            //         width: 100%;
+            //         background-color: var(--cricket-door-disable);
+            //         height: 2px;
+            //     }
 
-                &::before {
-                    transform: rotate(45deg);
-                }
-                &::after {
-                    transform: rotate(-45deg);
-                }
+            //     &::before {
+            //         transform: rotate(45deg);
+            //     }
+            //     &::after {
+            //         transform: rotate(-45deg);
+            //     }
 
-                &.first {
-                    &::after {
-                        background-color: var(--cricket-door-confirm) !important;
-                    }
-                }
-                &.second {
-                    &::before {
-                        background-color: var(--cricket-door-confirm) !important;
-                    }
-                }
-                &.full {
-                    border: 2px solid var(--cricket-door-confirm) !important;
-                }
-            }
+            //     // &.first {
+            //     //     &::after {
+            //     //         background-color: var(--cricket-door-confirm) !important;
+            //     //     }
+            //     // }
+            //     &.first-volley {
+            //         &::after {
+            //             background-color: #0089ff !important;
+            //         }
+            //     }
+            //     &.second {
+            //         &::before {
+            //             background-color: var(--cricket-door-confirm) !important;
+            //         }
+            //     }
+            //     &.second-volley {
+            //         &::before {
+            //             background-color: #0089ff !important;
+            //         }
+            //     }
+            //     &.full {
+            //         border: 2px solid var(--cricket-door-confirm) !important;
+            //     }
+            //     &.full-volley {
+            //         border: 2px solid #0089ff !important;
+            //     }
+            // }
         }
     }
 
