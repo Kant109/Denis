@@ -147,59 +147,6 @@ const openStat = () => {
             align-items: center;
             justify-content: center;
             gap: .5rem;
-            
-            // .door {
-            //     display: flex;
-            //     justify-content: center;
-            //     align-items: center;
-            //     border: 2px solid var(--cricket-door-disable);
-            //     border-radius: 50%;
-            //     height: 1.5rem;
-            //     width: 1.5rem;
-            //     position: relative;
-
-            //     &::before, &::after {
-            //         content: '';
-            //         position: absolute;
-            //         width: 100%;
-            //         background-color: var(--cricket-door-disable);
-            //         height: 2px;
-            //     }
-
-            //     &::before {
-            //         transform: rotate(45deg);
-            //     }
-            //     &::after {
-            //         transform: rotate(-45deg);
-            //     }
-
-            //     // &.first {
-            //     //     &::after {
-            //     //         background-color: var(--cricket-door-confirm) !important;
-            //     //     }
-            //     // }
-            //     &.first-volley {
-            //         &::after {
-            //             background-color: #0089ff !important;
-            //         }
-            //     }
-            //     &.second {
-            //         &::before {
-            //             background-color: var(--cricket-door-confirm) !important;
-            //         }
-            //     }
-            //     &.second-volley {
-            //         &::before {
-            //             background-color: #0089ff !important;
-            //         }
-            //     }
-            //     &.full {
-            //         border: 2px solid var(--cricket-door-confirm) !important;
-            //     }
-            //     &.full-volley {
-            //         border: 2px solid #0089ff !important;
-            //     }
-            // }
         }
     }
 
