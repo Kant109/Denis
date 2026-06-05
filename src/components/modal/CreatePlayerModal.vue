@@ -30,13 +30,13 @@ const createPlayer = async () => {
     formError.value = false;
     
     let player = {
-        "firstName": firstname.value,
+        "firstname": firstname.value,
         "name": lastname.value,
         "pseudo": pseudo.value
     }
 
     try {
-        const response = await fetch(import.meta.env.VITE_BE_URL + "/players", {
+        const response = await fetch(import.meta.env.VITE_BE_URL + "/player", {
             method: "POST",
             body: JSON.stringify(player),
             headers: {

@@ -69,7 +69,7 @@ onMounted(async () => {
             players.value.forEach(player => {
                 participants.push({
                     "id": player.id,
-                    "firstName": player.firstName,
+                    "firstname": player.firstname,
                     "name": player.name,
                     "pseudo": player.pseudo
                 })

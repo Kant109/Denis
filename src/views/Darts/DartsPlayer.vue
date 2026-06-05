@@ -87,7 +87,7 @@ watch(
                     <div class="player-container">
                         <i class="player-order">{{ selectedPlayers.indexOf(player) + 1  }}</i>
                         <div class="player-content" @dragstart.prevent>
-                            <img class="player-img" :src="'https://api.dicebear.com/9.x/adventurer/svg?seed=' + player.firstName + player.pseudo + player.name" alt="Avatar" />
+                            <img class="player-img" :src="'https://api.dicebear.com/9.x/adventurer/svg?seed=' + player.firstname + player.pseudo + player.name" alt="Avatar" />
                             <div class="player-name">{{ player.pseudo.length > 5 ? player.pseudo.substring(0,5) + ".." : player.pseudo}}</div>
                         </div>
                     </div>

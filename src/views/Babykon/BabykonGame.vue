@@ -129,7 +129,7 @@ const openModal = (isSelectingWinner: boolean, scorePlayer: number) => {
                 <div class="player-presentation">
                     <img src="@/assets/images/trophy_3d.png" alt="Trophée" height="60">
                     <img class="player-img" width="100" height="100"
-                        :src="`https://api.dicebear.com/9.x/adventurer/svg?seed=${winner.firstName}${winner.pseudo}${winner.name}`"
+                        :src="`https://api.dicebear.com/9.x/adventurer/svg?seed=${winner.firstname}${winner.pseudo}${winner.name}`"
                         alt="Avatar" />
                     <div class="text">{{ winner?.pseudo }}</div>
                 </div>
@@ -152,7 +152,7 @@ const openModal = (isSelectingWinner: boolean, scorePlayer: number) => {
             <div class="recap-container">
                 <div class="player-presentation">
                     <img class="player-img" width="100" height="100"
-                        :src="`https://api.dicebear.com/9.x/adventurer/svg?seed=${loser.firstName}${loser.pseudo}${loser.name}`"
+                        :src="`https://api.dicebear.com/9.x/adventurer/svg?seed=${loser.firstname}${loser.pseudo}${loser.name}`"
                         alt="Avatar" />
                     <div class="text">{{allPlayers.find(p => p.id === loser.id)?.pseudo}}</div>
                 </div>

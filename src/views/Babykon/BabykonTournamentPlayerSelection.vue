@@ -93,7 +93,7 @@ watch(
                 <div class="players-container">
                     <div class="player" v-for="player in players" :key="player.id">
                         <div class="player-content" @click.prevent="selectPlayer(player)">
-                            <img class="player-img" :src="'https://api.dicebear.com/9.x/adventurer/svg?seed=' + player.firstName + player.pseudo + player.name" alt="Avatar" />
+                            <img class="player-img" :src="'https://api.dicebear.com/9.x/adventurer/svg?seed=' + player.firstname + player.pseudo + player.name" alt="Avatar" />
                             <div class="player-name">{{ player.pseudo.length > 5 ? player.pseudo.substring(0,5) + ".." : player.pseudo}}</div>
                         </div>
                     </div>
@@ -104,7 +104,7 @@ watch(
             <div v-if="selectedPlayers.length > 0" class="players-selected">
                 <div class="player" v-for="player in selectedPlayers" :key="player.id">
                     <div class="player-content" @click.prevent="removePlayer(player)">
-                        <img class="player-img" :src="'https://api.dicebear.com/9.x/adventurer/svg?seed=' + player.firstName + player.pseudo + player.name" alt="Avatar" />
+                        <img class="player-img" :src="'https://api.dicebear.com/9.x/adventurer/svg?seed=' + player.firstname + player.pseudo + player.name" alt="Avatar" />
                         <div class="player-name">{{ player.pseudo.length > 5 ? player.pseudo.substring(0,5) + ".." : player.pseudo}}</div>
                     </div>
                 </div>
