@@ -1,6 +1,6 @@
 interface Player {
     id: number,
-    firstName: string,
+    firstname: string,
     name: string,
     pseudo: string
 }

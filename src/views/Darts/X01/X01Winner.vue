@@ -48,10 +48,10 @@ onMounted(() => {
         />
         <div class="winner-content">
             <img class="back" src="@/assets/images/chevron.svg" alt="Retour" @click.prevent="back">
-            <img class="player-img" :src="'https://api.dicebear.com/9.x/adventurer/svg?seed=' + winnerPlayer.firstName + winnerPlayer.pseudo + winnerPlayer.name" alt="Avatar"></img>
+            <img class="player-img" :src="'https://api.dicebear.com/9.x/adventurer/svg?seed=' + winnerPlayer.firstname + winnerPlayer.pseudo + winnerPlayer.name" alt="Avatar"></img>
             <div class="player-info">
                 <div class="player-info-pseudo">{{ winnerPlayer.pseudo }}</div>
-                <div class="player-info-full-name">{{ winnerPlayer.firstName }} {{ winnerPlayer.name.toUpperCase() }}</div>
+                <div class="player-info-full-name">{{ winnerPlayer.firstname }} {{ winnerPlayer.name.toUpperCase() }}</div>
             </div>
         </div>
         <div class="btn-replay" @click.prevent="replay">Rejouer</div>

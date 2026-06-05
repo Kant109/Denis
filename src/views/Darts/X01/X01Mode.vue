@@ -19,7 +19,7 @@ const selectX01Mode = (selectedX01Mode: number) => {
         const currentPlayer: X01Player = {
             id: player.id,
             pseudo: player.pseudo,
-            firstName: player.firstName,
+            firstname: player.firstname,
             name: player.name,
             isActive: players.indexOf(player) == 0,
             points: x01Mode.value,

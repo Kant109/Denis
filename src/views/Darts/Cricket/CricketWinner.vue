@@ -125,10 +125,10 @@ onBeforeMount(async () => {
             <swiper-slide v-for="player in players">
                 <div class="end-game-player-content">
                     <div class="winner-content">
-                        <img class="player-img" :src="'https://api.dicebear.com/9.x/adventurer/svg?seed=' + player.firstName + player.pseudo + player.name" alt="Avatar"></img>
+                        <img class="player-img" :src="'https://api.dicebear.com/9.x/adventurer/svg?seed=' + player.firstname + player.pseudo + player.name" alt="Avatar"></img>
                         <div class="player-info">
                             <div class="player-info-pseudo">{{ player.pseudo }}</div>
-                            <div class="player-info-full-name">{{ player.firstName }} {{ player.name.toUpperCase() }}</div>
+                            <div class="player-info-full-name">{{ player.firstname }} {{ player.name.toUpperCase() }}</div>
                         </div>
                     </div>
                     <div class="game-stats">

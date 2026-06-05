@@ -1,48 +1,37 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
-import X01Board from '@/components/X01/X01Board.vue';
-import X01Player from '@/components/X01/X01Player.vue';
-import { useX01GameStore } from '@/stores/X01GameStore';
-import { useRouter } from 'vue-router';
-import Header from '@/components/Header.vue';
 import { useWebSocket } from '@/composables/useWebSocket'
-
-const { send } = useWebSocket(import.meta.env.VITE_WS_RECAP_URL);
+import { useX01GameStore } from '@/stores/X01GameStore.js';
+import X01Player from '@/components/X01/X01Player.vue';
 
 const gameStore = useX01GameStore();
 
 const players = computed(() => gameStore.players);
-const isGameFinish = computed(() => gameStore.isGameFinish);
 const isLastPlayerActive = ref(false);
-const title = players.value[0].points.toString();
 
-const router = useRouter();
+const { messages, status } = useWebSocket(import.meta.env.VITE_WS_RECAP_URL)
 
 const setIsLastPlayerActive = (isCurrentPlayerLast: boolean) => {
     isLastPlayerActive.value = isCurrentPlayerLast;
 }
 
-const back = () => {
-    gameStore.reset();
-    router.push({ name: "darts-mode-x01" });
+function updateGame(message: string) {
+    const data = JSON.parse(message);
+    gameStore.players = data.players as X01Player[];
+    gameStore.isGameFinish = data.isGameFinish as boolean;
 }
 
 watch(
-    () => players.value,
+    () => messages.value,
     () => {
-        send(JSON.stringify({
-            players: players.value
-        }));
+        updateGame(messages.value);
     }, { deep: true }
 )
-
-watch(() => isGameFinish.value, () => router.push({ name: "x01-winner" }));
 
 </script>
 
 <template>
-    <Header :title="title" @previous-route="back" />
-    <div class="players-container">
+    <div class="players-container" v-if="messages">
         <div class="players-content" :class="{'lastPlayerActive': isLastPlayerActive}">
             <X01Player
                 v-for="player in players"
@@ -53,35 +42,9 @@ watch(() => isGameFinish.value, () => router.push({ name: "x01-winner" }));
             />
         </div>
     </div>
-    <X01Board />
 </template>
 
 <style lang="scss" scoped>
-
-.points-recap-doors {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 390px;
-    margin-bottom: 1rem;
-    
-    .recap-doors {
-        display: flex;
-        gap: .5rem;
-        font-family: "Tilt Warp", sans-serif;
-        font-size: 1rem;
-
-        .recap-door {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 5px;
-            background-color: var(--bg-color-primary);
-            width: 1.5rem;
-            aspect-ratio: 1/1;
-        }
-    }
-}
 
 .players-container {
     display: flex;
@@ -123,9 +86,4 @@ watch(() => isGameFinish.value, () => router.push({ name: "x01-winner" }));
     }
 }
 
-@media screen and (max-width: 389px) {
-    .players-container {
-        max-height: calc(100vh - 278px);
-    }
-}
 </style>

@@ -27,7 +27,7 @@ const endTournament = () => {
                 <img v-if="players.indexOf(player) === 0" src="@/assets/images/1st-place-medal.svg" alt="Trophée">
                 <img v-if="players.indexOf(player) === 1" src="@/assets/images/2nd-place-medal.svg" alt="Trophée">
                 <img v-if="players.indexOf(player) === 2" src="@/assets/images/3rd-place-medal.svg" alt="Trophée">
-                <span class="player-name">{{ player.firstName }} "{{ player.pseudo }}" {{ player.name }}</span>
+                <span class="player-name">{{ player.firstname }} "{{ player.pseudo }}" {{ player.name }}</span>
                 <span class="player-wins">Victoires : {{ player.nbWins }}</span>
                 <span class="player-goals">Buts : {{ player.score }}</span>
                 <span class="player-elo">Elo : {{ player.elo?.toFixed(0) }}</span>

@@ -29,9 +29,9 @@ function plusValue() {
             <img class="change-player-img" src="@/assets/images/sync-rotate.svg" width="25" height="25"
                 @click.prevent="emit('select-player', score)" />
             <img class="player-img" width="100" height="100"
-                :src="`https://api.dicebear.com/9.x/adventurer/svg?seed=${player.firstName}${player.pseudo}${player.name}`"
+                :src="`https://api.dicebear.com/9.x/adventurer/svg?seed=${player.firstname}${player.pseudo}${player.name}`"
                 alt="Avatar" />
-            <p class="player-full-name">{{ `${player.firstName} '${player.pseudo}' ${player.name}` }}</p>
+            <p class="player-full-name">{{ `${player.firstname} '${player.pseudo}' ${player.name}` }}</p>
         </div>
         <div class="player-score">
             <button class="action-btn" @click.prevent="minusValue(); emit('score-change', score);">–</button>

@@ -151,12 +151,12 @@ onBeforeMount(() => {
             <div class="match" v-for="match in matchs" :key="match.matchId">
                 <div class="opposition">
                     <div class="player" :class="{'winner': match.winnerId === match.player1.id}" @click.prevent="isWinner(match, match.player1)">
-                        <img :src="'https://api.dicebear.com/9.x/adventurer/svg?seed=' + match.player1.firstName + match.player1.pseudo + match.player1.name" alt="Avatar de {{ match.player1.name }}" />
+                        <img :src="'https://api.dicebear.com/9.x/adventurer/svg?seed=' + match.player1.firstname + match.player1.pseudo + match.player1.name" alt="Avatar de {{ match.player1.name }}" />
                         <span>{{ match.player1.pseudo }}</span>
                     </div>
                     <div class="vs">VS</div>
                     <div class="player" :class="{'winner': match.winnerId === match.player2.id}" @click.prevent="isWinner(match, match.player2)">
-                        <img :src="'https://api.dicebear.com/9.x/adventurer/svg?seed=' + match.player2.firstName + match.player2.pseudo + match.player2.name" alt="Avatar de {{ match.player2.name }}" />
+                        <img :src="'https://api.dicebear.com/9.x/adventurer/svg?seed=' + match.player2.firstname + match.player2.pseudo + match.player2.name" alt="Avatar de {{ match.player2.name }}" />
                         <span>{{ match.player2.pseudo }}</span>
                     </div>
                 </div>

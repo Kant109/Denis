@@ -226,7 +226,7 @@ const setPointsActivePlayer = async (points: number) => {
 
                         performances.push({
                             "idPlayer": player.id,
-                            "pseudo": player.firstName,
+                            "pseudo": player.firstname,
                             "score": player.points.total,
                             "position": player.position,
                             "volley": player.volleys[player.volleys.length - 1][0] + "-" + player.volleys[player.volleys.length - 1][1] + "-" + player.volleys[player.volleys.length - 1][2],
@@ -288,7 +288,7 @@ const endGame = async () => {
 
         performances.push({
             "idPlayer": player.id,
-            "pseudo": player.firstName,
+            "pseudo": player.firstname,
             "score": player.points.total,
             "position": player.position,
             "volley": player.volleys[player.volleys.length - 1][0] + "-" + player.volleys[player.volleys.length - 1][1] + "-" + player.volleys[player.volleys.length - 1][2],

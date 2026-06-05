@@ -8,7 +8,7 @@ const selectGamemode = (mode: string) => {
     if(mode === "cricket") {
         router.push({ name: "darts-mode-cricket" });
     } else if(mode === "x01") {
-        // router.push({ name: "darts-mode-x01" });
+        router.push({ name: "darts-mode-x01" });
     }
 }
 
@@ -26,6 +26,7 @@ const back = () => {
             <div class="choices-container">
                 <div class="choice cricket" @click.prevent="selectGamemode('cricket')">Cricket</div>
                 <div class="choice x01" @click.prevent="selectGamemode('x01')">X01</div>
+                <div class="choice wip">WIP</div>
             </div>
         </div>
     </div>
@@ -59,7 +60,7 @@ const back = () => {
             .choice {
                 @include btn-primary;
 
-                &.x01 {
+                &.wip {
                     @include wip-btn;
                 }
             }

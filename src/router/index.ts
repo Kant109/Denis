@@ -81,6 +81,11 @@ const router = createRouter({
       component: X01Winner
     },
     {
+      path: '/darts/overview',
+      name: 'darts-overview',
+      component: () => import('@/views/Darts/DartsOverview.vue')
+    },
+    {
       path: '/babykon',
       name: 'babykon-mode',
       component: BabykonMode

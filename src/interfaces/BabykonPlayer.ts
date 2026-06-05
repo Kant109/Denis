@@ -1,6 +1,6 @@
 interface BabykonPlayer {
     id: number,
-    firstName: string,
+    firstname: string,
     name: string,
     pseudo: string,
     nbWins: number,

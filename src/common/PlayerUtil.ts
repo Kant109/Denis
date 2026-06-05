@@ -1,11 +1,11 @@
 export function getPlayerLibelle(player: Player): string {
-  return `${player.firstName}${player.pseudo}${player.name}`;
+  return `${player.firstname}${player.pseudo}${player.name}`;
 }
 export function getPlayerRankingLibelle(player: PlayerRanking): string {
   return `${player.name}${player.pseudo}${player.lastName}`;
 }
 export function getPlayerFullName(player: Player): string {
-  return `${player.firstName} ${player.name}`;
+  return `${player.firstname} ${player.name}`;
 }
 export function getPlayerRankingFullName(player: PlayerRanking): string {
   return `${player.name} ${player.name}`;
