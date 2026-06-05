@@ -5,6 +5,9 @@ import X01Player from '@/components/X01/X01Player.vue';
 import { useX01GameStore } from '@/stores/X01GameStore';
 import { useRouter } from 'vue-router';
 import Header from '@/components/Header.vue';
+import { useWebSocket } from '@/composables/useWebSocket'
+
+const { send } = useWebSocket(import.meta.env.VITE_WS_RECAP_URL);
 
 const gameStore = useX01GameStore();
 
@@ -23,6 +26,15 @@ const back = () => {
     gameStore.reset();
     router.push({ name: "darts-mode-x01" });
 }
+
+watch(
+    () => players.value,
+    () => {
+        send(JSON.stringify({
+            players: players.value
+        }));
+    }, { deep: true }
+)
 
 watch(() => isGameFinish.value, () => router.push({ name: "x01-winner" }));
 
