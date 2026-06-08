@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import X01Board from '@/components/X01/X01Board.vue';
 import X01Player from '@/components/X01/X01Player.vue';
 import { useX01GameStore } from '@/stores/X01GameStore';
@@ -7,7 +7,7 @@ import { useRouter } from 'vue-router';
 import Header from '@/components/Header.vue';
 import { useWebSocket } from '@/composables/useWebSocket'
 
-const { send } = useWebSocket(import.meta.env.VITE_WS_RECAP_URL);
+const { send, status } = useWebSocket(import.meta.env.VITE_WS_RECAP_URL);
 
 const gameStore = useX01GameStore();
 
@@ -31,9 +31,20 @@ watch(
     () => players.value,
     () => {
         send(JSON.stringify({
-            players: players.value
+            players: players.value,
+            isGameFinish: isGameFinish.value
         }));
     }, { deep: true }
+)
+
+watch(
+    () => status.value,
+    () => {
+        send(JSON.stringify({
+            players: players.value,
+            isGameFinish: isGameFinish.value
+        }));
+    }
 )
 
 watch(() => isGameFinish.value, () => router.push({ name: "x01-winner" }));
