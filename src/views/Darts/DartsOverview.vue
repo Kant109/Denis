@@ -1,17 +1,18 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
 import { useWebSocket } from '@/composables/useWebSocket'
-import { useX01GameStore } from '@/stores/X01GameStore.js';
 import { useDartsCheckout } from '@/composables/useDartsCheckout';
 import X01PlayerOverview from '@/components/X01/X01PlayerOverview.vue';
+import { useX01GameStore } from '@/stores/X01GameStore';
 
 const { getCheckouts } = useDartsCheckout()
 const score = ref(301);
 const checkouts = computed(() => getCheckouts(score.value))
 
-const gameStore = useX01GameStore();
+const dartGameStore = useX01GameStore();
 
-const players = computed(() => gameStore.players);
+const players = computed(() => dartGameStore.players);
+const isGameFinish = computed(() => dartGameStore.isGameFinish);
 const isLastPlayerActive = ref(false);
 
 const { messages, status } = useWebSocket(import.meta.env.VITE_WS_RECAP_URL)
@@ -22,8 +23,8 @@ const setIsLastPlayerActive = (isCurrentPlayerLast: boolean) => {
 
 function updateGame(message: string) {
     const data = JSON.parse(message);
-    gameStore.players = data.players as X01Player[];
-    gameStore.isGameFinish = data.isGameFinish as boolean;
+    dartGameStore.players = data.players as X01Player[];
+    dartGameStore.isGameFinish = data.isGameFinish as boolean;
 }
 
 function setCurrentScore(newScore: number) {
@@ -43,7 +44,6 @@ watch(
 watch(
     () => messages.value,
     () => {
-        console.log("in")
         updateGame(messages.value);
     }, { deep: true }
 )
@@ -51,7 +51,7 @@ watch(
 </script>
 
 <template>
-    <div class="players-container" v-if="players.length > 0">
+    <div class="players-container" v-if="players.length > 0 && !isGameFinish">
         <div class="players-content" :class="{'lastPlayerActive': isLastPlayerActive}">
             <X01PlayerOverview
                 v-for="player in players"
@@ -100,25 +100,25 @@ watch(
     }
 
     .players-content {
-        display: flex;
-        flex-direction: column;
-        max-width: 390px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, max-content));
+        justify-content: center;
+        justify-items: center;
+        align-items: center;
+        gap: 2rem;
         width: 100%;
-
-        &::after {
-            content: "";
-            height: .75rem;
-            border-radius: 0 0 1rem 1rem;
-            --tw-shadow: inset 0 -5px 0 0 rgba(0, 0, 0, .25);
-            box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
-            background-color: var(--bg-color-secondary);
-        }
+        padding: 0 1rem;
 
         &.lastPlayerActive {
             &::after {
                 background-color: var(--active-player);
             }
         }
+    }
+
+    .checkouts-container {
+        margin-top: 1.5rem;
+        text-align: center;
     }
 }
 

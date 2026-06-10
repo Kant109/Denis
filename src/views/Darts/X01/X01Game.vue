@@ -2,19 +2,19 @@
 import { computed, onMounted, ref, watch } from 'vue';
 import X01Board from '@/components/X01/X01Board.vue';
 import X01Player from '@/components/X01/X01Player.vue';
-import { useX01GameStore } from '@/stores/X01GameStore';
 import { useRouter } from 'vue-router';
 import Header from '@/components/Header.vue';
 import { useWebSocket } from '@/composables/useWebSocket'
+import { useX01GameStore } from '@/stores/X01GameStore';
 
 const { send, status } = useWebSocket(import.meta.env.VITE_WS_RECAP_URL);
 
-const gameStore = useX01GameStore();
+const dartGameStore = useX01GameStore();
 
-const players = computed(() => gameStore.players);
-const isGameFinish = computed(() => gameStore.isGameFinish);
+const players = computed(() => dartGameStore.players);
+const isGameFinish = computed(() => dartGameStore.isGameFinish);
 const isLastPlayerActive = ref(false);
-const title = players.value[0].points.toString();
+const title = dartGameStore.mode;
 
 const router = useRouter();
 
@@ -23,7 +23,7 @@ const setIsLastPlayerActive = (isCurrentPlayerLast: boolean) => {
 }
 
 const back = () => {
-    gameStore.reset();
+    dartGameStore.reset();
     router.push({ name: "darts-mode-x01" });
 }
 

@@ -4,7 +4,7 @@ import { useX01GameStore } from '@/stores/X01GameStore';
 import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
-const x01GameStore = useX01GameStore();
+const dartGameStore = useX01GameStore();
 
 const orderedPlayers = computed(() => JSON.parse(localStorage.getItem('orderedDartsPlayer') as string));
 const players = (orderedPlayers.value as [] as Array<Player>);
@@ -14,6 +14,7 @@ const router = useRouter();
 
 const selectX01Mode = (selectedX01Mode: number) => {
     x01Mode.value = selectedX01Mode;
+    dartGameStore.mode = selectedX01Mode.toString() as '301' | '501';
 
     players.forEach((player: Player) => {
         const currentPlayer: X01Player = {
@@ -26,7 +27,7 @@ const selectX01Mode = (selectedX01Mode: number) => {
             volleys: players.indexOf(player) == 0 ? [['', '', '']] : []
         };
 
-        x01GameStore.setPlayer(currentPlayer);
+        dartGameStore.setPlayer(currentPlayer);
     });
     router.push({ name: "x01-game" })
 }

@@ -5,16 +5,16 @@ import { useRouter } from "vue-router";
 import { onMounted, ref } from "vue";
 import { useX01GameStore } from "@/stores/X01GameStore";
 
-const gameStore = useX01GameStore();
+const dartGameStore = useX01GameStore();
 
-const winnerPlayer = gameStore.winnerPlayer;
+const winnerPlayer = dartGameStore.winnerPlayer;
 const nbDarts = ref(0);
 
 const router = useRouter();
 
 const back = () => {
-    gameStore.setIsGameFinish(false);
-    gameStore.setWinner({} as X01Player);
+    dartGameStore.setIsGameFinish(false);
+    dartGameStore.setWinner({} as X01Player);
     router.push({ name: "x01-game"});
 }
 

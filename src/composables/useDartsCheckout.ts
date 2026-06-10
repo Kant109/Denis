@@ -23,6 +23,32 @@ function dartLabel(v: number, isFinish = false): string {
   return `${v}`
 }
 
+// Difficulté relative de chaque case (plus bas = plus facile)
+const DOUBLE_DIFFICULTY: Record<number, number> = {
+  16: 1,  8: 2,  4: 3,  2: 4,   // quart sup gauche, zones larges
+  20: 5, 19: 6, 18: 7, 17: 8,   // classiques du haut
+  15: 9, 10: 10,  6: 11, 13: 12,
+  11: 13, 14: 14,  9: 15, 12: 16,
+   5: 17,  1: 18,  3: 19,  7: 20, // bas du tableau, zones étroites
+}
+
+function dartDifficulty(v: number): number {
+  if (v === 50) return 30                          // D-Bull : le plus risqué
+  if (v === 25) return 20                          // Bull single
+  const n3 = v / 3
+  if (Number.isInteger(n3) && n3 <= 20)
+    return (20 - n3) + 5                           // T20=5, T1=24
+  const n2 = v / 2
+  if (Number.isInteger(n2) && n2 <= 20)
+    return (DOUBLE_DIFFICULTY[n2] ?? 10) * 0.8     // doubles légèrement favorisés
+  return (20 - v) + 1                              // singles
+}
+
+function comboDifficulty(darts: number[]): number {
+  const penalty = (darts.length - 1) * 3          // pénalité par fléchette supplémentaire
+  return darts.reduce((sum, v) => sum + dartDifficulty(v), penalty)
+}
+
 export function useDartsCheckout() {
   function getCheckouts(score: number, limit = 5): Checkout[] | null {
     if (score < 2 || score > 170 || IMPOSSIBLE.has(score)) return null
@@ -51,7 +77,7 @@ export function useDartsCheckout() {
     const seen = new Set<string>()
     return results
       .filter(r => { const k = r.join('-'); return seen.has(k) ? false : (seen.add(k), true) })
-      .sort((a, b) => a.length - b.length)
+      .sort((a, b) => comboDifficulty(a) - comboDifficulty(b))
       .slice(0, limit)
       .map(darts => ({
         darts,

@@ -8,8 +8,8 @@ const props = defineProps<{
   isTopBgPlayerActive: boolean
 }>()
 
-const gameStore = useX01GameStore();
-const players = computed(() => gameStore.players);
+const dartGameStore = useX01GameStore();
+const players = computed(() => dartGameStore.players);
 
 const emit = defineEmits(['isLastPlayer']);
 

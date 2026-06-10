@@ -39,6 +39,13 @@ const getBabykon = () => {
     }, 1100);
 }
 
+const getStats = () => {
+    launchAnimation('trophy_3d');
+    setTimeout(() => {
+        router.push({ name: "stats"});
+    }, 1100);
+}
+
 const getGameDetails = () => {
     launchAnimation('crossed_swords_3d');
     setTimeout(() => {
@@ -54,13 +61,17 @@ const getGameDetails = () => {
     </div>
     <div class="details-container" :class="{'isAnimationLaunch': isAnimationLaunch}">
         <h2>Général :</h2>
-        <div class="ranking-btn" @click.prevent="getRanking()">
+        <div class="stats-btn" @click.prevent="getStats()">
             <img src="@/assets/images/trophy_3d.png" alt="Trophée">
-            <div class="content">Classement</div>
+            <div class="content">Stats</div>
         </div>
-        <!-- <div class="games-btn" @click.prevent="getGameDetails()">
+        <div class="games-btn" @click.prevent="getGameDetails()">
             <img src="@/assets/images/crossed_swords_3d.png" alt="Trophée">
             <div class="content">Parties</div>
+        </div>
+        <!-- <div class="ranking-btn" @click.prevent="getRanking()">
+            <img src="@/assets/images/trophy_3d.png" alt="Trophée">
+            <div class="content">Classement</div>
         </div> -->
     </div>
     <div class="all-games-container" :class="{'isAnimationLaunch': isAnimationLaunch}">
@@ -70,11 +81,11 @@ const getGameDetails = () => {
             title="Fléchettes"
             @click.prevent="getDart()"
         />
-        <GameContainer
+        <!-- <GameContainer
             img="babyfoot"
             title="Babykon"
             @click.prevent="getBabykon()"
-        /> 
+        />  -->
     </div>
     <div v-if="isAnimationLaunch" class="container-animation">
         <div class="scale-animation" :class="{'jello-animation': launchJelloAnimation}">
@@ -176,7 +187,7 @@ const getGameDetails = () => {
     width: 100%;
     padding: 0rem 0.5rem 1rem 0.5rem;
 
-    .ranking-btn, .games-btn {
+    .ranking-btn, .games-btn, .stats-btn {
         display: flex;
         align-items: center;
         justify-content: center;

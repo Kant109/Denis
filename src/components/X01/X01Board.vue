@@ -2,9 +2,9 @@
 import { computed, onMounted, ref } from 'vue';
 import { useX01GameStore } from '@/stores/X01GameStore';
 
-const gameStore = useX01GameStore();
+const dartGameStore = useX01GameStore();
 
-const players = computed(() => gameStore.players);
+const players = computed(() => dartGameStore.players);
 const double = ref(false);
 const triple = ref(false);
 
@@ -80,8 +80,8 @@ const setPointsActivePlayer = async (points: number) => {
                 activePlayerPointsVolley = false;
             } else if(player.points === 0) {
                 if(value === 2) {
-                    gameStore.setIsGameFinish(true);
-                    gameStore.setWinner(player);
+                    dartGameStore.setIsGameFinish(true);
+                    dartGameStore.setWinner(player);
                 } else {
                     player.points += value * points;
                     player.isActive = false;
@@ -140,7 +140,7 @@ const reset = () => {
 }
 
 onMounted(() => {
-    gameStore.setWinner({} as X01Player);
+    dartGameStore.setWinner({} as X01Player);
     cancel();
 })
 
@@ -155,17 +155,17 @@ onMounted(() => {
                 <div class="points" @click.prevent="setPointsActivePlayer(3)">3</div>
                 <div class="points" @click.prevent="setPointsActivePlayer(4)">4</div>
                 <div class="points" @click.prevent="setPointsActivePlayer(5)">5</div>
-                <div class="points" @click.prevent="setPointsActivePlayer(6)">7</div>
-                <div class="points" @click.prevent="setPointsActivePlayer(8)">8</div>
+                <div class="points" @click.prevent="setPointsActivePlayer(6)">6</div>
+                <div class="points" @click.prevent="setPointsActivePlayer(7)">7</div>
             </div>
             <div class="points-line">
+                <div class="points" @click.prevent="setPointsActivePlayer(8)">8</div>
                 <div class="points" @click.prevent="setPointsActivePlayer(9)">9</div>
                 <div class="points" @click.prevent="setPointsActivePlayer(10)">10</div>
                 <div class="points" @click.prevent="setPointsActivePlayer(11)">11</div>
                 <div class="points" @click.prevent="setPointsActivePlayer(12)">12</div>
                 <div class="points" @click.prevent="setPointsActivePlayer(13)">13</div>
                 <div class="points" @click.prevent="setPointsActivePlayer(14)">14</div>
-                <div class="points" @click.prevent="setPointsActivePlayer(15)">15</div>
             </div>
             <div class="points-line">
                 <div class="points" @click.prevent="setPointsActivePlayer(15)">15</div>

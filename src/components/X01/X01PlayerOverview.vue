@@ -8,15 +8,24 @@ const props = defineProps<{
   isTopBgPlayerActive: boolean
 }>()
 
-const gameStore = useX01GameStore();
-const players = computed(() => gameStore.players);
+const dartGameStore = useX01GameStore();
+const players = computed(() => dartGameStore.players);
 
 const averageVolleys = computed(() => {
     if(props.player.volleys.length === 0) return 0;
     const totalPoints = props.player.volleys.reduce((acc, volley) => {
         return acc + volley.reduce((volleyAcc, dart) => {
-            const points = parseInt(dart.replace('O', '')) || 0;
-            return volleyAcc + points;
+            if(dart === '') return volleyAcc;
+            if(dart.includes('T')) {
+                const points = parseInt(dart.replace('T', '')) || 0;
+                return volleyAcc + points * 3;
+            } else if(dart.includes('D')) {
+                const points = parseInt(dart.replace('D', '')) || 0;
+                return volleyAcc + points * 2;
+            } else {
+                const points = parseInt(dart) || 0;
+                return volleyAcc + points;
+            }
         }, 0);
     }, 0);
     return (totalPoints / props.player.volleys.length).toFixed(2);
@@ -54,7 +63,7 @@ watch(
 </script>
 
 <template>
-    <div class="full-content" :class="{'top-bg': props.isTopBgActive, 'top-bg-active': props.isTopBgPlayerActive && props.isTopBgActive}">
+    <div class="full-content">
         <div class="player-content" :class="{'isPlayerActive': player.isActive }">
             <div class="player-name">{{ player.firstname }} "{{ player.pseudo }}" {{ player.name }}</div>
                 <div class="recap">
@@ -89,111 +98,116 @@ watch(
     background-color: var(--active-player);
 }
 
-.player-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background-color: var(--bg-color-secondary);
-    border-radius: 1rem 1rem 0 0;
-    padding: 1rem;
-    --tw-shadow: inset 0 5px 0 0 rgba(0, 0, 0, .25);
-    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+.full-content {
+    min-width: 250px;
 
-    &.isPlayerActive {
-        background-color: var(--active-player);
-
-        .player-name, .points-taken {
-            color: #121212;
-        }
-    }
-
-    .player-name {
+    .player-content {
         display: flex;
-        align-items: center;
-        font-family: "Tilt Warp", sans-serif;
-        font-size: 1rem;
-        color: var(--text-color);
-
-        &:is(.player-name) {
-            min-width: 55px;
-            grid-area: 1 / 1 / 2 / 2;
-        }
-
-        &:is(.points-taken) {
-            justify-content: flex-end;
-            grid-area: 1 / 5 / 2 / 6;
-        }
-    }
-
-    .points-taken {
-        display: flex;
-        align-items: center;
-        font-family: "Tilt Warp", sans-serif;
-        font-size: 4rem;
-        color: var(--text-color);
-    }
-
-    .recap {
-        display: flex;
-        justify-content: center;
         flex-direction: column;
-        grid-area: 1 / 2 / 2 / 5;
+        align-items: center;
+        justify-content: center;
         gap: .5rem;
-        padding-top: 5px;
+        background-color: var(--bg-color-secondary);
+        border-radius: 1rem;
+        padding: 1rem;
+        --tw-shadow: inset 0 5px 0 0 rgba(0, 0, 0, .25);
+        box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+        width: 100%;
+        border: 1px solid rgba(0, 0, 0, .25);
 
-        .current-points {
+        &.isPlayerActive {
+            background-color: var(--active-player);
+
+            .player-name, .points-taken {
+                color: #121212;
+            }
+        }
+
+        .player-name {
+            display: flex;
+            align-items: center;
+            font-family: "Tilt Warp", sans-serif;
+            font-size: 1rem;
+            color: var(--text-color);
+
+            &:is(.player-name) {
+                min-width: 55px;
+                grid-area: 1 / 1 / 2 / 2;
+            }
+
+            &:is(.points-taken) {
+                justify-content: flex-end;
+                grid-area: 1 / 5 / 2 / 6;
+            }
+        }
+
+        .points-taken {
+            display: flex;
+            align-items: center;
+            font-family: "Tilt Warp", sans-serif;
+            font-size: 4rem;
+            color: var(--text-color);
+        }
+
+        .recap {
             display: flex;
             justify-content: center;
-            gap: 2rem;
+            flex-direction: column;
+            grid-area: 1 / 2 / 2 / 5;
+            gap: .5rem;
 
-            .points {
+            .current-points {
                 display: flex;
-                align-items: center;
                 justify-content: center;
-                font-family: "Tilt Warp", sans-serif;
-                font-size: 1rem;
-                padding-bottom: 5px;
-                border-radius: 8px;
-                width: 2.5rem;
-                aspect-ratio: 1/1;
-                background-color: white;
-                border: 1px solid rgba(0, 0, 0, .25);
-                --tw-shadow: inset 0 -5px 0 0 rgba(0, 0, 0, .25);
-                box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+                gap: 2rem;
 
-                & s {
-                    text-decoration-thickness: 2px;
+                .points {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-family: "Tilt Warp", sans-serif;
+                    font-size: 1rem;
+                    padding-bottom: 5px;
+                    border-radius: 8px;
+                    width: 2.5rem;
+                    aspect-ratio: 1/1;
+                    background-color: white;
+                    border: 1px solid rgba(0, 0, 0, .25);
+                    --tw-shadow: inset 0 -5px 0 0 rgba(0, 0, 0, .25);
+                    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+
+                    & s {
+                        text-decoration-thickness: 2px;
+                    }
                 }
             }
         }
-    }
 
-    .darts-details {
-        display: flex;
-        justify-content: center;
-        gap: 1rem;
-        margin-top: .5rem;
-
-        .average-volleys {
+        .darts-details {
             display: flex;
-            align-items: center;
-            font-family: "Tilt Warp", sans-serif;
-            font-size: .875rem;
-            color: var(--text-color);
-        }
+            justify-content: center;
+            gap: 1rem;
 
-        .nb-throw-darts {
-            display: flex;
-            align-items: center;
-            font-family: "Tilt Warp", sans-serif;
-            font-size: .875rem;
-            color: var(--text-color);
-            gap: .25rem;
+            .average-volleys {
+                display: flex;
+                align-items: center;
+                font-family: "Tilt Warp", sans-serif;
+                font-size: .875rem;
+                color: var(--text-color);
+            }
 
-            img {
-                width: 1rem;
-                height: 1rem;
+            .nb-throw-darts {
+                display: flex;
+                align-items: center;
+                font-family: "Tilt Warp", sans-serif;
+                font-size: .875rem;
+                color: var(--text-color);
+                gap: .25rem;
+
+                img {
+                    width: 1rem;
+                    height: 1rem;
+                }
             }
         }
     }

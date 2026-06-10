@@ -35,7 +35,7 @@ const openCreatePlayer = ref(false);
           </div>
           <div class="select-player-container">
             <div
-              class="select-player d-flex"
+              class="select-player"
               v-for="player in allPlayers.filter(
                 (p) => !unselectablePlayerIds.find((id) => p.id === id) && getPlayerLibelle(p).toLocaleLowerCase().includes(searchText.toLocaleLowerCase())
               )"
@@ -48,11 +48,8 @@ const openCreatePlayer = ref(false);
                 )}`"
                 alt="Avatar"
               />
-              <div class="player-name d-flex">
-                <span class="player-name-pseudo"> {{ player.pseudo }} </span>
-                <span class="player-full-name">
-                  {{ getPlayerFullName(player) }}</span
-                >
+              <div class="player-name">
+                <span class="player-name-pseudo"> {{ player.firstname }} "{{ player.pseudo }}" {{ player.name }} </span>
               </div>
             </div>
         </div>
@@ -65,54 +62,63 @@ const openCreatePlayer = ref(false);
   </Teleport>
 </template>
 <style lang="scss" scoped>
-  @import "@/assets/helpers/dialog.scss";
+@import "@/assets/helpers/dialog.scss";
+@import "@/assets/helpers/mixins.scss";
 
-.select-player-container {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-gap: 10px;
-  justify-content: space-between;
-  margin: 0 16px;
-  max-height: 80vh;
-  height: 100%;
+.dialog-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 
-  .select-player {
+  .search-player-container {
+    width: 100%;
     display: flex;
     align-items: center;
-    justify-content: flex-start;
-    background-color: var(--bg-color-primary);
-    border: 5px solid var(--bg-color-primary);
-    border-radius: 0.5rem;
-    font-size: 0.8rem;
-    min-width: 150px;
-    height: fit-content;
+    justify-content: center;
+  }
 
-    .player-img {
-      height: 3rem;
-      width: 3rem;
-      border-radius: 50%;
-      background-color: white;
-      cursor: pointer;
-    }
+  .select-player-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    justify-content: space-between;
+    margin: 0 16px;
+    max-height: 80vh;
+    height: 100%;
 
-    .player-name {
-      flex-direction: column;
+    .select-player {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: .5rem;
+      background-color: var(--bg-color-primary);
+      border: 5px solid var(--bg-color-primary);
+      border-radius: 0.5rem;
+      font-size: 0.8rem;
+      width: 100%;
+      height: fit-content;
 
-      span {
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        width: 100%;
-        max-width: 6em;
+      .player-img {
+        height: 3rem;
+        width: 3rem;
+        border-radius: 50%;
+        background-color: white;
+        cursor: pointer;
+      }
+
+      .player-name {
+        flex-direction: column;
+
+        span {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          width: 100%;
+          max-width: 6em;
+        }
       }
     }
   }
 }
-.search-player-container {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 8px;
-}
+
 </style>
