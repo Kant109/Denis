@@ -24,7 +24,12 @@ const selectX01Mode = (selectedX01Mode: number) => {
             name: player.name,
             isActive: players.indexOf(player) == 0,
             points: x01Mode.value,
-            volleys: players.indexOf(player) == 0 ? [['', '', '']] : []
+            volleys: players.indexOf(player) == 0 ? [['', '', '']] : [],
+            sets: 0,
+            legs: 0,
+            average: 0,
+            nbThrows: 0,
+            nbDarts: 0
         };
 
         dartGameStore.setPlayer(currentPlayer);
