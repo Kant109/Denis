@@ -23,8 +23,10 @@ const setIsLastPlayerActive = (isCurrentPlayerLast: boolean) => {
 
 function updateGame(message: string) {
     const data = JSON.parse(message);
-    dartGameStore.players = data.players as X01Player[];
-    dartGameStore.isGameFinish = data.isGameFinish as boolean;
+    dartGameStore.syncActiveGame({
+        players: data.players as X01Player[],
+        isGameFinish: data.isGameFinish as boolean,
+    });
 }
 
 function setCurrentScore(newScore: number) {
