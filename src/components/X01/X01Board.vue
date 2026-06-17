@@ -80,8 +80,26 @@ const setPointsActivePlayer = async (points: number) => {
                 activePlayerPointsVolley = false;
             } else if(player.points === 0) {
                 if(value === 2) {
-                    dartGameStore.setIsGameFinish(true);
-                    dartGameStore.setWinner(player);
+                    localStorage.setItem('previousDartGame', JSON.stringify(dartGameStore.$state));
+                    dartGameStore.saveGame();
+                    player.legs += 1;
+                    if(player.legs === dartGameStore.legs) {
+                        player.sets += 1;
+                        if(player.sets === dartGameStore.sets) {
+                            dartGameStore.setIsGameFinish(true);
+                            dartGameStore.setWinner(player);
+                        }
+                    }
+                    players.value.forEach(p => {
+                        p.average = 0;
+                        p.nbThrows = 0;
+                        p.nbDarts = 0;
+                        p.volleys = [];
+                        p.points = dartGameStore.mode === '301' ? 301 : 501;
+                    });
+                    player.isActive = false;
+                    setNextPlayerActive(player);
+                    activePlayerPointsVolley = false;
                 } else {
                     player.points += value * points;
                     player.isActive = false;
@@ -112,14 +130,27 @@ const removePreviousDart = async (player: X01Player, isCancel: boolean) => {
     }
 }
 
+function resetToOldGame() {
+    const previousDartGame = JSON.parse(localStorage.getItem('previousDartGame') as string);
+    dartGameStore.$state = previousDartGame;
+    localStorage.removeItem('previousDartGame');
+    cancel();
+}
+
 const cancel = () => {
     players.value.forEach(player => {
+        if(player.isActive && player.volleys.length === 1 && player.volleys[0][0] === "" && player.volleys[0][1] === "" && player.volleys[0][2] === "") {
+            resetToOldGame();
+            return;
+        }
+
         if(player.isActive) {
             if(!(players.value.indexOf(player) === 0 && player.volleys.length === 1 && player.volleys[0][0] === "")) {
                 let isCancel = false;
                 if(!(player.volleys[player.volleys.length - 1][0] === "" && player.volleys[player.volleys.length - 1][1] === "" && player.volleys[player.volleys.length - 1][2] === "")) {
                     removePreviousDart(player, isCancel);
                 } else {
+                    player.volleys.pop();
                     player.isActive = false;
                     if((players.value.indexOf(player) - 1) >= 0) {
                         players.value[players.value.indexOf(player) - 1].isActive = true;
@@ -141,7 +172,6 @@ const reset = () => {
 
 onMounted(() => {
     dartGameStore.setWinner({} as X01Player);
-    cancel();
 })
 
 </script>

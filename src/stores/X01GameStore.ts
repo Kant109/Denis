@@ -8,6 +8,7 @@ export const useX01GameStore = defineStore('X01Game', () => {
     const mode = ref('301' as '301' | '501');
     const sets= ref(1);
     const legs = ref(1);
+    const games = ref([] as Array<X01Game>)
 
     function setPlayer(player: X01Player) {
         players.value.push(player);
@@ -21,6 +22,21 @@ export const useX01GameStore = defineStore('X01Game', () => {
         winnerPlayer.value = winner;
     }
 
+    function saveGame() {
+        games.value.push({
+            stats: players.value.map(player => ({
+                player: player,
+                points: player.points,
+                volleys: player.volleys,
+                sets: player.sets,
+                legs: player.legs,
+                average: player.average,
+                nbThrows: player.nbThrows,
+                nbDarts: player.nbDarts,
+            }))
+        });
+    }
+
     function reset() {
         players.value = [];
         isGameFinish.value = false;
@@ -30,5 +46,5 @@ export const useX01GameStore = defineStore('X01Game', () => {
         legs.value = 1;
     }
 
-    return { players, isGameFinish, winnerPlayer, mode, sets, legs, setPlayer, setIsGameFinish, setWinner, reset };
+    return { players, isGameFinish, winnerPlayer, mode, sets, legs, setPlayer, setIsGameFinish, setWinner, saveGame, reset };
 })

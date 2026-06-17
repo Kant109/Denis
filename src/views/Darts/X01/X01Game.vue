@@ -23,6 +23,7 @@ const setIsLastPlayerActive = (isCurrentPlayerLast: boolean) => {
 }
 
 const back = () => {
+    localStorage.removeItem('previousDartGame');
     dartGameStore.reset();
     router.push({ name: "darts-mode-x01" });
 }

@@ -19,7 +19,7 @@ const back = () => {
 }
 
 const replay = () => {
-    
+    localStorage.removeItem('previousDartGame');
 }
 
 onMounted(() => {
