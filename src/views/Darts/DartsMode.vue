@@ -21,8 +21,8 @@ const startGame = () => {
     if(gamemode.value === "cricket") {
         router.push({ name: "darts-mode-cricket" });
     } else if(gamemode.value === "x01") {
-        localStorage.setItem("dartNbLegs", dartGameStore.games.legs.toString());
-        localStorage.setItem("dartNbSets", dartGameStore.games.sets.toString());
+        localStorage.setItem("dartNbLegs", dartGameStore.legs.toString());
+        localStorage.setItem("dartNbSets", dartGameStore.sets.toString());
         router.push({ name: "darts-mode-x01" });
     }
 }
@@ -32,8 +32,8 @@ const back = () => {
 }
 
 onBeforeMount(() => {
-    localStorage.getItem("dartNbLegs") && (dartGameStore.games.legs = parseInt(localStorage.getItem("dartNbLegs")!));
-    localStorage.getItem("dartNbSets") && (dartGameStore.games.sets = parseInt(localStorage.getItem("dartNbSets")!));
+    localStorage.getItem("dartNbLegs") && (dartGameStore.legs = parseInt(localStorage.getItem("dartNbLegs")!));
+    localStorage.getItem("dartNbSets") && (dartGameStore.sets = parseInt(localStorage.getItem("dartNbSets")!));
 })
 
 </script>
@@ -53,7 +53,7 @@ onBeforeMount(() => {
                     <div class="sets">
                         <label for="set-select">Sets :</label>
 
-                        <select name="sets" id="set-select" v-model="dartGameStore.games.sets">
+                        <select name="sets" id="set-select" v-model="dartGameStore.sets">
                             <option value="1">1</option>
                             <option value="2">2</option>
                             <option value="3">3</option>
@@ -64,7 +64,7 @@ onBeforeMount(() => {
                     <div class="legs">
                         <label for="leg-select">Legs :</label>
     
-                        <select name="legs" id="leg-select" v-model="dartGameStore.games.legs">
+                        <select name="legs" id="leg-select" v-model="dartGameStore.legs">
                             <option value="1">1</option>
                             <option value="2">2</option>
                             <option value="3">3</option>

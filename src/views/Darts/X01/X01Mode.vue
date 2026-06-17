@@ -15,7 +15,6 @@ const router = useRouter();
 const selectX01Mode = (selectedX01Mode: number) => {
     x01Mode.value = selectedX01Mode;
     dartGameStore.mode = selectedX01Mode.toString() as '301' | '501';
-    dartGameStore.clearDraftPlayers();
 
     players.forEach((player: Player) => {
         const currentPlayer: X01Player = {
@@ -35,8 +34,6 @@ const selectX01Mode = (selectedX01Mode: number) => {
 
         dartGameStore.setPlayer(currentPlayer);
     });
-
-    dartGameStore.startGameFromDraft();
     router.push({ name: "x01-game" })
 }
 

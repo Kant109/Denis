@@ -22,14 +22,116 @@ const selectTriple = () => {
     triple.value = !triple.value;
 }
 
+const setNextPlayerActive = (player: X01Player) => {
+    if(players.value.indexOf(player) + 1 === players.value.length) {
+        players.value[0].isActive = true;
+        players.value[0].volleys.push(['', '', '']);
+    } else {
+        players.value[players.value.indexOf(player) + 1].isActive = true;
+        players.value[players.value.indexOf(player) + 1].volleys.push(['', '', '']);
+    }
+}
+
 const setPointsActivePlayer = async (points: number) => {
-    const value = (double.value ? 2 : triple.value ? 3 : 1) as 1 | 2 | 3;
-    dartGameStore.applyThrow(points, value);
+    const value = double.value ? 2 : triple.value ? 3 : 1;
+    let activePlayerPointsVolley = true;
+
+    players.value.forEach(player => {
+        if(player.isActive && activePlayerPointsVolley) {
+            const currentPointValue = value === 2 ? "D" + points.toString() : value === 3 ? "T" + points.toString() : points.toString();
+
+            player.points -= value * points;
+
+            if(player.volleys[player.volleys.length - 1][0] === "") {
+                player.volleys[player.volleys.length - 1][0] = currentPointValue;
+            } else if(player.volleys[player.volleys.length - 1][1] === "") {
+                player.volleys[player.volleys.length - 1][1] = currentPointValue;
+            } else if(player.volleys[player.volleys.length - 1][2] === "") {
+                player.volleys[player.volleys.length - 1][2] = currentPointValue;
+                player.isActive = false;
+                setNextPlayerActive(player);
+                activePlayerPointsVolley = false;
+            }
+
+            if(player.points < 0 || player.points === 1) {
+
+                player.points += value * points;
+
+                if(player.volleys[player.volleys.length - 1][0] === "") {
+                    player.volleys[player.volleys.length - 1][0] = "";
+                } else {
+                    player.volleys[player.volleys.length - 1][0] = "O" + player.volleys[player.volleys.length - 1][0];
+                }
+
+                if(player.volleys[player.volleys.length - 1][1] === "") {
+                    player.volleys[player.volleys.length - 1][1] = "";
+                } else {
+                    player.volleys[player.volleys.length - 1][1] = "O" + player.volleys[player.volleys.length - 1][1];
+                }
+
+                if(player.volleys[player.volleys.length - 1][2] === "") {
+                    player.volleys[player.volleys.length - 1][2] = "";
+                } else {
+                    player.volleys[player.volleys.length - 1][2] = "O" + player.volleys[player.volleys.length - 1][2];
+                }
+
+                player.isActive = false;
+                setNextPlayerActive(player);
+                activePlayerPointsVolley = false;
+            } else if(player.points === 0) {
+                if(value === 2) {
+                    dartGameStore.setIsGameFinish(true);
+                    dartGameStore.setWinner(player);
+                } else {
+                    player.points += value * points;
+                    player.isActive = false;
+                    setNextPlayerActive(player);
+                    activePlayerPointsVolley = false;
+                }
+            }
+        }
+    })
     reset();
 }
 
+const cancelPoints = async (previousDart: string, player: X01Player) => {
+    const value = previousDart.includes('T') ? 3 : previousDart.includes('D') ? 2 : 1;
+    player.points += value === 1 ? parseInt(previousDart) : value * parseInt(previousDart.substring(1,3));
+}
+
+const removePreviousDart = async (player: X01Player, isCancel: boolean) => {
+    for (let index = 3; index > 0; index--) {
+        const previousDart = player.volleys[player.volleys.length - 1][index - 1];
+
+        if(previousDart !== "" && !isCancel) {
+            await cancelPoints(previousDart, player);
+
+            player.volleys[player.volleys.length - 1][index - 1] = "";
+            isCancel = true;
+        }
+    }
+}
+
 const cancel = () => {
-    dartGameStore.undoThrow();
+    players.value.forEach(player => {
+        if(player.isActive) {
+            if(!(players.value.indexOf(player) === 0 && player.volleys.length === 1 && player.volleys[0][0] === "")) {
+                let isCancel = false;
+                if(!(player.volleys[player.volleys.length - 1][0] === "" && player.volleys[player.volleys.length - 1][1] === "" && player.volleys[player.volleys.length - 1][2] === "")) {
+                    removePreviousDart(player, isCancel);
+                } else {
+                    player.isActive = false;
+                    if((players.value.indexOf(player) - 1) >= 0) {
+                        players.value[players.value.indexOf(player) - 1].isActive = true;
+                        removePreviousDart(players.value[players.value.indexOf(player) - 1], isCancel);
+                    } else {
+                        players.value[players.value.length - 1].isActive = true;
+                        removePreviousDart(players.value[players.value.length - 1], isCancel);
+                    }
+                }
+            }
+        }
+    });
 }
 
 const reset = () => {

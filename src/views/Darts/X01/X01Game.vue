@@ -14,8 +14,7 @@ const dartGameStore = useX01GameStore();
 const players = computed(() => dartGameStore.players);
 const isGameFinish = computed(() => dartGameStore.isGameFinish);
 const isLastPlayerActive = ref(false);
-const winnerNavigationTimeout = ref<number | null>(null);
-const title = computed(() => dartGameStore.mode);
+const title = dartGameStore.mode;
 
 const router = useRouter();
 
@@ -48,29 +47,7 @@ watch(
     }
 )
 
-watch(() => isGameFinish.value, (isFinished) => {
-    if(!isFinished) {
-        if(winnerNavigationTimeout.value) {
-            window.clearTimeout(winnerNavigationTimeout.value);
-            winnerNavigationTimeout.value = null;
-        }
-        return;
-    }
-
-    if(winnerNavigationTimeout.value) {
-        window.clearTimeout(winnerNavigationTimeout.value);
-    }
-
-    winnerNavigationTimeout.value = window.setTimeout(() => {
-        router.push({ name: "x01-winner" });
-    }, 600);
-});
-
-onMounted(() => {
-    if(players.value.length > 0 && !dartGameStore.activeGame) {
-        dartGameStore.startGameFromDraft();
-    }
-});
+watch(() => isGameFinish.value, () => router.push({ name: "x01-winner" }));
 
 </script>
 

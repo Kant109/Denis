@@ -19,8 +19,7 @@ const back = () => {
 }
 
 const replay = () => {
-    dartGameStore.replayActiveGame();
-    router.push({ name: "x01-game" });
+    
 }
 
 onMounted(() => {
