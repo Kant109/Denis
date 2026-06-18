@@ -1,11 +1,10 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
 import { useWebSocket } from '@/composables/useWebSocket'
-import { useDartsCheckout } from '@/composables/useDartsCheckout';
+import { getCheckouts } from '@/composables/useDartsCheckout';
 import X01PlayerOverview from '@/components/X01/X01PlayerOverview.vue';
 import { useX01GameStore } from '@/stores/X01GameStore';
 
-const { getCheckouts } = useDartsCheckout()
 const score = ref(301);
 const checkouts = computed(() => getCheckouts(score.value))
 
@@ -65,9 +64,9 @@ watch(
         <div class="checkouts-container" v-if="checkouts">
             <h3>Checkouts for {{ score }}</h3>
             <div class="checkout-list">
-                <template v-for="checkout in checkouts" :key="checkout.darts.join('-')">
-                    <span v-for="(label, i) in checkout.labels" :key="i">
-                        {{ label }}{{ i < checkout.labels.length - 1 ? ' → ' : '' }}
+                <template v-for="checkout in checkouts" :key="checkout">
+                    <span v-for="(value, i) in checkout" :key="i">
+                        {{ value }}{{ i < checkout.length - 1 ? ' → ' : '' }}
                     </span>
                     <br>
                 </template>
