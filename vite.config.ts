@@ -19,6 +19,7 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       workbox: {
+        maximumFileSizeToCacheInBytes: 5000000,
         cleanupOutdatedCaches: false
       },
       manifest: {

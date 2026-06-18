@@ -1,18 +1,20 @@
 import checkoutsJSON from '@/json/darts-checkouts.json';
 
-interface CheckoutModel {
-  "score": number;
-  "combinations": Array<CheckoutCombination>;
+interface CheckoutCombo {
+  darts: number;
+  combo: string[];
 }
 
-interface CheckoutCombination {
-  "dart": number;
-  "combo": Array<string>;
+interface CheckoutEntry {
+  score: number;
+  combinations: CheckoutCombo[];
 }
+
+type CheckoutData = Record<string, CheckoutEntry>;
 
 export function getCheckouts(number: number): Array<Array<string>> {
 
-  const checkouts = checkoutsJSON as CheckoutModel[];
+  const checkouts = checkoutsJSON as CheckoutData;
 
   return checkouts[number].combinations.slice(0, 5).map(combination => combination.combo);
 }
