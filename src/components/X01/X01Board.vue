@@ -113,6 +113,9 @@ const setPointsActivePlayer = async (points: number) => {
 }
 
 const cancelPoints = async (previousDart: string, player: X01Player) => {
+    if(previousDart.includes('O')) {
+        return;
+    }
     const value = previousDart.includes('T') ? 3 : previousDart.includes('D') ? 2 : 1;
     player.points += value === 1 ? parseInt(previousDart) : value * parseInt(previousDart.substring(1,3));
 }
@@ -122,6 +125,15 @@ const removePreviousDart = async (player: X01Player, isCancel: boolean) => {
         const previousDart = player.volleys[player.volleys.length - 1][index - 1];
 
         if(previousDart !== "" && !isCancel) {
+            if(player.volleys[player.volleys.length - 1][0].includes('O')) {
+                player.volleys[player.volleys.length - 1][0] = previousDart.substring(1);
+            }
+            if(player.volleys[player.volleys.length - 1][1].includes('O')) {
+                player.volleys[player.volleys.length - 1][1] = previousDart.substring(1);
+            }
+            if(player.volleys[player.volleys.length - 1][2].includes('O')) {
+                player.volleys[player.volleys.length - 1][2] = previousDart.substring(1);
+            }
             await cancelPoints(previousDart, player);
 
             player.volleys[player.volleys.length - 1][index - 1] = "";
