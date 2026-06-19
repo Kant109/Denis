@@ -12,9 +12,25 @@ const { send, status } = useWebSocket(import.meta.env.VITE_WS_RECAP_URL);
 const dartGameStore = useX01GameStore();
 
 const players = computed(() => dartGameStore.players);
+const games = computed(() => dartGameStore.games);
 const isGameFinish = computed(() => dartGameStore.isGameFinish);
 const isLastPlayerActive = ref(false);
 const title = dartGameStore.mode;
+
+const historyEvents = computed(() => {
+    return games.value.map((game, index) => {
+        const winner = game.players.find(player => player.points === 0);
+
+        return {
+            eventIndex: index + 1,
+            eventType: game.eventType,
+            eventLabel: game.eventType === 'end_match' ? 'Fin de match' : `Fin de leg ${index + 1}`,
+            winnerName: winner ? `${winner.firstname} \"${winner.pseudo}\" ${winner.name}` : '-',
+            sets: winner?.sets ?? 0,
+            legs: winner?.legs ?? 0,
+        }
+    }).slice().reverse();
+});
 
 const router = useRouter();
 
@@ -63,6 +79,21 @@ watch(() => isGameFinish.value, () => router.push({ name: "x01-winner" }));
                 :is-top-bg-player-active="players[players.indexOf(player) - 1 > 0 ? players.indexOf(player) - 1 : 0].isActive === true"
                 @isLastPlayer="setIsLastPlayerActive"
             />
+        </div>
+        <div class="legs-history" v-if="historyEvents.length > 0">
+            <div class="legs-history-title">Historique des événements</div>
+            <div class="legs-history-list">
+                <div
+                    class="legs-history-item"
+                    :class="{'is-match-end': event.eventType === 'end_match'}"
+                    v-for="event in historyEvents"
+                    :key="`${event.eventIndex}-${event.eventType}`"
+                >
+                    <span class="event-label">{{ event.eventLabel }}</span>
+                    <span>{{ event.winnerName }}</span>
+                    <span>{{ event.sets }} set / {{ event.legs }} leg</span>
+                </div>
+            </div>
         </div>
     </div>
     <X01Board />
@@ -130,6 +161,50 @@ watch(() => isGameFinish.value, () => router.push({ name: "x01-winner" }));
         &.lastPlayerActive {
             &::after {
                 background-color: var(--active-player);
+            }
+        }
+    }
+
+    .legs-history {
+        display: flex;
+        flex-direction: column;
+        gap: .5rem;
+        width: 100%;
+        max-width: 390px;
+        margin-top: .75rem;
+        padding: 0 .5rem;
+
+        .legs-history-title {
+            font-family: "Tilt Warp", sans-serif;
+            font-size: .95rem;
+            color: var(--text-color);
+        }
+
+        .legs-history-list {
+            display: flex;
+            flex-direction: column;
+            gap: .35rem;
+        }
+
+        .legs-history-item {
+            display: grid;
+            grid-template-columns: 110px 1fr auto;
+            align-items: center;
+            gap: .5rem;
+            font-size: .75rem;
+            color: var(--text-color);
+            background-color: var(--bg-color-secondary);
+            border-radius: .5rem;
+            padding: .45rem .6rem;
+            border: 1px solid rgba(0, 0, 0, .25);
+
+            &.is-match-end {
+                background-color: var(--active-player);
+            }
+
+            .event-label {
+                font-family: "Tilt Warp", sans-serif;
+                font-size: .7rem;
             }
         }
     }

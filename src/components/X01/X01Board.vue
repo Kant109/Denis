@@ -36,7 +36,7 @@ const setPointsActivePlayer = async (points: number) => {
     const value = double.value ? 2 : triple.value ? 3 : 1;
     let activePlayerPointsVolley = true;
 
-    players.value.forEach(player => {
+    players.value.forEach(async player => {
         if(player.isActive && activePlayerPointsVolley) {
             const currentPointValue = value === 2 ? "D" + points.toString() : value === 3 ? "T" + points.toString() : points.toString();
 
@@ -81,13 +81,17 @@ const setPointsActivePlayer = async (points: number) => {
             } else if(player.points === 0) {
                 if(value === 2) {
                     localStorage.setItem('previousDartGame', JSON.stringify(dartGameStore.$state));
-                    dartGameStore.saveGame();
                     player.legs += 1;
+                    dartGameStore.registerLegEnd(players.value);
                     if(player.legs === dartGameStore.legs) {
                         player.sets += 1;
+                        players.value.forEach(p => {
+                            p.legs = 0;
+                        });
                         if(player.sets === dartGameStore.sets) {
                             dartGameStore.setIsGameFinish(true);
                             dartGameStore.setWinner(player);
+                            dartGameStore.registerMatchEnd(players.value);
                         }
                     }
                     players.value.forEach(p => {

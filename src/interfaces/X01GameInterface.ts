@@ -1,12 +1,6 @@
+type X01GameEventType = 'end_leg' | 'end_match'
+
 interface X01Game {
-    stats: Array<{
-        player: X01Player,
-        points: number,
-        volleys: Array<Array<string>>,
-        sets: number,
-        legs: number,
-        average: number,
-        nbThrows: number,
-        nbDarts: number,
-    }>
+    eventType: X01GameEventType,
+    players: Array<X01Player>,
 }

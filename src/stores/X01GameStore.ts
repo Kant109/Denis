@@ -22,19 +22,24 @@ export const useX01GameStore = defineStore('X01Game', () => {
         winnerPlayer.value = winner;
     }
 
-    function saveGame() {
+    function addFinishedGame(finishedPlayers: Array<X01Player>, eventType: X01GameEventType = 'end_leg') {
+        const playersSnapshot = finishedPlayers.map(player => ({
+            ...player,
+            volleys: player.volleys.map(volley => [...volley]),
+        }));
+
         games.value.push({
-            stats: players.value.map(player => ({
-                player: player,
-                points: player.points,
-                volleys: player.volleys,
-                sets: player.sets,
-                legs: player.legs,
-                average: player.average,
-                nbThrows: player.nbThrows,
-                nbDarts: player.nbDarts,
-            }))
+            eventType,
+            players: playersSnapshot,
         });
+    }
+
+    function registerLegEnd(finishedPlayers: Array<X01Player>) {
+        addFinishedGame(finishedPlayers, 'end_leg');
+    }
+
+    function registerMatchEnd(finishedPlayers: Array<X01Player>) {
+        addFinishedGame(finishedPlayers, 'end_match');
     }
 
     function reset() {
@@ -46,5 +51,5 @@ export const useX01GameStore = defineStore('X01Game', () => {
         legs.value = 1;
     }
 
-    return { players, isGameFinish, winnerPlayer, mode, sets, legs, setPlayer, setIsGameFinish, setWinner, saveGame, reset };
+    return { players, isGameFinish, winnerPlayer, mode, sets, legs, games, setPlayer, setIsGameFinish, setWinner, addFinishedGame, registerLegEnd, registerMatchEnd, reset };
 })
