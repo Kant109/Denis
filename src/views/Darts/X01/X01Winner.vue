@@ -1,57 +1,87 @@
 <script setup lang="ts">
-import { LottieAnimation } from "lottie-web-vue";
-import ConfettiAnimation from "@/assets/animations/confetti.json";
 import { useRouter } from "vue-router";
-import { onMounted, ref } from "vue";
+import { computed } from "vue";
 import { useX01GameStore } from "@/stores/X01GameStore";
+import { buildX01MatchStats } from "@/common/X01StatsUtils";
+import { clearX01LocalStorage } from "@/common/X01PersistenceUtils";
 
 const dartGameStore = useX01GameStore();
+const winnerPlayer = computed(() => dartGameStore.winnerPlayer);
+const matchStats = computed(() => {
+    if (dartGameStore.matchStats) return dartGameStore.matchStats;
 
-const winnerPlayer = dartGameStore.winnerPlayer;
-const nbDarts = ref(0);
+    return buildX01MatchStats(
+        dartGameStore.games,
+        dartGameStore.mode,
+        dartGameStore.sets,
+        dartGameStore.legs,
+        dartGameStore.winnerPlayer,
+    );
+});
+const winnerStats = computed(() => {
+    return matchStats.value.players.find(player => player.isWinner) ?? matchStats.value.players[0];
+});
 
 const router = useRouter();
 
 const back = () => {
-    dartGameStore.setIsGameFinish(false);
-    dartGameStore.setWinner({} as X01Player);
-    router.push({ name: "x01-game"});
+    clearX01LocalStorage();
+    dartGameStore.reset();
+    router.push({ name: "darts-mode-x01"});
 }
 
 const replay = () => {
-    localStorage.removeItem('previousDartGame');
+    clearX01LocalStorage();
+    dartGameStore.reset();
+    router.push({ name: "darts-mode-x01"});
 }
-
-onMounted(() => {
-    winnerPlayer.volleys.forEach(volley => {
-        if(volley.includes("")) {
-            volley.forEach(dart => {
-                if(dart !== "") nbDarts.value++;
-            });
-        } else {
-            nbDarts.value += 3;
-        }
-    });
-})
 
 </script>
 
 <template>
     <div class="winning-container">
-        <LottieAnimation
-            class="animation"
-            :animation-data="ConfettiAnimation"
-            :auto-play="true"
-            :loop="true"
-            :speed="1"
-            ref="anim"
-        />
         <div class="winner-content">
             <img class="back" src="@/assets/images/chevron.svg" alt="Retour" @click.prevent="back">
             <img class="player-img" :src="'https://api.dicebear.com/9.x/adventurer/svg?seed=' + winnerPlayer.firstname + winnerPlayer.pseudo + winnerPlayer.name" alt="Avatar"></img>
             <div class="player-info">
                 <div class="player-info-pseudo">{{ winnerPlayer.pseudo }}</div>
-                <div class="player-info-full-name">{{ winnerPlayer.firstname }} {{ winnerPlayer.name.toUpperCase() }}</div>
+                <div class="player-info-full-name">{{ winnerPlayer.firstname }} {{ winnerPlayer.name?.toUpperCase() }}</div>
+            </div>
+        </div>
+        <div class="match-summary" v-if="winnerStats">
+            <div class="match-summary-item">
+                <span class="label">Mode</span>
+                <span class="value">X{{ matchStats.mode }}</span>
+            </div>
+            <div class="match-summary-item">
+                <span class="label">Sets/Legs</span>
+                <span class="value">{{ matchStats.setsTarget }} / {{ matchStats.legsTarget }}</span>
+            </div>
+            <div class="match-summary-item">
+                <span class="label">Legs joués</span>
+                <span class="value">{{ matchStats.legsPlayed }}</span>
+            </div>
+            <div class="match-summary-item">
+                <span class="label">Moyenne</span>
+                <span class="value">{{ winnerStats.averagePerVolley.toFixed(2) }}</span>
+            </div>
+            <div class="match-summary-item">
+                <span class="label">Fléchettes</span>
+                <span class="value">{{ winnerStats.dartsThrown }}</span>
+            </div>
+            <div class="match-summary-item">
+                <span class="label">Meilleure volée</span>
+                <span class="value">{{ winnerStats.bestVolley }}</span>
+            </div>
+        </div>
+        <div class="players-ranking" v-if="matchStats.players.length > 0">
+            <div class="players-ranking-title">Classement de la partie</div>
+            <div class="players-ranking-list">
+                <div class="players-ranking-item" :class="{ 'is-winner': player.isWinner }" v-for="(player, index) in matchStats.players" :key="player.playerId">
+                    <span class="position">{{ index + 1 }}</span>
+                    <span class="name">{{ player.displayName }}</span>
+                    <span class="stats">{{ player.averagePerVolley.toFixed(2) }} avg · {{ player.dartsThrown }} darts</span>
+                </div>
             </div>
         </div>
         <div class="btn-replay" @click.prevent="replay">Rejouer</div>
@@ -65,10 +95,11 @@ onMounted(() => {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     width: 100%;
+    min-height: 100%;
     background-color: var(--bg-color-primary);
-    padding-bottom: 3rem;
+    padding-bottom: 2rem;
 
     .animation {
         position: absolute;
@@ -101,6 +132,7 @@ onMounted(() => {
             width: 10rem;
             border-radius: 50%;
             background-color: white;
+            border: 1px solid rgba(0, 0, 0, .25);
         }
 
         .player-info {
@@ -127,6 +159,88 @@ onMounted(() => {
         }
     }
 
+    .match-summary {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: .5rem;
+        width: 100%;
+        max-width: 390px;
+        padding: 0 .5rem;
+
+        &-item {
+            display: flex;
+            flex-direction: column;
+            background-color: var(--bg-color-secondary);
+            border-radius: .5rem;
+            padding: .5rem;
+            border: 1px solid rgba(0, 0, 0, .25);
+
+            .label {
+                font-size: .75rem;
+                color: var(--text-color);
+                opacity: .75;
+            }
+
+            .value {
+                font-family: "Tilt Warp", sans-serif;
+                font-size: .9rem;
+                color: var(--text-color);
+            }
+        }
+    }
+
+    .players-ranking {
+        width: 100%;
+        max-width: 390px;
+        margin-top: .75rem;
+        padding: 0 .5rem;
+
+        &-title {
+            font-family: "Tilt Warp", sans-serif;
+            font-size: .95rem;
+            color: var(--text-color);
+            margin-bottom: .35rem;
+        }
+
+        &-list {
+            display: flex;
+            flex-direction: column;
+            gap: .35rem;
+        }
+
+        &-item {
+            display: grid;
+            grid-template-columns: 28px 1fr auto;
+            align-items: center;
+            gap: .5rem;
+            background-color: var(--bg-color-secondary);
+            border: 1px solid rgba(0, 0, 0, .25);
+            border-radius: .5rem;
+            padding: .45rem .6rem;
+            color: var(--text-color);
+            font-size: .75rem;
+
+            &.is-winner {
+                background-color: var(--active-player);
+            }
+
+            .position {
+                font-family: "Tilt Warp", sans-serif;
+                font-size: .8rem;
+            }
+
+            .name {
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+
+            .stats {
+                font-size: .7rem;
+            }
+        }
+    }
+
     #chart {
         width: 100%;
     }
@@ -135,7 +249,8 @@ onMounted(() => {
         @include btn-primary;
         & {
             width: 80%;
-            margin-top: 1rem;
+            max-width: 390px;
+            margin-top: .75rem;
         }
     }
 }
