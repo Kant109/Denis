@@ -1,5 +1,7 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
+import { buildX01MatchStats } from "@/common/X01StatsUtils";
+import type { X01MatchStats } from "@/interfaces/X01MatchStatsInterface";
 
 export const useX01GameStore = defineStore('X01Game', () => {
     const players = ref([] as Array<X01Player>);
@@ -8,7 +10,8 @@ export const useX01GameStore = defineStore('X01Game', () => {
     const mode = ref('301' as '301' | '501');
     const sets= ref(1);
     const legs = ref(1);
-    const games = ref([] as Array<X01Game>)
+    const games = ref([] as Array<X01Game>);
+    const matchStats = ref(null as X01MatchStats | null);
 
     function setPlayer(player: X01Player) {
         players.value.push(player);
@@ -20,6 +23,16 @@ export const useX01GameStore = defineStore('X01Game', () => {
 
     function setWinner(winner: X01Player) {
         winnerPlayer.value = winner;
+    }
+
+    function computeMatchStats() {
+        matchStats.value = buildX01MatchStats(
+            games.value,
+            mode.value,
+            sets.value,
+            legs.value,
+            winnerPlayer.value,
+        );
     }
 
     function addFinishedGame(finishedPlayers: Array<X01Player>, eventType: X01GameEventType = 'end_leg') {
@@ -49,7 +62,9 @@ export const useX01GameStore = defineStore('X01Game', () => {
         mode.value = '301';
         sets.value = 1;
         legs.value = 1;
+        games.value = [];
+        matchStats.value = null;
     }
 
-    return { players, isGameFinish, winnerPlayer, mode, sets, legs, games, setPlayer, setIsGameFinish, setWinner, addFinishedGame, registerLegEnd, registerMatchEnd, reset };
+    return { players, isGameFinish, winnerPlayer, mode, sets, legs, games, matchStats, setPlayer, setIsGameFinish, setWinner, computeMatchStats, addFinishedGame, registerLegEnd, registerMatchEnd, reset };
 })

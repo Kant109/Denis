@@ -3,6 +3,7 @@ import Header from '@/components/Header.vue';
 import { useX01GameStore } from '@/stores/X01GameStore';
 import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { clearX01LocalStorage } from '@/common/X01PersistenceUtils';
 
 const dartGameStore = useX01GameStore();
 
@@ -13,6 +14,13 @@ const x01Mode = ref(0);
 const router = useRouter();
 
 const selectX01Mode = (selectedX01Mode: number) => {
+    clearX01LocalStorage();
+    dartGameStore.players = [];
+    dartGameStore.games = [];
+    dartGameStore.matchStats = null;
+    dartGameStore.setWinner({} as X01Player);
+    dartGameStore.setIsGameFinish(false);
+
     x01Mode.value = selectedX01Mode;
     dartGameStore.mode = selectedX01Mode.toString() as '301' | '501';
 

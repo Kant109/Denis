@@ -6,6 +6,7 @@ import { useRouter } from 'vue-router';
 import Header from '@/components/Header.vue';
 import { useWebSocket } from '@/composables/useWebSocket'
 import { useX01GameStore } from '@/stores/X01GameStore';
+import { clearX01LocalStorage } from '@/common/X01PersistenceUtils';
 
 const { send, status } = useWebSocket(import.meta.env.VITE_WS_RECAP_URL);
 
@@ -18,8 +19,8 @@ const isLastPlayerActive = ref(false);
 const title = dartGameStore.mode;
 
 const historyEvents = computed(() => {
-    return games.value.map((game, index) => {
-        const winner = game.players.find(player => player.points === 0);
+    return games.value.map((game: X01Game, index: number) => {
+        const winner = game.players.find((player: X01Player) => player.points === 0);
 
         return {
             eventIndex: index + 1,
@@ -39,7 +40,7 @@ const setIsLastPlayerActive = (isCurrentPlayerLast: boolean) => {
 }
 
 const back = () => {
-    localStorage.removeItem('previousDartGame');
+    clearX01LocalStorage();
     dartGameStore.reset();
     router.push({ name: "darts-mode-x01" });
 }
