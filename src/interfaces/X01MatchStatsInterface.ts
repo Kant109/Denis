@@ -72,3 +72,23 @@ export interface X01PlayerMatchStatsAPI {
     legsWon: number,
     setsWon: number
 }
+
+
+export interface X01PlayerStats {
+    playerId: string,
+    pseudo: string,
+    firstname: string,
+    name: string,
+    displayName: string,
+    matchesPlayed: number,
+    wins: number,
+    losses: number,
+    winRate: number,
+    setsWon: number,
+    legsWon: number,
+    dartsThrown: number,
+    volleysPlayed: number,
+    totalPoints: number,
+    averagePerVolley: number,
+    bestVolley: number
+}

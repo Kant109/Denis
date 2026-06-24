@@ -51,11 +51,7 @@ export const useX01GameStore = defineStore('X01Game', () => {
         addFinishedGame(finishedPlayers, 'end_leg');
     }
 
-    function registerMatchEnd(finishedPlayers: Array<X01Player>) {
-        addFinishedGame(finishedPlayers, 'end_match');
-    }
-
-    function reset() {
+    async function reset() {
         players.value = [];
         isGameFinish.value = false;
         winnerPlayer.value = {} as X01Player;
@@ -66,5 +62,5 @@ export const useX01GameStore = defineStore('X01Game', () => {
         matchStats.value = null;
     }
 
-    return { players, isGameFinish, winnerPlayer, mode, sets, legs, games, matchStats, setPlayer, setIsGameFinish, setWinner, computeMatchStats, addFinishedGame, registerLegEnd, registerMatchEnd, reset };
+    return { players, isGameFinish, winnerPlayer, mode, sets, legs, games, matchStats, setPlayer, setIsGameFinish, setWinner, computeMatchStats, addFinishedGame, registerLegEnd, reset };
 })

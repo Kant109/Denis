@@ -91,7 +91,6 @@ const setPointsActivePlayer = async (points: number) => {
                         if(player.sets === dartGameStore.sets) {
                             dartGameStore.setIsGameFinish(true);
                             dartGameStore.setWinner(player);
-                            dartGameStore.registerMatchEnd(players.value);
                             dartGameStore.computeMatchStats();
                         }
                     }

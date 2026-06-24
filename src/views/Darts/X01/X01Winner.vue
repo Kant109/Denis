@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router";
-import { computed } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useX01GameStore } from "@/stores/X01GameStore";
 import { buildX01MatchStats } from "@/common/X01StatsUtils";
 import { clearX01LocalStorage } from "@/common/X01PersistenceUtils";
+import { useX01StatsApi } from "@/composables/useX01StatsApi";
 
 const dartGameStore = useX01GameStore();
 const winnerPlayer = computed(() => dartGameStore.winnerPlayer);
@@ -22,12 +23,36 @@ const winnerStats = computed(() => {
     return matchStats.value.players.find(player => player.isWinner) ?? matchStats.value.players[0];
 });
 
+const { saveMatchStats } = useX01StatsApi();
+const isSavingStats = ref(false);
+const saveStatsError = ref('');
+const persistedMatchId = ref('');
+
 const router = useRouter();
+
+onMounted(async () => {
+    if (!matchStats.value || matchStats.value.players.length <= 0) {
+        return;
+    }
+
+    isSavingStats.value = true;
+    saveStatsError.value = '';
+
+    try {
+        const persisted = await saveMatchStats(matchStats.value);
+        persistedMatchId.value = persisted.matchId;
+        sessionStorage.setItem('x01-last-persisted-match-id', persisted.matchId);
+    } catch (error) {
+        saveStatsError.value = error instanceof Error ? error.message : 'Erreur inconnue lors de la sauvegarde';
+    } finally {
+        isSavingStats.value = false;
+    }
+});
 
 const back = () => {
     clearX01LocalStorage();
     dartGameStore.reset();
-    router.push({ name: "darts-mode-x01"});
+    router.push({ name: "home"});
 }
 
 const replay = () => {
@@ -83,6 +108,11 @@ const replay = () => {
                     <span class="stats">{{ player.averagePerVolley.toFixed(2) }} avg · {{ player.dartsThrown }} darts</span>
                 </div>
             </div>
+        </div>
+        <div class="stats-persist-status" v-if="isSavingStats || persistedMatchId || saveStatsError">
+            <span v-if="isSavingStats">Sauvegarde des stats en cours…</span>
+            <span v-else-if="persistedMatchId">Stats sauvegardées (match {{ persistedMatchId }})</span>
+            <span v-else>{{ saveStatsError }}</span>
         </div>
         <div class="btn-replay" @click.prevent="replay">Rejouer</div>
     </div>
@@ -252,6 +282,17 @@ const replay = () => {
             max-width: 390px;
             margin-top: .75rem;
         }
+    }
+
+    .stats-persist-status {
+        width: 100%;
+        max-width: 390px;
+        margin-top: .75rem;
+        padding: 0 .75rem;
+        color: var(--text-color);
+        font-size: .75rem;
+        text-align: center;
+        opacity: .85;
     }
 }
 </style>
