@@ -20,6 +20,12 @@ function getThrownDartsCount(volleys: Array<Array<string>>): number {
     }, 0);
 }
 
+function getNumberVolley(volleys: Array<Array<string>>): number {
+    return volleys.reduce((accumulator, volley) => {
+        return accumulator + (volley[0] !== '' ? 1 : 0);
+    }, 0);
+}
+
 export function buildX01MatchStats(
     games: Array<X01Game>,
     mode: '301' | '501',
@@ -89,7 +95,7 @@ export function buildX01MatchStats(
 
             currentStats.totalPoints += playerTotalPoints;
             currentStats.dartsThrown += getThrownDartsCount(player.volleys);
-            currentStats.volleysPlayed += player.volleys.length;
+            currentStats.volleysPlayed += getNumberVolley(player.volleys);
             currentStats.bestVolley = Math.max(currentStats.bestVolley, playerBestVolley);
         });
     });

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import Header from '@/components/Header.vue';
-import { usePlayerStore } from '@/stores/PlayerStore';
 import { onMounted, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import draggable from 'vuedraggable';
@@ -8,64 +7,59 @@ import SearchPlayerModal from '@/components/modal/SearchPlayerModal.vue';
 
 const router = useRouter();
 
-const playersStore = usePlayerStore();
-
-const allPlayers = ref([] as Array<Player>);
 const selectedPlayers = ref([] as Array<Player>);
 const deletedPlayers = ref([] as Array<Player>);
 const openSearchPlayer = ref(false);
 const modalTitle = ref("Sélectionner des joueurs");
-const creatingPlayer = ref(false);
 const messageErrorNbPlayer = ref(false);
-
-let drag = ref(false);
+const drag = ref(false);
 const loader = ref(true);
 
+const STORAGE_KEY = 'orderedDartsPlayer';
 
-onMounted(async () => {
-    if((localStorage.getItem('orderedDartsPlayer') as string) !== null) {
-        const playersFromLocalStorage = JSON.parse(localStorage.getItem('orderedDartsPlayer') as string) as Array<Player>;
-        selectedPlayers.value.push(...playersFromLocalStorage);
+onMounted(() => {
+    // Restaure l'ordre des joueurs d'une précédente session, le cas échéant.
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved !== null) {
+        selectedPlayers.value.push(...(JSON.parse(saved) as Array<Player>));
     }
-    if(selectedPlayers.value.length < 1) {
+
+    // Aucun joueur restauré : on ouvre directement la recherche.
+    if (selectedPlayers.value.length < 1) {
         openSearchPlayer.value = true;
     }
-
-    allPlayers.value = playersStore.players;
 
     setTimeout(() => {
         loader.value = false;
     }, 1000);
-})
+});
 
-const addNewPlayer = async () => {
+const addNewPlayer = () => {
     openSearchPlayer.value = true;
     messageErrorNbPlayer.value = false;
-}
+};
 
 const selectPlayer = (player: Player) => {
     selectedPlayers.value.push(player);
-}
+};
 
 const startGame = () => {
-    if(selectedPlayers.value.length > 1) {
-        router.push({ name: "darts-mode"});
-        localStorage.setItem('orderedDartsPlayer', JSON.stringify([].slice.call(selectedPlayers.value)));
+    if (selectedPlayers.value.length > 1) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify([...selectedPlayers.value]));
+        router.push({ name: "darts-mode" });
     } else {
         messageErrorNbPlayer.value = true;
     }
-}
+};
 
 const back = () => {
     router.push({ name: "home" });
-}
+};
 
-watch(
-    () => deletedPlayers.value,
-    () => {
-        deletedPlayers.value.pop();
-    }
-)
+// La zone de suppression ne sert qu'à retirer un joueur : on vide ce qui y est déposé.
+watch(deletedPlayers, () => {
+    deletedPlayers.value.pop();
+});
 </script>
 
 <template>
@@ -88,7 +82,7 @@ watch(
                         <i class="player-order">{{ selectedPlayers.indexOf(player) + 1  }}</i>
                         <div class="player-content" @dragstart.prevent>
                             <img class="player-img" :src="'https://api.dicebear.com/9.x/adventurer/svg?seed=' + player.firstname + player.pseudo + player.name" alt="Avatar" />
-                            <div class="player-name">{{ player.pseudo.length > 5 ? player.pseudo.substring(0,5) + ".." : player.pseudo}}</div>
+                            <div class="player-name">{{ player.firstname }} {{ player.name }}</div>
                         </div>
                     </div>
                 </template>
@@ -201,6 +195,7 @@ watch(
                         font-family: "Tilt Warp", sans-serif;
                         font-size: 1rem;
                         color: var(--text-color);
+                        text-align: center;
                     }
                 }
                 .player-order {

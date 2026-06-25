@@ -94,6 +94,15 @@ const openModal = (isSelectingWinner: boolean, scorePlayer: number) => {
         modalTitle.value = 'Sélectionner le perdant';
     }
 }
+
+/** Stats Babykon d'un joueur après la partie. */
+const statFor = (playerId: number) => stats.value.find(p => p.idPlayer === playerId);
+
+/** Nombre de défaites = parties jouées - victoires. */
+const defeatsFor = (playerId: number) => {
+    const stat = statFor(playerId);
+    return stat ? stat.nbGame - stat.nbVictory : 0;
+}
 </script>
 
 <template>
@@ -135,13 +144,11 @@ const openModal = (isSelectingWinner: boolean, scorePlayer: number) => {
                 </div>
                 <div class="player-stat">
                     <img src="@/assets/images/star.svg" alt="Elo">
-                    <div class="text">{{stats.find(p => p.idPlayer === winner.id)?.elo.toFixed(0)}}</div>
+                    <div class="text">{{ statFor(winner.id)?.elo.toFixed(0) }}</div>
                     <img src="@/assets/images/cup.svg" alt="Nombre de victoire">
-                    <div class="text">{{stats.find(p => p.idPlayer === winner.id)?.nbVictory}}</div>
+                    <div class="text">{{ statFor(winner.id)?.nbVictory }}</div>
                     <img src="@/assets/images/shield-bad.svg" alt="Nombre de défaite">
-                    <div class="text">{{stats.find(p => p.idPlayer === winner.id)?.nbGame! - stats.find(p =>
-                        p.idPlayer
-                        === winner.id)?.nbVictory!}}</div>
+                    <div class="text">{{ defeatsFor(winner.id) }}</div>
                 </div>
             </div>
             <div class="d-flex align-items-center" style="gap:1rem;">
@@ -158,13 +165,11 @@ const openModal = (isSelectingWinner: boolean, scorePlayer: number) => {
                 </div>
                 <div class="player-stat">
                     <img src="@/assets/images/star.svg" alt="Elo">
-                    <div class="text">{{stats.find(p => p.idPlayer === loser.id)?.elo.toFixed(0)}}</div>
+                    <div class="text">{{ statFor(loser.id)?.elo.toFixed(0) }}</div>
                     <img src="@/assets/images/cup.svg" alt="Nombre de victoire">
-                    <div class="text">{{stats.find(p => p.idPlayer === loser.id)?.nbVictory}}</div>
+                    <div class="text">{{ statFor(loser.id)?.nbVictory }}</div>
                     <img src="@/assets/images/shield-bad.svg" alt="Nombre de défaite">
-                    <div class="text">{{stats.find(p => p.idPlayer === loser.id)?.nbGame! - stats.find(p =>
-                        p.idPlayer
-                        === loser.id)?.nbVictory!}}</div>
+                    <div class="text">{{ defeatsFor(loser.id) }}</div>
                 </div>
             </div>
         </div>

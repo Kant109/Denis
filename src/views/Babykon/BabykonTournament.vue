@@ -44,32 +44,21 @@ const isWinner = (match: BabykonMatch, player: BabykonPlayer) => {
     match.winnerId = match.winnerId === player.id ? null : player.id;
 }
 
-const isResultsOk = async (): Promise<boolean> => {
-    let isOk = true;
-    matchs.value.forEach(match => {
-        if (match.winnerId === null) {
-            isOk = false;
-        }
-    });
-    return isOk;
-}
+/** Tous les matchs ont un gagnant désigné. */
+const isResultsOk = () => matchs.value.every(match => match.winnerId !== null);
 
 const getRanking = async () => {
     matchs.value.forEach(match => {
-        players.value.forEach(player => {
-            if(match.winnerId === player.id) {
-                player.nbWins += 1;
-            }
-        })
-        players.value[players.value.indexOf(match.player1)].score += match.scoreP1;
-        players.value[players.value.indexOf(match.player2)].score += match.scoreP2;
-    })
-    players.value.sort((a, b) => {
-        if (b.nbWins === a.nbWins) {
-            return b.score - a.score;
-        }
-        return b.nbWins - a.nbWins;
+        const winner = players.value.find(player => match.winnerId === player.id);
+        if (winner) winner.nbWins += 1;
+
+        match.player1.score += match.scoreP1;
+        match.player2.score += match.scoreP2;
     });
+
+    players.value.sort((a, b) =>
+        b.nbWins === a.nbWins ? b.score - a.score : b.nbWins - a.nbWins
+    );
     babykonStore.players = players.value;
 }
 
@@ -84,27 +73,23 @@ const sendResults = async () => {
         nbGames: matchs.value.length
     }
 
-    const maPromesse = new Promise(async (resolve, reject) => {
-        const response = await fetch(import.meta.env.VITE_BE_URL + "/babykon/tournament", {
-            method: "POST",
-            body: JSON.stringify(data),
-            headers: {
-                "Content-Type": "application/json"
-            }
-        });
-        resolve(response.json());
+    // Envoi non bloquant : les elos sont mis à jour quand la réponse arrive.
+    fetch(import.meta.env.VITE_BE_URL + "/babykon/tournament", {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: { "Content-Type": "application/json" }
     })
-    maPromesse.then((data: any) => {
-        players.value.forEach(player => {
-            data.forEach((results: { idPlayer: number; elo: number | undefined; }) => {
-                results.idPlayer === player.id ? player.elo = results.elo : null;
+        .then(response => response.json())
+        .then((results: Array<{ idPlayer: number; elo: number | undefined }>) => {
+            players.value.forEach(player => {
+                const playerResult = results.find(r => r.idPlayer === player.id);
+                if (playerResult) player.elo = playerResult.elo;
             });
         });
-    });
 }
 
 const getResults = async () => {
-    if(await isResultsOk()) {
+    if (isResultsOk()) {
         openDialogModal.value = true;
     } else {
         alert('Veuillez sélectionner un gagnant pour chaque match.');

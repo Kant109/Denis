@@ -35,7 +35,7 @@ watch(
     <div class="full-content" :class="{'top-bg': props.isTopBgActive, 'top-bg-active': props.isTopBgPlayerActive && props.isTopBgActive}">
         <div class="player-content" :class="{'isPlayerActive': player.isActive }">
             <div class="top-infos">
-                <div class="player-name">{{ player.pseudo }}</div>
+                <div class="player-name">{{ player.firstname }} "{{ player.pseudo }}" {{ player.name }}</div>
                 <div class="recap">
                     <div class="current-points">
                         <div class="points" v-if="player.volleys.length > 0 && player.volleys[player.volleys.length - 1][0].includes('O')"><s>{{ player.volleys[player.volleys.length - 1][0].substring(1) }}</s></div>
@@ -90,27 +90,26 @@ watch(
     }
 
     .top-infos {
-        display: grid;
-        grid-template-columns: repeat(5, 1fr);
-        grid-template-rows: 1fr;
-        grid-column-gap: 0px;
-        grid-row-gap: 0px;
-        height: 60px;
-        padding: 0 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: .5rem;
+        align-items: center;
+        padding: 1rem;
 
         .player-name, .points-taken {
             display: flex;
             align-items: center;
             font-family: "Tilt Warp", sans-serif;
-            font-size: 1rem;
             color: var(--text-color);
-
+            
             &:is(.player-name) {
+                font-size: 1rem;
                 min-width: 55px;
                 grid-area: 1 / 1 / 2 / 2;
             }
-
+            
             &:is(.points-taken) {
+                font-size: 2rem;
                 justify-content: flex-end;
                 grid-area: 1 / 5 / 2 / 6;
             }

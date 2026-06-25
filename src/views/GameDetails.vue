@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import Header from '@/components/Header.vue';
 import { useX01StatsApi, type X01PersistedMatchResponse } from '@/composables/useX01StatsApi';
+import type { X01PlayerMatchStats } from '@/interfaces/X01MatchStatsInterface';
 import { computed, onMounted, ref } from 'vue';
 
 const goBack = () => {
@@ -28,6 +29,17 @@ const selectedMatch = computed(() => {
     return allMatchStats.value.find((match) => match.matchId === selectedMatchId.value) ?? null;
 });
 
+/** Construit la liste libellé/valeur des stats d'un joueur (affichée dans le détail). */
+const getPlayerStats = (player: X01PlayerMatchStats) => [
+    { label: 'Sets gagnés', value: player.setsWon },
+    { label: 'Legs gagnés', value: player.legsWon },
+    { label: 'Moyenne / volée', value: Number(player.averagePerVolley).toFixed(2) },
+    { label: 'Best volley', value: player.bestVolley },
+    { label: 'Fléchettes', value: player.dartsThrown },
+    { label: 'Volées', value: player.volleysPlayed },
+    { label: 'Total points', value: player.totalPoints },
+];
+
 const openMatchDetail = (matchId: string) => {
     selectedMatchId.value = matchId;
     isDetailOpen.value = true;
@@ -46,8 +58,7 @@ onMounted(async () => {
     error.value = '';
 
     try {
-        const allMatchStatsData = await getAllMatchStats();
-        allMatchStats.value = allMatchStatsData;
+        allMatchStats.value = await getAllMatchStats();
     } catch (e) {
         console.error('Error fetching all match stats:', e);
         error.value = e instanceof Error ? e.message : 'Erreur inconnue lors du chargement des parties';
@@ -136,33 +147,9 @@ onMounted(async () => {
                                             <span class="winner-badge" v-if="player.isWinner">Winner</span>
                                         </div>
                                         <div class="player-stats">
-                                            <div class="stat">
-                                                <span class="stat-label">Sets gagnés</span>
-                                                <span class="stat-value">{{ player.setsWon }}</span>
-                                            </div>
-                                            <div class="stat">
-                                                <span class="stat-label">Legs gagnés</span>
-                                                <span class="stat-value">{{ player.legsWon }}</span>
-                                            </div>
-                                            <div class="stat">
-                                                <span class="stat-label">Moyenne / volée</span>
-                                                <span class="stat-value">{{ Number(player.averagePerVolley).toFixed(2) }}</span>
-                                            </div>
-                                            <div class="stat">
-                                                <span class="stat-label">Best volley</span>
-                                                <span class="stat-value">{{ player.bestVolley }}</span>
-                                            </div>
-                                            <div class="stat">
-                                                <span class="stat-label">Fléchettes</span>
-                                                <span class="stat-value">{{ player.dartsThrown }}</span>
-                                            </div>
-                                            <div class="stat">
-                                                <span class="stat-label">Volées</span>
-                                                <span class="stat-value">{{ player.volleysPlayed }}</span>
-                                            </div>
-                                            <div class="stat">
-                                                <span class="stat-label">Total points</span>
-                                                <span class="stat-value">{{ player.totalPoints }}</span>
+                                            <div class="stat" v-for="stat in getPlayerStats(player)" :key="stat.label">
+                                                <span class="stat-label">{{ stat.label }}</span>
+                                                <span class="stat-value">{{ stat.value }}</span>
                                             </div>
                                         </div>
                                     </div>

@@ -43,6 +43,26 @@ const availablePlayers = computed(() => {
 
 const selectedPlayer = computed(() => availablePlayers.value.find((player) => player.id === selectedPlayerId.value) ?? null);
 
+/** Liste des cartes de statistiques affichées (libellé / valeur / mise en avant). */
+const summaryItems = computed(() => {
+    const s = stats.value;
+    if (!s) return [];
+
+    return [
+        { label: 'Nombre de parties', value: s.matchesPlayed, highlight: true },
+        { label: 'Moyenne / volée', value: Number(s.averagePerVolley).toFixed(2), highlight: true },
+        { label: 'Victoires', value: s.wins, highlight: false },
+        { label: 'Défaites', value: s.losses, highlight: false },
+        { label: 'Winrate', value: `${Number(s.winRate).toFixed(2)}%`, highlight: false },
+        { label: 'Sets gagnés', value: s.setsWon, highlight: false },
+        { label: 'Legs gagnés', value: s.legsWon, highlight: false },
+        { label: 'Fléchettes lancées', value: s.dartsThrown, highlight: false },
+        { label: 'Volées jouées', value: s.volleysPlayed, highlight: false },
+        { label: 'Points marqués', value: s.totalPoints, highlight: false },
+        { label: 'Meilleure volée', value: s.bestVolley, highlight: false },
+    ];
+});
+
 const loadPlayerStats = async (playerId: number) => {
     isLoading.value = true;
     error.value = '';
@@ -125,49 +145,14 @@ watch(selectedPlayerId, async (newPlayerId) => {
                     </div>
 
                     <div class="match-summary">
-                        <div class="match-summary-item highlight">
-                            <span class="label">Nombre de parties</span>
-                            <span class="value">{{ stats.matchesPlayed }}</span>
-                        </div>
-                        <div class="match-summary-item highlight">
-                            <span class="label">Moyenne / volée</span>
-                            <span class="value">{{ Number(stats.averagePerVolley).toFixed(2) }}</span>
-                        </div>
-                        <div class="match-summary-item">
-                            <span class="label">Victoires</span>
-                            <span class="value">{{ stats.wins }}</span>
-                        </div>
-                        <div class="match-summary-item">
-                            <span class="label">Défaites</span>
-                            <span class="value">{{ stats.losses }}</span>
-                        </div>
-                        <div class="match-summary-item">
-                            <span class="label">Winrate</span>
-                            <span class="value">{{ Number(stats.winRate).toFixed(2) }}%</span>
-                        </div>
-                        <div class="match-summary-item">
-                            <span class="label">Sets gagnés</span>
-                            <span class="value">{{ stats.setsWon }}</span>
-                        </div>
-                        <div class="match-summary-item">
-                            <span class="label">Legs gagnés</span>
-                            <span class="value">{{ stats.legsWon }}</span>
-                        </div>
-                        <div class="match-summary-item">
-                            <span class="label">Fléchettes lancées</span>
-                            <span class="value">{{ stats.dartsThrown }}</span>
-                        </div>
-                        <div class="match-summary-item">
-                            <span class="label">Volées jouées</span>
-                            <span class="value">{{ stats.volleysPlayed }}</span>
-                        </div>
-                        <div class="match-summary-item">
-                            <span class="label">Points marqués</span>
-                            <span class="value">{{ stats.totalPoints }}</span>
-                        </div>
-                        <div class="match-summary-item">
-                            <span class="label">Meilleure volée</span>
-                            <span class="value">{{ stats.bestVolley }}</span>
+                        <div
+                            class="match-summary-item"
+                            :class="{ highlight: item.highlight }"
+                            v-for="item in summaryItems"
+                            :key="item.label"
+                        >
+                            <span class="label">{{ item.label }}</span>
+                            <span class="value">{{ item.value }}</span>
                         </div>
                     </div>
                 </div>

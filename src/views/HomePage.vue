@@ -17,41 +17,19 @@ const launchAnimation = (img: string) => {
     }, 200);
 }
 
-const getRanking = () => {
-    launchAnimation('trophy_3d');
+/** Lance l'animation d'icône puis navigue vers la route après la transition. */
+const navigateTo = (img: string, routeName: string) => {
+    launchAnimation(img);
     setTimeout(() => {
-        router.push({ name: "ranking"});
+        router.push({ name: routeName });
     }, 1100);
 }
 
-const getDart = () => {
-    launchAnimation('dart');
-    setTimeout(() => {
-        router.push({ name: "darts-player"});
-    }, 1100);
-}
-
-
-const getBabykon = () => {
-    launchAnimation('babyfoot');
-    setTimeout(() => {
-        router.push({ name: "babykon-mode"});
-    }, 1100);
-}
-
-const getStats = () => {
-    launchAnimation('trophy_3d');
-    setTimeout(() => {
-        router.push({ name: "stats"});
-    }, 1100);
-}
-
-const getGameDetails = () => {
-    launchAnimation('crossed_swords_3d');
-    setTimeout(() => {
-        router.push({ name: "game-details"});
-    }, 1100);
-}
+const getRanking = () => navigateTo('trophy_3d', 'ranking');
+const getDart = () => navigateTo('dart', 'darts-player');
+const getBabykon = () => navigateTo('babyfoot', 'babykon-mode');
+const getStats = () => navigateTo('trophy_3d', 'stats');
+const getGameDetails = () => navigateTo('crossed_swords_3d', 'game-details');
 
 </script>
 
