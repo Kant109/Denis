@@ -1,15 +1,11 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router";
 import { useCricketGameStore } from "@/stores/CricketGameStore";
-import { computed, onBeforeMount, ref } from "vue";
-import { register } from 'swiper/element/bundle';
-import { useManagementAppStore } from "@/stores/ManagementAppStore";
+import { computed, ref } from "vue";
 
 const gameStore = useCricketGameStore();
-const managementAppStore = useManagementAppStore();
 
 const players = computed(() => gameStore.players);
-const chartDataLoaded = ref(false);
 
 const router = useRouter();
 
@@ -22,96 +18,6 @@ const backHome = () => {
     gameStore.reset();
     router.push({ name: "home"});
 }
-
-onBeforeMount(async () => {
-    register();
-    try {
-        const response = await fetch(import.meta.env.VITE_BE_URL + "/dart/stat/game/" + gameStore.gameId + "/detail?typeGame=DACKT");
-        if (!response.ok) {
-            throw new Error(`Response status: ${response.status}`);
-        }
-        const cricketGameStats = await response.json();
-
-        players.value.forEach(player => {
-            let evolutionScore = cricketGameStats.evolutionScore[player.id];
-            evolutionScore.push(player.points.total);
-
-            player.chartData = {
-                title: {
-                    text: 'Évolution de votre position et score',
-                    align: 'center'
-                },
-                yAxis: [
-                    {
-                        allowDecimals: false,
-                        labels: {
-                            format: '{value}',
-                            style: {
-                                color: "#0000FF"
-                            }
-                        },
-                        title: {
-                            text: 'Score',
-                            style: {
-                                color: "#0000FF"
-                            }
-                        },
-                        opposite: true,
-                        min: 0
-                    },
-                    {
-                        allowDecimals: false,
-                        labels: {
-                            format: '{value}',
-                            style: {
-                                color: "#FF0000"
-                            }
-                        },
-                        title: {
-                            text: 'Position',
-                            style: {
-                                color: "#FF0000"
-                            }
-                        },
-                        min: 0
-                    }
-                ],
-                series: [
-                    {
-                        name: "Position",
-                        yAxis: 1,
-                        data: cricketGameStats.evolutionPosition[player.id],
-                        color: "#FF0000",
-                    },
-                    {
-                        name: "Score",
-                        data: evolutionScore,
-                        color: "#0000FF",
-                        zoneAxis: 'x',
-                        zones: [{
-                            value: cricketGameStats.evolutionPosition[player.id].length - 1
-                        }, {
-                            dashStyle: 'dot'
-                        }]
-                    }
-                ]
-            }
-        });
-
-        (cricketGameStats.players as Array<PlayerStats>).forEach(playerGameStat => {
-            players.value.forEach(player => {
-                if(player.id === playerGameStat.idPlayer) {
-                    player.elo = playerGameStat.eloScore;
-                }
-            })
-        })
-
-        chartDataLoaded.value = true;
-    } catch (error: any) {
-        console.error(error.message);
-    }
-    managementAppStore.computeData = false;
-})
 
 </script>
 
@@ -133,10 +39,6 @@ onBeforeMount(async () => {
                     </div>
                     <div class="game-stats">
                         <div class="player-position">Position : {{ players.indexOf(player) + 1 }} <sup v-if="players.indexOf(player) === 0">er</sup><sup v-else>ème</sup>/ {{ players.length }}</div>
-                        <div class="player-elo">Classement Elo : {{ player.elo !== undefined ? Math.round(player.elo[0]) : "" }}&nbsp;<img v-if="((player.elo !== undefined) && (player.elo.length > 1)) && player.elo[1] < player.elo[0]" src="@/assets/images/chevron-up.svg" alt=""><img v-if="((player.elo !== undefined) && (player.elo.length > 1)) && player.elo[1] > player.elo[0]" src="@/assets/images/chevron-down.svg" alt="">&nbsp;{{ ((player.elo !== undefined) && (player.elo.length > 1)) ? " ("  + (player.elo[0] - player.elo[1] < 0 ? player.elo[0] - player.elo[1] : `+${ player.elo[0] - player.elo[1] }`) + ")" : "" }}</div>
-                    </div>
-                    <div class="stats-container" v-if="chartDataLoaded">
-                        <highcharts :options="player.chartData"></highcharts>
                     </div>
                     <div class="btn-replay" @click.prevent="replay">Rejouer</div>
                 </div>

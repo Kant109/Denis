@@ -204,7 +204,6 @@ const finishVolley = async (player: CricketPlayer) => {
 
     if (isLastPlayer) {
         await getPlayersPosition();
-        sendRound(buildPerformances());
     }
 
     passTurnToNext(player);
@@ -223,49 +222,6 @@ const buildPerformances = (): DartPerformance[] =>
             numberRound: numberRound.value,
         };
     });
-
-/* -------------------------------------------------------------------------- */
-/* Appels serveur                                                              */
-/* -------------------------------------------------------------------------- */
-
-const sendRound = async (performances: DartPerformance[]) => {
-    const data: DartRound = {
-        idGame: gameStore.gameId,
-        numberRound: numberRound.value,
-        performances,
-    };
-
-    const response = await fetch(import.meta.env.VITE_BE_URL + "/dart/game/round", {
-        method: "POST",
-        body: JSON.stringify(data),
-        headers: { "Content-Type": "application/json" },
-    });
-    const result = await response.json();
-    emit("comment", result.comment);
-};
-
-const endGame = async () => {
-    await getPlayersPosition();
-
-    const data: DartRound = {
-        idGame: gameStore.gameId,
-        numberRound: numberRound.value,
-        performances: buildPerformances(),
-    };
-
-    try {
-        const response = await fetch(import.meta.env.VITE_BE_URL + "/dart/game/end", {
-            method: "POST",
-            body: JSON.stringify(data),
-            headers: { "Content-Type": "application/json" },
-        });
-        if (!response.ok) {
-            throw new Error(`Response status: ${response.status}`);
-        }
-    } catch (error) {
-        console.error(error);
-    }
-};
 
 /* -------------------------------------------------------------------------- */
 /* Annulation (bouton RETOUR)                                                  */
@@ -336,7 +292,6 @@ const confirmEndGame = async (confirm: boolean) => {
     if (confirm) {
         managementAppStore.computeData = true;
         setTimeout(async () => {
-            await endGame();
             gameStore.isGameFinish = true;
             gameStore.players = await getPlayersPosition();
         }, 2500);
