@@ -12,9 +12,13 @@ interface CheckoutEntry {
 
 type CheckoutData = Record<string, CheckoutEntry>;
 
-export function getCheckouts(number: number): Array<Array<string>> {
+export function getCheckouts(number: number): Array<Array<string>> | null {
 
   const checkouts = checkoutsJSON as CheckoutData;
+
+  if (!checkouts[number]) {
+    return null;
+  }
 
   return checkouts[number].combinations.slice(0, 5).map(combination => combination.combo);
 }

@@ -105,7 +105,7 @@ const replay = () => {
                 <div class="players-ranking-item" :class="{ 'is-winner': player.isWinner }" v-for="(player, index) in matchStats.players" :key="player.playerId">
                     <span class="position">{{ index + 1 }}</span>
                     <span class="name">{{ player.displayName }}</span>
-                    <span class="stats">{{ player.averagePerVolley.toFixed(2) }} avg · {{ player.dartsThrown }} darts</span>
+                    <span class="stats">{{ player.averagePerVolley.toFixed(2) }} avg · {{ player.dartsThrown }} <img src="/public/icons/darts.svg" alt=""></span>
                 </div>
             </div>
         </div>
@@ -267,6 +267,12 @@ const replay = () => {
 
             .stats {
                 font-size: .7rem;
+
+                img {
+                    width: 1rem;
+                    height: 1rem;
+                    margin-left: .25rem;
+                }
             }
         }
     }

@@ -14,7 +14,7 @@ const players = computed(() => dartGameStore.players);
 const isGameFinish = computed(() => dartGameStore.isGameFinish);
 const isLastPlayerActive = ref(false);
 
-const { messages, status } = useWebSocket(import.meta.env.VITE_WS_RECAP_URL)
+const { messages } = useWebSocket(import.meta.env.VITE_WS_RECAP_URL)
 
 const setIsLastPlayerActive = (isCurrentPlayerLast: boolean) => {
     isLastPlayerActive.value = isCurrentPlayerLast;
