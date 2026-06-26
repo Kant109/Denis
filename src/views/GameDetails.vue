@@ -91,9 +91,13 @@ onMounted(async () => {
                             :key="match.matchId"
                             @click="openMatchDetail(match.matchId)"
                         >
-                            <span class="match-title">Match {{ match.matchId }}</span>
-                            <span>X{{ match.stats.mode }} · {{ match.stats.players.length }} joueur(s)</span>
-                            <span>{{ match.stats.setsTarget }} set(s) / {{ match.stats.legsTarget }} leg(s)</span>
+                            <div class="header">
+                                <span class="match-title">X{{ match.stats.mode }}</span>
+                                <span>{{ match.stats.setsTarget }} set(s) / {{ match.stats.legsTarget }} leg(s)</span>
+                            </div>
+                            <div class="names">
+                                <span class="name" v-for="player in match.stats.players" :key="player.pseudo">{{ player.firstname }} "{{ player.pseudo }}" {{ player.name }}</span>
+                            </div>
                         </div>
                     </div>
 
@@ -119,7 +123,7 @@ onMounted(async () => {
                 <dialog class="dialog" :open="isDetailOpen" v-if="isDetailOpen && selectedMatch">
                     <div class="dialog-content">
                         <div class="dialog-header dialog-header--sticky">
-                            <h3 class="dialog-title">Match {{ selectedMatch.matchId }}</h3>
+                            <h3 class="dialog-title">Statistiques du match</h3>
                             <span class="dialog-close" @click.prevent="closeMatchDetail">x</span>
                         </div>
                         <div class="dialog-body">
@@ -164,7 +168,6 @@ onMounted(async () => {
 </template>
 
 <style lang="scss" scoped>
-@import "@/assets/helpers/dialog.scss";
 
 .game-details-container {
     display: flex;
@@ -243,7 +246,7 @@ onMounted(async () => {
         .match-card {
             display: flex;
             flex-direction: column;
-            gap: .2rem;
+            gap: .5rem;
             background-color: var(--bg-color-secondary);
             border: 1px solid rgba(0, 0, 0, .25);
             border-radius: .5rem;
@@ -258,128 +261,206 @@ onMounted(async () => {
                 border-color: var(--active-player);
             }
 
-            .match-title {
-                font-family: "Tilt Warp", sans-serif;
-                font-size: .86rem;
-            }
-        }
-
-        .dialog-body {
-            display: flex;
-            flex-direction: column;
-            gap: 1.25rem;
-            padding: 1rem;
-        }
-
-        .summary-grid {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: .6rem;
-
-            .summary-item {
-                display: flex;
-                flex-direction: column;
-                gap: .25rem;
-                background-color: var(--bg-color-secondary);
-                border: 1px solid rgba(0, 0, 0, .15);
-                border-radius: .6rem;
-                padding: .7rem .8rem;
-                min-width: 0;
-
-                .label {
-                    font-size: .72rem;
-                    text-transform: uppercase;
-                    letter-spacing: .03em;
-                    opacity: .65;
-                }
-
-                .value {
-                    font-family: "Tilt Warp", sans-serif;
-                    font-size: 1.05rem;
-                    word-break: break-word;
-                }
-            }
-        }
-
-        .players-section {
-            display: flex;
-            flex-direction: column;
-            gap: .6rem;
-
-            h3 {
-                margin: 0;
-                font-family: "Tilt Warp", sans-serif;
-                font-size: 1rem;
-            }
-        }
-
-        .players-list {
-            display: flex;
-            flex-direction: column;
-            gap: .7rem;
-        }
-
-        .player-card {
-            display: flex;
-            flex-direction: column;
-            gap: .65rem;
-            background-color: var(--bg-color-secondary);
-            border: 1px solid rgba(0, 0, 0, .15);
-            border-radius: .6rem;
-            padding: .85rem;
-            width: 100%;
-            min-width: 0;
-            word-break: break-word;
-
-            &.winner {
-                border-color: var(--active-player);
-                border-width: 2px;
-            }
-
-            .player-header {
+            .header {
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
-                gap: .5rem;
-                flex-wrap: wrap;
-                padding-bottom: .55rem;
-                border-bottom: 1px solid rgba(0, 0, 0, .12);
+
+                .match-title {
+                    font-family: "Tilt Warp", sans-serif;
+                    font-size: 1.25rem;
+                }
             }
 
-            .player-name {
-                font-family: "Tilt Warp", sans-serif;
-                font-size: 1.05rem;
+            .names {
+                display: flex;
+                flex-direction: column;
+                gap: .2rem;
+                
+                .name {
+                    color: rgba(0, 0, 0, .5);
+                }
+            }
+        }
+
+        dialog {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, .5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+
+            &::backdrop {
+                background-color: rgba(0, 0, 0, .5);
             }
 
-            .winner-badge {
-                font-size: .7rem;
-                padding: .15rem .45rem;
-                border-radius: .35rem;
-                border: 1px solid rgba(0, 0, 0, .2);
-                background-color: var(--active-player);
-            }
+            .dialog-content {
+                background-color: var(--bg-color-primary);
+                border-radius: .6rem;
+                width: 90%;
+                max-width: 600px;
+                max-height: 90%;
+                overflow-y: auto;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, .3);
+                display: flex;
+                flex-direction: column;
 
-            .player-stats {
-                display: grid;
-                grid-template-columns: repeat(2, minmax(0, 1fr));
-                gap: .4rem .9rem;
-
-                .stat {
+                .dialog-header {
                     display: flex;
-                    align-items: baseline;
+                    align-items: center;
                     justify-content: space-between;
-                    gap: .5rem;
-                    min-width: 0;
+                    padding: 1rem;
+                    border-bottom: 1px solid rgba(0, 0, 0, .15);
 
-                    .stat-label {
-                        font-size: .78rem;
-                        opacity: .7;
+                    &.dialog-header--sticky {
+                        position: sticky;
+                        top: 0;
+                        background-color: var(--bg-color-primary);
+                        z-index: 10;
                     }
 
-                    .stat-value {
+                    .dialog-title {
+                        margin: 0;
                         font-family: "Tilt Warp", sans-serif;
-                        font-size: .95rem;
-                        white-space: nowrap;
+                        font-size: 1.2rem;
+                    }
+
+                    .dialog-close {
+                        cursor: pointer;
+                        font-size: 1.2rem;
+                        line-height: 1;
+                        padding: .2rem .5rem;
+                        border-radius: .3rem;
+
+                        &:hover {
+                            background-color: rgba(0, 0, 0, .1);
+                        }
+                    }
+                }
+
+                .dialog-body {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 1.25rem;
+                    padding: 1rem;
+
+                    .summary-grid {
+                        display: grid;
+                        grid-template-columns: repeat(2, minmax(0, 1fr));
+                        gap: .6rem;
+            
+                        .summary-item {
+                            display: flex;
+                            flex-direction: column;
+                            gap: .25rem;
+                            background-color: var(--bg-color-secondary);
+                            border: 1px solid rgba(0, 0, 0, .15);
+                            border-radius: .6rem;
+                            padding: .7rem .8rem;
+                            min-width: 0;
+            
+                            .label {
+                                font-size: .72rem;
+                                text-transform: uppercase;
+                                letter-spacing: .03em;
+                                opacity: .65;
+                            }
+            
+                            .value {
+                                font-family: "Tilt Warp", sans-serif;
+                                font-size: 1.05rem;
+                                word-break: break-word;
+                            }
+                        }
+                    }
+
+                    .players-section {
+                        display: flex;
+                        flex-direction: column;
+                        gap: .6rem;
+            
+                        h3 {
+                            margin: 0;
+                            font-family: "Tilt Warp", sans-serif;
+                            font-size: 1rem;
+                        }
+            
+                        .players-list {
+                            display: flex;
+                            flex-direction: column;
+                            gap: .7rem;
+            
+                            .player-card {
+                                display: flex;
+                                flex-direction: column;
+                                gap: .65rem;
+                                background-color: var(--bg-color-secondary);
+                                border: 1px solid rgba(0, 0, 0, .15);
+                                border-radius: .6rem;
+                                padding: .85rem;
+                                width: 100%;
+                                min-width: 0;
+                                word-break: break-word;
+                    
+                                &.winner {
+                                    border-color: var(--active-player);
+                                    border-width: 2px;
+                                }
+                    
+                                .player-header {
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: space-between;
+                                    gap: .5rem;
+                                    flex-wrap: wrap;
+                                    padding-bottom: .55rem;
+                                    border-bottom: 1px solid rgba(0, 0, 0, .12);
+                                }
+                    
+                                .player-name {
+                                    font-family: "Tilt Warp", sans-serif;
+                                    font-size: 1.05rem;
+                                }
+                    
+                                .winner-badge {
+                                    font-size: .7rem;
+                                    padding: .15rem .45rem;
+                                    border-radius: .35rem;
+                                    border: 1px solid rgba(0, 0, 0, .2);
+                                    background-color: var(--active-player);
+                                }
+                    
+                                .player-stats {
+                                    display: grid;
+                                    grid-template-columns: repeat(2, minmax(0, 1fr));
+                                    gap: .4rem .9rem;
+                    
+                                    .stat {
+                                        display: flex;
+                                        align-items: baseline;
+                                        justify-content: space-between;
+                                        gap: .5rem;
+                                        min-width: 0;
+                    
+                                        .stat-label {
+                                            font-size: .78rem;
+                                            opacity: .7;
+                                        }
+                    
+                                        .stat-value {
+                                            font-family: "Tilt Warp", sans-serif;
+                                            font-size: .95rem;
+                                            white-space: nowrap;
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }

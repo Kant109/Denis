@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue';
+import { computed, onUnmounted, ref, watch } from 'vue';
 import { useWebSocket } from '@/composables/useWebSocket'
 import { getCheckouts } from '@/composables/useDartsCheckout';
 import X01PlayerOverview from '@/components/X01/X01PlayerOverview.vue';
 import { useX01GameStore } from '@/stores/X01GameStore';
+import { useSound } from '@/composables/useSound';
 
 const score = ref(301);
 const checkouts = computed(() => getCheckouts(score.value))
@@ -13,8 +14,11 @@ const dartGameStore = useX01GameStore();
 const players = computed(() => dartGameStore.players);
 const isGameFinish = computed(() => dartGameStore.isGameFinish);
 const isLastPlayerActive = ref(false);
+const seeGame = ref(false);
 
 const { messages } = useWebSocket(import.meta.env.VITE_WS_RECAP_URL)
+
+const { play, stop } = useSound();
 
 const setIsLastPlayerActive = (isCurrentPlayerLast: boolean) => {
     isLastPlayerActive.value = isCurrentPlayerLast;
@@ -30,6 +34,35 @@ function setCurrentScore(newScore: number) {
     score.value = newScore;
 }
 
+function playSoundForActivePlayer() {
+    if(players.value.length > 0) {
+        players.value.forEach(player => {
+            if(player.volleys.length > 1 || !player.isActive) {
+                stop(player.firstname.toLocaleLowerCase());
+            }
+            if(player.isActive && player.points === 301) {
+                play(player.firstname.toLocaleLowerCase());
+            }
+        });
+    }
+}
+
+function start() {
+    if(players.value.length > 0) {
+        seeGame.value = true;
+        playSoundForActivePlayer();
+    }
+}
+
+watch(
+    () => isGameFinish.value,
+    () => {
+        if(isGameFinish.value) {
+            play('victory');
+        }
+    }
+)
+
 watch(
     () => players.value,
     () => {
@@ -37,6 +70,7 @@ watch(
             score.value = 301
             isLastPlayerActive.value = false;
         }
+        playSoundForActivePlayer();
     }, { deep: true }
 )
 
@@ -47,10 +81,14 @@ watch(
     }, { deep: true }
 )
 
+onUnmounted(() => {
+    stop('victory');
+})
+
 </script>
 
 <template>
-    <div class="players-container" v-if="players.length > 0 && !isGameFinish">
+    <div class="players-container" v-if="seeGame">
         <div class="players-content" :class="{'lastPlayerActive': isLastPlayerActive}">
             <X01PlayerOverview
                 v-for="player in players"
@@ -73,14 +111,18 @@ watch(
             </div>
         </div>
     </div>
+    <div class="game-detected" v-else-if="players.length > 0 && !isGameFinish">
+        <div class="join-btn" @click.prevent="start">Join game</div>
+    </div>
     <div class="waiting-container" v-else>
         <p>Waiting for the game to start...</p>
     </div>
 </template>
 
 <style lang="scss" scoped>
+@import "@/assets/helpers/mixins.scss";
 
-.players-container, .waiting-container {
+.players-container, .waiting-container, .game-detected {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -118,6 +160,10 @@ watch(
     .checkouts-container {
         margin-top: 1.5rem;
         text-align: center;
+    }
+
+    .join-btn {
+        @include btn-primary;
     }
 }
 
