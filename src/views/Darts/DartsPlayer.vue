@@ -124,7 +124,6 @@ watch(deletedPlayers, () => {
     flex-direction: column;
     align-items: center;
     position: relative;
-    overflow: scroll;
     padding-bottom: 2rem;
 
     &.blur {
@@ -160,7 +159,6 @@ watch(deletedPlayers, () => {
                 align-items: center;
                 justify-content: center;
                 background-color: var(--bg-color-primary);
-                width: min( 102px, 100%);
 
                 border: 5px solid var(--bg-color-primary);
                 border-radius: .5rem;

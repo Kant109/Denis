@@ -62,59 +62,99 @@ const openCreatePlayer = ref(false);
   </Teleport>
 </template>
 <style lang="scss" scoped>
-@import "@/assets/helpers/dialog.scss";
 @import "@/assets/helpers/mixins.scss";
 
-.dialog-body {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+.dialog {
+  inset-block-start: 0px;
+  inset-block-end: 0px;
+  width: 100%;
+  user-select: text;
+  visibility: visible;
+  border: none;
+  padding: 0;
+  border-radius: 0.5rem;
 
-  .search-player-container {
-    width: 100%;
+  .dialog-header {
     display: flex;
-    align-items: center;
+    text-align: center;
     justify-content: center;
+    align-items: center;
+    width: 100%;
+    background-color: canvas;
+    padding: 16px;
+    border-radius: 0.5rem;
+    min-height: 20%;
+
+    .dialog-title {
+      font-size: 1.5rem;
+      color: var(--text-color);
+      margin: 0;
+    }
+
+    .dialog-close {
+      padding: 0.5em;
+      position: absolute;
+      right: 0;
+      top: 12px;
+      font-size: 1rem;
+    }
   }
 
-  .select-player-container {
+  .dialog-body {
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    justify-content: space-between;
-    margin: 0 16px;
-    max-height: 80vh;
-    height: 100%;
+    overflow-y: auto;
+    border-radius: 0.5rem;
+    margin-bottom: 10px;
 
-    .select-player {
+    .search-player-container {
+      width: 100%;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: .5rem;
-      background-color: var(--bg-color-primary);
-      border: 5px solid var(--bg-color-primary);
-      border-radius: 0.5rem;
-      font-size: 0.8rem;
-      width: 100%;
-      height: fit-content;
+      gap: 1rem;
+    }
 
-      .player-img {
-        height: 3rem;
-        width: 3rem;
-        border-radius: 50%;
-        background-color: white;
-        cursor: pointer;
-      }
+    .select-player-container {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      justify-content: space-between;
+      margin: 0 16px;
+      max-height: 80vh;
+      height: 100%;
 
-      .player-name {
-        flex-direction: column;
+      .select-player {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: .5rem;
+        background-color: var(--bg-color-primary);
+        border: 5px solid var(--bg-color-primary);
+        border-radius: 0.5rem;
+        font-size: 0.8rem;
+        width: 100%;
+        height: fit-content;
 
-        span {
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          width: 100%;
-          max-width: 6em;
+        .player-img {
+          height: 3rem;
+          width: 3rem;
+          border-radius: 50%;
+          background-color: white;
+          cursor: pointer;
+        }
+
+        .player-name {
+          flex-direction: column;
+
+          span {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 100%;
+            max-width: 6em;
+          }
         }
       }
     }
