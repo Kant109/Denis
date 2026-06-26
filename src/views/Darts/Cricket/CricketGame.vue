@@ -93,7 +93,7 @@ watch(
     flex-direction: column;
     align-items: center;
     width: 100%;
-    max-height: calc(100vh - 210px);
+    max-height: calc(100vh - 228px);
     height: 100%;
     background-color: var(--bg-color-primary);
     padding-bottom: 2rem;

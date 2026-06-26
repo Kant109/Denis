@@ -132,7 +132,7 @@ watch(() => isGameFinish.value, () => router.push({ name: "x01-winner" }));
     flex-direction: column;
     align-items: center;
     width: 100%;
-    height: calc(100% - 287px);
+    height: calc(100% - 334px);
     background-color: var(--bg-color-primary);
     padding-bottom: 2rem;
     overflow: scroll;
@@ -211,9 +211,4 @@ watch(() => isGameFinish.value, () => router.push({ name: "x01-winner" }));
     }
 }
 
-@media screen and (max-width: 389px) {
-    .players-container {
-        max-height: calc(100vh - 278px);
-    }
-}
 </style>
