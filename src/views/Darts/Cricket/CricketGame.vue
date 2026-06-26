@@ -32,27 +32,6 @@ const confirmBack = () => {
     managementAppStore.openCancelGame = true;
 }
 
-const speak = async (text: string) => {
-    const utterance = new SpeechSynthesisUtterance(text);
-    
-    utterance.voice = window.speechSynthesis
-        .getVoices()
-        .find((voice) => voice.name === "") as SpeechSynthesisVoice;
-        // .find((voice) => voice.name === "Microsoft Paul - French (France)") as SpeechSynthesisVoice;
-    utterance.rate = 1.5;
-    utterance.pitch = 1;
-
-    utterance.onstart = () => {
-        managementAppStore.displayRadioBox = true;
-    };
-
-    utterance.onend = () => {
-        managementAppStore.displayRadioBox = false;
-    };
-
-    window.speechSynthesis.speak(utterance);
-}
-
 watch(
     () => isGameFinish.value,
     () => {
@@ -61,62 +40,6 @@ watch(
         router.push({ name: "cricket-winner" });
     }
 );
-
-onMounted(async () => {
-    if(gameStore.gameId === 0) {
-        const participants = async () => {
-            let participants = [] as Array<Player>;
-            players.value.forEach(player => {
-                participants.push({
-                    "id": player.id,
-                    "firstname": player.firstname,
-                    "name": player.name,
-                    "pseudo": player.pseudo
-                })
-            });
-
-            return participants;
-        }
-
-        const currentDate = async (): Promise<string> => {
-            // Get current date
-            const today = new Date();
-
-            // Extract day, month, and year
-            let day = today.getDate().toString();
-            let month = (today.getMonth() + 1).toString();
-            let year = today.getFullYear().toString();
-
-            // Add leading zero to day and month if needed
-            day = parseInt(day) < 10 ? "0" + day : day;
-            month = parseInt(month) < 10 ? "0" + month : month;
-
-            // Format the date as dd/mm/yyyy
-            return day + "-" + month + "-" +year;
-        }
-
-        const data: DartGame = {
-            "typeGame": "DACKT",
-            "creationDate": await currentDate() ,
-            "players": await participants()
-        }
-
-        const maPromesse = new Promise(async (resolve, reject) => {
-            const response = await fetch(import.meta.env.VITE_BE_URL + "/dart/game", {
-                method: "POST",
-                body: JSON.stringify(data),
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            });
-            resolve(response.json());
-        })
-        maPromesse.then((data: any) => {
-            gameStore.gameId = data.id;
-            speak(data.commentaire);
-        });
-    }
-})
 
 </script>
 
@@ -135,7 +58,7 @@ onMounted(async () => {
             />
         </div>
     </div>
-    <CricketBoard @comment="(text) => speak(text)" @back="back"/>
+    <CricketBoard @back="back"/>
 </template>
 
 <style lang="scss" scoped>

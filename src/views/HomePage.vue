@@ -17,34 +17,19 @@ const launchAnimation = (img: string) => {
     }, 200);
 }
 
-const getRanking = () => {
-    launchAnimation('trophy_3d');
+/** Lance l'animation d'icône puis navigue vers la route après la transition. */
+const navigateTo = (img: string, routeName: string) => {
+    launchAnimation(img);
     setTimeout(() => {
-        router.push({ name: "ranking"});
+        router.push({ name: routeName });
     }, 1100);
 }
 
-const getDart = () => {
-    launchAnimation('dart');
-    setTimeout(() => {
-        router.push({ name: "darts-player"});
-    }, 1100);
-}
-
-
-const getBabykon = () => {
-    launchAnimation('babyfoot');
-    setTimeout(() => {
-        router.push({ name: "babykon-mode"});
-    }, 1100);
-}
-
-const getGameDetails = () => {
-    launchAnimation('crossed_swords_3d');
-    setTimeout(() => {
-        router.push({ name: "game-details"});
-    }, 1100);
-}
+const getRanking = () => navigateTo('trophy_3d', 'ranking');
+const getDart = () => navigateTo('dart', 'darts-player');
+const getBabykon = () => navigateTo('babyfoot', 'babykon-mode');
+const getStats = () => navigateTo('trophy_3d', 'stats');
+const getGameDetails = () => navigateTo('crossed_swords_3d', 'game-details');
 
 </script>
 
@@ -54,13 +39,17 @@ const getGameDetails = () => {
     </div>
     <div class="details-container" :class="{'isAnimationLaunch': isAnimationLaunch}">
         <h2>Général :</h2>
-        <div class="ranking-btn" @click.prevent="getRanking()">
+        <div class="stats-btn" @click.prevent="getStats()">
             <img src="@/assets/images/trophy_3d.png" alt="Trophée">
-            <div class="content">Classement</div>
+            <div class="content">Stats</div>
         </div>
-        <!-- <div class="games-btn" @click.prevent="getGameDetails()">
+        <div class="games-btn" @click.prevent="getGameDetails()">
             <img src="@/assets/images/crossed_swords_3d.png" alt="Trophée">
             <div class="content">Parties</div>
+        </div>
+        <!-- <div class="ranking-btn" @click.prevent="getRanking()">
+            <img src="@/assets/images/trophy_3d.png" alt="Trophée">
+            <div class="content">Classement</div>
         </div> -->
     </div>
     <div class="all-games-container" :class="{'isAnimationLaunch': isAnimationLaunch}">
@@ -70,11 +59,11 @@ const getGameDetails = () => {
             title="Fléchettes"
             @click.prevent="getDart()"
         />
-        <GameContainer
+        <!-- <GameContainer
             img="babyfoot"
             title="Babykon"
             @click.prevent="getBabykon()"
-        /> 
+        />  -->
     </div>
     <div v-if="isAnimationLaunch" class="container-animation">
         <div class="scale-animation" :class="{'jello-animation': launchJelloAnimation}">
@@ -176,7 +165,7 @@ const getGameDetails = () => {
     width: 100%;
     padding: 0rem 0.5rem 1rem 0.5rem;
 
-    .ranking-btn, .games-btn {
+    .ranking-btn, .games-btn, .stats-btn {
         display: flex;
         align-items: center;
         justify-content: center;

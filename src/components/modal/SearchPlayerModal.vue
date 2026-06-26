@@ -35,7 +35,7 @@ const openCreatePlayer = ref(false);
           </div>
           <div class="select-player-container">
             <div
-              class="select-player d-flex"
+              class="select-player"
               v-for="player in allPlayers.filter(
                 (p) => !unselectablePlayerIds.find((id) => p.id === id) && getPlayerLibelle(p).toLocaleLowerCase().includes(searchText.toLocaleLowerCase())
               )"
@@ -48,11 +48,8 @@ const openCreatePlayer = ref(false);
                 )}`"
                 alt="Avatar"
               />
-              <div class="player-name d-flex">
-                <span class="player-name-pseudo"> {{ player.pseudo }} </span>
-                <span class="player-full-name">
-                  {{ getPlayerFullName(player) }}</span
-                >
+              <div class="player-name">
+                <span class="player-name-pseudo"> {{ player.firstname }} "{{ player.pseudo }}" {{ player.name }} </span>
               </div>
             </div>
         </div>
@@ -65,54 +62,103 @@ const openCreatePlayer = ref(false);
   </Teleport>
 </template>
 <style lang="scss" scoped>
-  @import "@/assets/helpers/dialog.scss";
+@import "@/assets/helpers/mixins.scss";
 
-.select-player-container {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-gap: 10px;
-  justify-content: space-between;
-  margin: 0 16px;
-  max-height: 80vh;
-  height: 100%;
+.dialog {
+  inset-block-start: 0px;
+  inset-block-end: 0px;
+  width: 100%;
+  user-select: text;
+  visibility: visible;
+  border: none;
+  padding: 0;
+  border-radius: 0.5rem;
 
-  .select-player {
+  .dialog-header {
     display: flex;
+    text-align: center;
+    justify-content: center;
     align-items: center;
-    justify-content: flex-start;
-    background-color: var(--bg-color-primary);
-    border: 5px solid var(--bg-color-primary);
+    width: 100%;
+    background-color: canvas;
+    padding: 16px;
     border-radius: 0.5rem;
-    font-size: 0.8rem;
-    min-width: 150px;
-    height: fit-content;
+    min-height: 20%;
 
-    .player-img {
-      height: 3rem;
-      width: 3rem;
-      border-radius: 50%;
-      background-color: white;
-      cursor: pointer;
+    .dialog-title {
+      font-size: 1.5rem;
+      color: var(--text-color);
+      margin: 0;
     }
 
-    .player-name {
-      flex-direction: column;
+    .dialog-close {
+      padding: 0.5em;
+      position: absolute;
+      right: 0;
+      top: 12px;
+      font-size: 1rem;
+    }
+  }
 
-      span {
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
+  .dialog-body {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    overflow-y: auto;
+    border-radius: 0.5rem;
+    margin-bottom: 10px;
+
+    .search-player-container {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+    }
+
+    .select-player-container {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      justify-content: space-between;
+      margin: 0 16px;
+      max-height: 80vh;
+      height: 100%;
+
+      .select-player {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: .5rem;
+        background-color: var(--bg-color-primary);
+        border: 5px solid var(--bg-color-primary);
+        border-radius: 0.5rem;
+        font-size: 0.8rem;
         width: 100%;
-        max-width: 6em;
+        height: fit-content;
+
+        .player-img {
+          height: 3rem;
+          width: 3rem;
+          border-radius: 50%;
+          background-color: white;
+          cursor: pointer;
+        }
+
+        .player-name {
+          flex-direction: column;
+
+          span {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 100%;
+            max-width: 6em;
+          }
+        }
       }
     }
   }
 }
-.search-player-container {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 8px;
-}
+
 </style>

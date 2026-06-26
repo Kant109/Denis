@@ -3,8 +3,9 @@ import Header from '@/components/Header.vue';
 import { useX01GameStore } from '@/stores/X01GameStore';
 import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { clearX01LocalStorage } from '@/common/X01PersistenceUtils';
 
-const x01GameStore = useX01GameStore();
+const dartGameStore = useX01GameStore();
 
 const orderedPlayers = computed(() => JSON.parse(localStorage.getItem('orderedDartsPlayer') as string));
 const players = (orderedPlayers.value as [] as Array<Player>);
@@ -13,7 +14,15 @@ const x01Mode = ref(0);
 const router = useRouter();
 
 const selectX01Mode = (selectedX01Mode: number) => {
+    clearX01LocalStorage();
+    dartGameStore.players = [];
+    dartGameStore.games = [];
+    dartGameStore.matchStats = null;
+    dartGameStore.setWinner({} as X01Player);
+    dartGameStore.setIsGameFinish(false);
+
     x01Mode.value = selectedX01Mode;
+    dartGameStore.mode = selectedX01Mode.toString() as '301' | '501';
 
     players.forEach((player: Player) => {
         const currentPlayer: X01Player = {
@@ -23,10 +32,15 @@ const selectX01Mode = (selectedX01Mode: number) => {
             name: player.name,
             isActive: players.indexOf(player) == 0,
             points: x01Mode.value,
-            volleys: players.indexOf(player) == 0 ? [['', '', '']] : []
+            volleys: players.indexOf(player) == 0 ? [['', '', '']] : [],
+            sets: 0,
+            legs: 0,
+            average: 0,
+            nbThrows: 0,
+            nbDarts: 0
         };
 
-        x01GameStore.setPlayer(currentPlayer);
+        dartGameStore.setPlayer(currentPlayer);
     });
     router.push({ name: "x01-game" })
 }

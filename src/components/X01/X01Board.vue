@@ -2,147 +2,223 @@
 import { computed, onMounted, ref } from 'vue';
 import { useX01GameStore } from '@/stores/X01GameStore';
 
-const gameStore = useX01GameStore();
+const dartGameStore = useX01GameStore();
+const players = computed(() => dartGameStore.players);
 
-const players = computed(() => gameStore.players);
+/* -------------------------------------------------------------------------- */
+/* Modificateurs de saisie (double / triple)                                  */
+/* -------------------------------------------------------------------------- */
+
 const double = ref(false);
 const triple = ref(false);
 
-const selectDouble = () => {
-    if(triple.value) {
-        triple.value = false;
-    }
+const toggleDouble = () => {
+    triple.value = false;
     double.value = !double.value;
-}
+};
 
-const selectTriple = () => {
-    if(double.value) {
-        double.value = false;
-    }
+const toggleTriple = () => {
+    double.value = false;
     triple.value = !triple.value;
-}
+};
 
-const setNextPlayerActive = (player: X01Player) => {
-    if(players.value.indexOf(player) + 1 === players.value.length) {
-        players.value[0].isActive = true;
-        players.value[0].volleys.push(['', '', '']);
-    } else {
-        players.value[players.value.indexOf(player) + 1].isActive = true;
-        players.value[players.value.indexOf(player) + 1].volleys.push(['', '', '']);
-    }
-}
-
-const setPointsActivePlayer = async (points: number) => {
-    const value = double.value ? 2 : triple.value ? 3 : 1;
-    let activePlayerPointsVolley = true;
-
-    players.value.forEach(player => {
-        if(player.isActive && activePlayerPointsVolley) {
-            const currentPointValue = value === 2 ? "D" + points.toString() : value === 3 ? "T" + points.toString() : points.toString();
-
-            player.points -= value * points;
-
-            if(player.volleys[player.volleys.length - 1][0] === "") {
-                player.volleys[player.volleys.length - 1][0] = currentPointValue;
-            } else if(player.volleys[player.volleys.length - 1][1] === "") {
-                player.volleys[player.volleys.length - 1][1] = currentPointValue;
-            } else if(player.volleys[player.volleys.length - 1][2] === "") {
-                player.volleys[player.volleys.length - 1][2] = currentPointValue;
-                player.isActive = false;
-                setNextPlayerActive(player);
-                activePlayerPointsVolley = false;
-            }
-
-            if(player.points < 0 || player.points === 1) {
-
-                player.points += value * points;
-
-                if(player.volleys[player.volleys.length - 1][0] === "") {
-                    player.volleys[player.volleys.length - 1][0] = "";
-                } else {
-                    player.volleys[player.volleys.length - 1][0] = "O" + player.volleys[player.volleys.length - 1][0];
-                }
-
-                if(player.volleys[player.volleys.length - 1][1] === "") {
-                    player.volleys[player.volleys.length - 1][1] = "";
-                } else {
-                    player.volleys[player.volleys.length - 1][1] = "O" + player.volleys[player.volleys.length - 1][1];
-                }
-
-                if(player.volleys[player.volleys.length - 1][2] === "") {
-                    player.volleys[player.volleys.length - 1][2] = "";
-                } else {
-                    player.volleys[player.volleys.length - 1][2] = "O" + player.volleys[player.volleys.length - 1][2];
-                }
-
-                player.isActive = false;
-                setNextPlayerActive(player);
-                activePlayerPointsVolley = false;
-            } else if(player.points === 0) {
-                if(value === 2) {
-                    gameStore.setIsGameFinish(true);
-                    gameStore.setWinner(player);
-                } else {
-                    player.points += value * points;
-                    player.isActive = false;
-                    setNextPlayerActive(player);
-                    activePlayerPointsVolley = false;
-                }
-            }
-        }
-    })
-    reset();
-}
-
-const cancelPoints = async (previousDart: string, player: X01Player) => {
-    const value = previousDart.includes('T') ? 3 : previousDart.includes('D') ? 2 : 1;
-    player.points += value === 1 ? parseInt(previousDart) : value * parseInt(previousDart.substring(1,3));
-}
-
-const removePreviousDart = async (player: X01Player, isCancel: boolean) => {
-    for (let index = 3; index > 0; index--) {
-        const previousDart = player.volleys[player.volleys.length - 1][index - 1];
-
-        if(previousDart !== "" && !isCancel) {
-            await cancelPoints(previousDart, player);
-
-            player.volleys[player.volleys.length - 1][index - 1] = "";
-            isCancel = true;
-        }
-    }
-}
-
-const cancel = () => {
-    players.value.forEach(player => {
-        if(player.isActive) {
-            if(!(players.value.indexOf(player) === 0 && player.volleys.length === 1 && player.volleys[0][0] === "")) {
-                let isCancel = false;
-                if(!(player.volleys[player.volleys.length - 1][0] === "" && player.volleys[player.volleys.length - 1][1] === "" && player.volleys[player.volleys.length - 1][2] === "")) {
-                    removePreviousDart(player, isCancel);
-                } else {
-                    player.isActive = false;
-                    if((players.value.indexOf(player) - 1) >= 0) {
-                        players.value[players.value.indexOf(player) - 1].isActive = true;
-                        removePreviousDart(players.value[players.value.indexOf(player) - 1], isCancel);
-                    } else {
-                        players.value[players.value.length - 1].isActive = true;
-                        removePreviousDart(players.value[players.value.length - 1], isCancel);
-                    }
-                }
-            }
-        }
-    });
-}
-
-const reset = () => {
+const resetModifiers = () => {
     double.value = false;
     triple.value = false;
-}
+};
+
+/* -------------------------------------------------------------------------- */
+/* Helpers                                                                     */
+/* -------------------------------------------------------------------------- */
+
+/** Dernière volée (groupe de 3 fléchettes) du joueur. */
+const lastVolley = (player: X01Player) => player.volleys[player.volleys.length - 1];
+
+/** Une volée est vide tant qu'aucune de ses 3 fléchettes n'est saisie. */
+const isVolleyEmpty = (volley: Array<string>) =>
+    volley[0] === '' && volley[1] === '' && volley[2] === '';
+
+/** Libellé d'une fléchette : "20", "D20" (double) ou "T20" (triple). */
+const formatDart = (points: number, multiplier: number) =>
+    multiplier === 2 ? `D${points}` : multiplier === 3 ? `T${points}` : `${points}`;
+
+/** Score de départ selon le mode de jeu. */
+const startingPoints = () => (dartGameStore.mode === '301' ? 301 : 501);
+
+/** Active le joueur suivant (retour au premier en fin de liste) et lui ouvre une volée. */
+const activateNextPlayer = (player: X01Player) => {
+    const list = players.value;
+    const nextIndex = (list.indexOf(player) + 1) % list.length;
+    list[nextIndex].isActive = true;
+    list[nextIndex].volleys.push(['', '', '']);
+};
+
+/** Termine le tour du joueur courant et passe la main au suivant. */
+const passTurn = (player: X01Player) => {
+    player.isActive = false;
+    activateNextPlayer(player);
+};
+
+/* -------------------------------------------------------------------------- */
+/* Saisie d'une fléchette                                                      */
+/* -------------------------------------------------------------------------- */
+
+const handleScore = (points: number) => {
+    const multiplier = double.value ? 2 : triple.value ? 3 : 1;
+    const player = players.value.find((p: X01Player) => p.isActive);
+
+    if (player) {
+        placeDart(player, points, multiplier);
+
+        if (player.points < 0 || player.points === 1) {
+            // Score impossible à finir : volée annulée (dépassement).
+            bust(player, points, multiplier);
+        } else if (player.points === 0) {
+            if (multiplier === 2) {
+                // Finition réussie sur un double : manche gagnée.
+                completeLeg(player);
+            } else {
+                // 0 atteint sans double : la finition n'est pas valide.
+                restoreScore(player, points, multiplier);
+                passTurn(player);
+            }
+        }
+    }
+
+    resetModifiers();
+};
+
+/** Enregistre la fléchette dans la première case libre de la volée courante. */
+const placeDart = (player: X01Player, points: number, multiplier: number) => {
+    const volley = lastVolley(player);
+    const label = formatDart(points, multiplier);
+
+    player.points -= multiplier * points;
+
+    if (volley[0] === '') {
+        volley[0] = label;
+    } else if (volley[1] === '') {
+        volley[1] = label;
+    } else if (volley[2] === '') {
+        volley[2] = label;
+        passTurn(player);
+    }
+};
+
+/** Restaure le score retiré par la dernière fléchette. */
+const restoreScore = (player: X01Player, points: number, multiplier: number) => {
+    player.points += multiplier * points;
+};
+
+/** Dépassement : on annule le score et on marque la volée d'un "O". */
+const bust = (player: X01Player, points: number, multiplier: number) => {
+    restoreScore(player, points, multiplier);
+
+    const volley = lastVolley(player);
+    volley.forEach((dart, i) => {
+        if (dart !== '') volley[i] = `O${dart}`;
+    });
+
+    passTurn(player);
+};
+
+/** Manche gagnée : on archive l'état, on met à jour legs/sets puis on réinitialise. */
+const completeLeg = (player: X01Player) => {
+    localStorage.setItem('previousDartGame', JSON.stringify(dartGameStore.$state));
+
+    player.legs += 1;
+    dartGameStore.registerLegEnd(players.value);
+
+    if (player.legs === dartGameStore.legs) {
+        player.sets += 1;
+        players.value.forEach((p: X01Player) => { p.legs = 0; });
+
+        if (player.sets === dartGameStore.sets) {
+            dartGameStore.setIsGameFinish(true);
+            dartGameStore.setWinner(player);
+            dartGameStore.computeMatchStats();
+            return;
+        }
+        return;
+    }
+
+    players.value.forEach((p: X01Player) => {
+        p.average = 0;
+        p.nbThrows = 0;
+        p.nbDarts = 0;
+        p.volleys = [];
+        p.points = startingPoints();
+    });
+
+    passTurn(player);
+};
+
+/* -------------------------------------------------------------------------- */
+/* Annulation (bouton RETOUR)                                                  */
+/* -------------------------------------------------------------------------- */
+
+const cancel = () => {
+    const player = players.value.find((p: X01Player) => p.isActive);
+    if (!player) return;
+
+    // Volée unique et vide : on annule la fin de manche précédente.
+    if (player.volleys.length === 0 && isVolleyEmpty(lastVolley(player))) {
+        restorePreviousGame();
+        return;
+    }
+
+    if (isVolleyEmpty(lastVolley(player))) {
+        // Aucune fléchette dans la volée courante : on revient au joueur précédent.
+        player.volleys.pop();
+        player.isActive = false;
+
+        const list = players.value;
+        const previousIndex = (list.indexOf(player) - 1 + list.length) % list.length;
+        list[previousIndex].isActive = true;
+        removeLastDart(list[previousIndex]);
+    } else {
+        // On retire la dernière fléchette saisie.
+        removeLastDart(player);
+    }
+};
+
+/** Retire la dernière fléchette de la volée courante et restitue son score. */
+const removeLastDart = (player: X01Player) => {
+    const volley = lastVolley(player);
+
+    for (let slot = 2; slot >= 0; slot--) {
+        const dart = volley[slot];
+        if (dart === '') continue;
+
+        // Si la volée était marquée comme dépassée ("O"), on retire la marque.
+        volley.forEach((d, i) => {
+            if (d.includes('O')) volley[i] = dart.substring(1);
+        });
+
+        restoreDartScore(dart, player);
+        volley[slot] = '';
+        break;
+    }
+};
+
+/** Re-crédite le score d'une fléchette annulée (ignorée si dépassement "O"). */
+const restoreDartScore = (dart: string, player: X01Player) => {
+    if (dart.includes('O')) return;
+    const multiplier = dart.includes('T') ? 3 : dart.includes('D') ? 2 : 1;
+    player.points += multiplier === 1 ? parseInt(dart) : multiplier * parseInt(dart.substring(1, 3));
+};
+
+/** Restaure l'état de jeu archivé avant la dernière manche puis annule le tir gagnant. */
+const restorePreviousGame = () => {
+    const previousDartGame = JSON.parse(localStorage.getItem('previousDartGame') as string);
+    dartGameStore.$state = previousDartGame;
+    localStorage.removeItem('previousDartGame');
+    cancel();
+};
 
 onMounted(() => {
-    gameStore.setWinner({} as X01Player);
-    cancel();
-})
+    dartGameStore.setWinner({} as X01Player);
+});
 
 </script>
 
@@ -150,37 +226,20 @@ onMounted(() => {
     <div class="points-container">
         <div class="points-content">
             <div class="points-line">
-                <div class="points" @click.prevent="setPointsActivePlayer(1)">1</div>
-                <div class="points" @click.prevent="setPointsActivePlayer(2)">2</div>
-                <div class="points" @click.prevent="setPointsActivePlayer(3)">3</div>
-                <div class="points" @click.prevent="setPointsActivePlayer(4)">4</div>
-                <div class="points" @click.prevent="setPointsActivePlayer(5)">5</div>
-                <div class="points" @click.prevent="setPointsActivePlayer(6)">7</div>
-                <div class="points" @click.prevent="setPointsActivePlayer(8)">8</div>
+                <div v-for="n in [1, 2, 3, 4, 5, 6, 7]" :key="n" class="points" @click.prevent="handleScore(n)">{{ n }}</div>
             </div>
             <div class="points-line">
-                <div class="points" @click.prevent="setPointsActivePlayer(9)">9</div>
-                <div class="points" @click.prevent="setPointsActivePlayer(10)">10</div>
-                <div class="points" @click.prevent="setPointsActivePlayer(11)">11</div>
-                <div class="points" @click.prevent="setPointsActivePlayer(12)">12</div>
-                <div class="points" @click.prevent="setPointsActivePlayer(13)">13</div>
-                <div class="points" @click.prevent="setPointsActivePlayer(14)">14</div>
-                <div class="points" @click.prevent="setPointsActivePlayer(15)">15</div>
+                <div v-for="n in [8, 9, 10, 11, 12, 13, 14]" :key="n" class="points" @click.prevent="handleScore(n)">{{ n }}</div>
             </div>
             <div class="points-line">
-                <div class="points" @click.prevent="setPointsActivePlayer(15)">15</div>
-                <div class="points" @click.prevent="setPointsActivePlayer(16)">16</div>
-                <div class="points" @click.prevent="setPointsActivePlayer(17)">17</div>
-                <div class="points" @click.prevent="setPointsActivePlayer(18)">18</div>
-                <div class="points" @click.prevent="setPointsActivePlayer(19)">19</div>
-                <div class="points" @click.prevent="setPointsActivePlayer(20)">20</div>
-                <div class="points" :class="{'isDisable': triple}" @click.prevent="setPointsActivePlayer(25)">25</div>
+                <div v-for="n in [15, 16, 17, 18, 19, 20]" :key="n" class="points" @click.prevent="handleScore(n)">{{ n }}</div>
+                <div class="points" :class="{'isDisable': triple}" @click.prevent="handleScore(25)">25</div>
             </div>
             <div class="instructions">
-                <div class="points zero" :class="{'isDisable': double || triple}" @click.prevent="setPointsActivePlayer(0)">0</div>
+                <div class="points zero" :class="{'isDisable': double || triple}" @click.prevent="handleScore(0)">0</div>
                 <div class="specific">
-                    <div class="points double" :class="{'isActive': double && !triple}" @click.prevent="selectDouble">DOUBLE</div>
-                    <div class="points triple" :class="{'isActive': triple && !double}" @click.prevent="selectTriple">TRIPLE</div>
+                    <div class="points double" :class="{'isActive': double && !triple}" @click.prevent="toggleDouble">DOUBLE</div>
+                    <div class="points triple" :class="{'isActive': triple && !double}" @click.prevent="toggleTriple">TRIPLE</div>
                     <div class="points back" @click.prevent="cancel">RETOUR</div>
                 </div>
             </div>

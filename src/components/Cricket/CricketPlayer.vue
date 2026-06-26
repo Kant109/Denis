@@ -48,19 +48,19 @@ const openStat = () => {
 <template>
     <div class="full-content" :class="{'top-bg': props.isTopBgActive, 'top-bg-active': props.isTopBgPlayerActive && props.isTopBgActive}">
         <div class="player-content" :class="{'isPlayerActive': player.isActive }" @click.prevent="openStat">
-            <div class="player-name">{{ player.pseudo.length > 5 ? player.pseudo.substring(0,5) + ".." : player.pseudo}}</div>
-            <div class="recap">
-                <div class="doors">
-                    <CricketDoor :number=15 :hit=player.doors[15] :volley=getLastVolley />
-                    <CricketDoor :number=16 :hit=player.doors[16] :volley=getLastVolley />
-                    <CricketDoor :number=17 :hit=player.doors[17] :volley=getLastVolley />
-                    <CricketDoor :number=18 :hit=player.doors[18] :volley=getLastVolley />
-                    <CricketDoor :number=19 :hit=player.doors[19] :volley=getLastVolley />
-                    <CricketDoor :number=20 :hit=player.doors[20] :volley=getLastVolley />
-                    <CricketDoor :number=25 :hit=player.doors[25] :volley=getLastVolley />
+                <div class="player-name">{{ player.firstname }} "{{ player.pseudo }}" {{ player.name }}</div>
+                <div class="recap">
+                    <div class="doors">
+                        <CricketDoor :number=15 :hit=player.doors[15] :volley=getLastVolley />
+                        <CricketDoor :number=16 :hit=player.doors[16] :volley=getLastVolley />
+                        <CricketDoor :number=17 :hit=player.doors[17] :volley=getLastVolley />
+                        <CricketDoor :number=18 :hit=player.doors[18] :volley=getLastVolley />
+                        <CricketDoor :number=19 :hit=player.doors[19] :volley=getLastVolley />
+                        <CricketDoor :number=20 :hit=player.doors[20] :volley=getLastVolley />
+                        <CricketDoor :number=25 :hit=player.doors[25] :volley=getLastVolley />
+                    </div>
                 </div>
-            </div>
-            <div class="points-taken">{{ player.points.total }}</div>
+                <div class="points-taken">{{ player.points.total }}</div>
         </div>
         <div class="player-stats" :class="{'isPlayerActive': player.isActive}" v-if="player.isActive || isStatOpen">
             <div class="recap-doors">
@@ -103,36 +103,32 @@ const openStat = () => {
 }
 
 .player-content {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    grid-template-rows: 1fr;
-    grid-column-gap: 0px;
-    grid-row-gap: 0px;
-    height: 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     background-color: var(--bg-color-secondary);
     border-radius: 1rem 1rem 0 0;
-    padding: 0 1rem;
+    padding: 1rem 1rem 0 1rem;
+    gap: .5rem;
     --tw-shadow: inset 0 5px 0 0 rgba(0, 0, 0, .25);
     box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
     cursor: pointer;
-
+        
     .player-name, .points-taken {
         display: flex;
         align-items: center;
         font-family: "Tilt Warp", sans-serif;
-        font-size: 1rem;
         color: var(--text-color);
-
+        
         &:is(.player-name) {
-            min-width: 55px;
-            grid-area: 1 / 1 / 2 / 2;
+            font-size: 1rem;
         }
-
+        
         &:is(.points-taken) {
-            justify-content: flex-end;
-            grid-area: 1 / 5 / 2 / 6;
+            font-size: 2rem;
         }
     }
+
 
     .recap {
         display: flex;
@@ -177,6 +173,7 @@ const openStat = () => {
     justify-content: center;
     align-items: center;
     gap: 1rem;
+    padding-top: 1rem;
     background-color: var(--bg-color-secondary);
 
     &.isPlayerActive {

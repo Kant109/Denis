@@ -11,11 +11,13 @@ import CricketWinner from '@/views/Darts/Cricket/CricketWinner.vue'
 import X01Winner from '@/views/Darts/X01/X01Winner.vue'
 import Ranking from '@/views/Ranking.vue'
 import GameDetails from '@/views/GameDetails.vue'
-import BabykonGame from '@/views/Babykon/BabykonGame.vue'
-import BabykonTournamentPlayerSelection from '@/views/Babykon/BabykonTournamentPlayerSelection.vue'
-import BabykonTournament from '@/views/Babykon/BabykonTournament.vue'
-import BabykonMode from '@/views/Babykon/BabykonMode.vue'
-import BabykonTournamentResults from '@/views/Babykon/BabykonTournamentResults.vue'
+import DartsOverview from '@/views/Darts/DartsOverview.vue'
+import Stats from '@/views/Stats.vue'
+// import BabykonGame from '@/views/Babykon/BabykonGame.vue'
+// import BabykonTournamentPlayerSelection from '@/views/Babykon/BabykonTournamentPlayerSelection.vue'
+// import BabykonTournament from '@/views/Babykon/BabykonTournament.vue'
+// import BabykonMode from '@/views/Babykon/BabykonMode.vue'
+// import BabykonTournamentResults from '@/views/Babykon/BabykonTournamentResults.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -83,33 +85,38 @@ const router = createRouter({
     {
       path: '/darts/overview',
       name: 'darts-overview',
-      component: () => import('@/views/Darts/DartsOverview.vue')
+      component: DartsOverview
     },
     {
-      path: '/babykon',
-      name: 'babykon-mode',
-      component: BabykonMode
+      path: '/stats',
+      name: 'stats',
+      component: Stats
     },
-    {
-      path: '/babykon/game',
-      name: 'babykon-game',
-      component: BabykonGame
-    },
-    {
-      path: '/babykon/tournament/selection-player',
-      name: 'babykon-tournament-selection-player',
-      component: BabykonTournamentPlayerSelection
-    },
-    {
-      path: '/babykon/tournament',
-      name: 'babykon-tournament',
-      component: BabykonTournament
-    },
-    {
-      path: '/babykon/tournament/results',
-      name: 'babykon-tournament-results',
-      component: BabykonTournamentResults
-    }
+    // {
+    //   path: '/babykon',
+    //   name: 'babykon-mode',
+    //   component: BabykonMode
+    // },
+    // {
+    //   path: '/babykon/game',
+    //   name: 'babykon-game',
+    //   component: BabykonGame
+    // },
+    // {
+    //   path: '/babykon/tournament/selection-player',
+    //   name: 'babykon-tournament-selection-player',
+    //   component: BabykonTournamentPlayerSelection
+    // },
+    // {
+    //   path: '/babykon/tournament',
+    //   name: 'babykon-tournament',
+    //   component: BabykonTournament
+    // },
+    // {
+    //   path: '/babykon/tournament/results',
+    //   name: 'babykon-tournament-results',
+    //   component: BabykonTournamentResults
+    // }
   ]
 })
 
