@@ -100,13 +100,14 @@ onUnmounted(() => {
             />
         </div>
         <div class="checkouts-container" v-if="checkouts">
-            <h3>Checkouts for {{ score }}</h3>
             <div class="checkout-list">
                 <template v-for="checkout in checkouts" :key="checkout">
                     <span v-for="(value, i) in checkout" :key="i">
-                        {{ value }}{{ i < checkout.length - 1 ? ' → ' : '' }}
+                        {{ value }}{{ i < checkout.length - 1 ? ' - ' : '' }}
                     </span>
-                    <br>
+                    <span v-if="checkouts.indexOf(checkout) !== checkouts.length - 1">
+                        /
+                    </span>
                 </template>
             </div>
         </div>
@@ -142,13 +143,12 @@ onUnmounted(() => {
 
     .players-content {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(260px, max-content));
+        grid-template-columns: repeat(auto-fit, minmax(440px, max-content));
         justify-content: center;
         justify-items: center;
         align-items: center;
         gap: 2rem;
         width: 100%;
-        padding: 0 1rem;
 
         &.lastPlayerActive {
             &::after {
@@ -158,8 +158,26 @@ onUnmounted(() => {
     }
 
     .checkouts-container {
-        margin-top: 1.5rem;
+        position: absolute;
+        display: flex;
+        bottom: 2rem;
         text-align: center;
+
+        h3 {
+            font-family: "Tilt Warp", sans-serif;
+            font-size: 1.5rem;
+            color: var(--text-color);
+        }
+
+        .checkout-list {
+            font-family: "Tilt Warp", sans-serif;
+            font-size: 1.25rem;
+            color: var(--text-color);
+
+            span {
+                font-size: 2rem;
+            }
+        }
     }
 
     .join-btn {
