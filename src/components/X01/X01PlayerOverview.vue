@@ -83,7 +83,7 @@ watch(
 }
 
 .full-content {
-    min-width: 250px;
+    min-width: 470px;
 
     .player-content {
         display: flex;
@@ -111,7 +111,7 @@ watch(
             display: flex;
             align-items: center;
             font-family: "Tilt Warp", sans-serif;
-            font-size: 1rem;
+            font-size: 1.5rem;
             color: var(--text-color);
 
             &:is(.player-name) {
@@ -141,10 +141,10 @@ watch(
                     align-items: center;
                     justify-content: center;
                     font-family: "Tilt Warp", sans-serif;
-                    font-size: 1rem;
+                    font-size: 2rem;
                     padding-bottom: 5px;
                     border-radius: 8px;
-                    width: 2.5rem;
+                    width: 4rem;
                     aspect-ratio: 1/1;
                     background-color: white;
                     border: 1px solid rgba(0, 0, 0, .25);
@@ -163,6 +163,7 @@ watch(
             grid-template-columns: 1fr 1fr 1fr;
             align-items: center;
             border-top: 1px solid rgba(0, 0, 0, .25);
+            width: 100%;
 
             .darts-details {
                 display: flex;
@@ -177,7 +178,7 @@ watch(
                     align-items: center;
                     justify-content: center;
                     font-family: "Tilt Warp", sans-serif;
-                    font-size: .875rem;
+                    font-size: 1.5rem;
                     color: var(--text-color);
                     height: 50%;
                     width: 100%;
@@ -189,7 +190,7 @@ watch(
                     align-items: center;
                     justify-content: center;
                     font-family: "Tilt Warp", sans-serif;
-                    font-size: .875rem;
+                    font-size: 1.5rem;
                     color: var(--text-color);
                     gap: .25rem;
                     height: 50%;
@@ -207,7 +208,7 @@ watch(
                 align-items: center;
                 justify-content: center;
                 font-family: "Tilt Warp", sans-serif;
-                font-size: 4rem;
+                font-size: 5rem;
                 color: var(--text-color);
                 padding: 1rem;
                 min-width: 150px;
@@ -226,7 +227,7 @@ watch(
                     align-items: center;
                     justify-content: center;
                     font-family: "Tilt Warp", sans-serif;
-                    font-size: 1rem;
+                    font-size: 1.5rem;
                     color: var(--text-color);
                     height: 50%;
                     width: 100%;
